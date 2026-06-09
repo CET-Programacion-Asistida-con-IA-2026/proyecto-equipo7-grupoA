@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OportunIA</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="hero">
+
+        <h1>OportunIA</h1>
+
+        <p>
+            Encontrá cursos, becas y empleos personalizados para potenciar tu futuro profesional.
+        </p>
+
+    </header>
+
+    <main>
+
+        <section class="card">
+
+            <h2>Completá tu perfil</h2>
+
+            <form id="profileForm">
+
+                <label>Nombre</label>
+                <input type="text" id="nombre" required>
+
+                <label>Estudios</label>
+                <input type="text" id="estudios" required>
+
+                <label>Experiencia</label>
+                <input type="text" id="experiencia" required>
+
+                <label>Habilidades</label>
+                <textarea
+                    id="habilidades"
+                    placeholder="Ej: Excel, Ventas, Administración"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Analizar perfil
+                </button>
+
+            </form>
+
+        </section>
+
+        <section id="resultado" class="resultado oculto">
+
+            <h2>Resultado del análisis</h2>
+
+            <div id="puntaje"></div>
+
+            <div class="resultado-grid">
+
+                <div class="box">
+                    <h3>Cursos recomendados</h3>
+                    <ul id="cursos"></ul>
+                </div>
+
+                <div class="box">
+                    <h3>Empleos sugeridos</h3>
+                    <ul id="empleos"></ul>
+                </div>
+
+                <div class="box">
+                    <h3>Becas recomendadas</h3>
+                    <ul id="becas"></ul>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="main.js"></script>
+
+</body>
+</html>
