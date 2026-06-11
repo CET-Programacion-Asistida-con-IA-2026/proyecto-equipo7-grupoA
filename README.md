@@ -98,7 +98,7 @@ Brinda orientación personalizada para el desarrollo profesional y la toma de de
 
 * LinkedIn
 * Computrabajo
-* Boomerang
+* Bumeran
 
 ### Formación
 
