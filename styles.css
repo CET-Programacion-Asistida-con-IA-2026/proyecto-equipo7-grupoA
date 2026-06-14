@@ -1361,7 +1361,9 @@ nav ul li a.active {
 .becas-section {
   background: var(--dark-2);
 }
-
+#searchBeca {
+  color:#0F172A;
+}
 /* Layout principal */
 .becas-layout {
   display: grid;
@@ -2890,7 +2892,7 @@ footer {
   background: none;
   border: none;
   padding: 10px 16px;
-  color: var(--text);
+  color: #000000;
   font-size: .8rem;
   font-family: var(--font-body);
   outline: none;
@@ -2905,7 +2907,7 @@ footer {
   border: none;
   padding: 10px 16px;
   cursor: pointer;
-  color: #fff;
+  color: #000000;
   font-size: .9rem;
 }
 

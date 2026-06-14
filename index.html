@@ -549,36 +549,60 @@
       <div class="filter-group">
         <span class="filter-label">Tipo de beca</span>
         <div class="filter-checks">
-          <label class="filter-check"><input type="checkbox" checked> <span>Beca completa</span></label>
-          <label class="filter-check"><input type="checkbox" checked> <span>Beca parcial</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Subsidio de viaje</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Beca de investigación</span></label>
+          <label class="filter-check"><input type="checkbox" class="tipo-filter" value="Completa"> <span>Completa</span></label>
+          <label class="filter-check"><input type="checkbox" class="tipo-filter" value="Mensual"> <span>Mensual</span></label>
+          <label class="filter-check"><input type="checkbox" class="tipo-filter" value="Único pago"> <span>Único pago</span></label>
+          <label class="filter-check"><input type="checkbox" class="tipo-filter" value="Parcial"> <span>Parcial</span></label>
         </div>
       </div>
 
       <div class="filter-group">
         <span class="filter-label">Alcance</span>
         <div class="filter-checks">
-          <label class="filter-check"><input type="checkbox" checked> <span>Internacional</span></label>
-          <label class="filter-check"><input type="checkbox" checked> <span>Nacional</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Regional</span></label>
+          <label class="filter-check"><input type="checkbox" class="alcance-filter" value="Internacional"> <span>Internacional</span></label>
+          <label class="filter-check"><input type="checkbox" class="alcance-filter" value="Nacional"> <span>Nacional</span></label>
+          <label class="filter-check"><input type="checkbox" class="alcance-filter" value="Regional"> <span>Regional</span></label>
         </div>
       </div>
 
       <div class="filter-group">
         <span class="filter-label">Área de estudio</span>
         <div class="filter-checks">
-          <label class="filter-check"><input type="checkbox" checked> <span>Tecnología</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Ciencias Sociales</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Arte y Diseño</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Salud</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Negocios</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Tecnología"> <span>Tecnología</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Ciencias Sociales"> <span>Ciencias Sociales</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Arte y Diseño"> <span>Arte y Diseño</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Salud"> <span>Salud</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Negocios"> <span>Negocios</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Políticas Públicas"> <span>Políticas Públicas</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Idioma"> <span>Idioma</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Educación"> <span>Educación</span></label>
+          <label class="filter-check"><input type="checkbox" class="area-filter" value="Multidisciplinaria"> <span>Multidisciplinaria</span></label>
         </div>
       </div>
 
       <div class="filter-group">
+        <span class="filter-label">Nivel académico</span>
+        <div class="filter-checks">
+
+         <label class="filter-check"> <input type="checkbox" class="nivel-filter"value="Grado"><span>Grado</span></label>
+         <label class="filter-check"><input type="checkbox"class="nivel-filter" value="Posgrado"><span>Posgrado</span></label>
+         <label class="filter-check"><input type="checkbox"class="nivel-filter"value="Doctorado"> <span>Doctorado</span> </label>
+         <label class="filter-check"><input type="checkbox" class="nivel-filter"value="indistinto"><span>Todos</span></label>
+       </div>
+     </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Modalidad</span>
+        <div class="filter-checks">
+         <label class="filter-check"> <input type="checkbox" class="nivel-filter"value="Presencial"><span>Presencial</span></label>
+         <label class="filter-check"><input type="checkbox"class="nivel-filter" value="Virtual"><span>Virtual</span></label>
+         <label class="filter-check"><input type="checkbox"class="nivel-filter"value="Híbrido"> <span>Híbrido</span> </label>
+       </div>
+     </div>
+
+      <div class="filter-group">
         <span class="filter-label">Compatibilidad mínima</span>
-        <input type="range" class="range-slider" min="0" max="100" value="60">
+        <input type="range" id="compabilityFilter"class="range-slider" min="0" max="100" value="60">
         <div class="range-labels">
           <span>0%</span>
           <span>60%+</span>
@@ -586,170 +610,35 @@
         </div>
       </div>
 
-      <button class="btn-primary" style="width:100%;margin-top:8px;justify-content:center;display:flex">
+<div class="filter-group">
+
+  <span class="filter-label">
+    Buscar beca
+  </span>
+
+  <input
+    type="text"
+    id="searchBeca"
+    placeholder="Ej: Alemania, Ingeniería, Fulbright..."
+    style="
+      width:100%;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:var(--surface);
+      color:rgb(0, 0, 0);
+    ">
+
+</div>
+
+      <button id="applyFilters"class="btn-primary" style="width:100%;margin-top:8px;justify-content:center;display:flex">
         Aplicar filtros
       </button>
 
     </div>
 
-    <div class="becas-grid">
-
-      <!-- Beca 1 -->
-
-      <div class="beca-card featured">
-
-        <div class="beca-logo-wrap">🌎</div>
-
-        <div class="beca-info">
-
-          <div style="margin-bottom:6px">
-            <span class="beca-featured-badge">⭐ Destacada</span>
-          </div>
-
-          <div class="beca-title">
-            Programa Fulbright – Posgrados Internacionales
-          </div>
-
-          <div class="beca-org">
-            Comisión Fulbright Argentina
-          </div>
-
-          <div class="beca-tags">
-            <span class="beca-tag intl">Internacional</span>
-            <span class="beca-tag full">Beca Completa</span>
-            <span class="beca-tag">Posgrado</span>
-            <span class="beca-tag">Inglés requerido</span>
-          </div>
-
-        </div>
-
-        <div class="beca-side">
-
-          <div class="match-circle">
-            <svg width="62" height="62" viewBox="0 0 62 62">
-              <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-              <circle cx="31" cy="31" r="27" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="27" stroke-linecap="round"/>
-            </svg>
-
-            <div class="match-circle-inner">
-              <div class="match-pct">84%</div>
-              <div class="match-lbl">compat.</div>
-            </div>
-          </div>
-
-          <div class="beca-deadline">
-            Convocatoria anual
-          </div>
-
-          <button class="btn-apply">Ver requisitos →</button>
-          <button class="btn-save">Guardar</button>
-
-        </div>
-
-      </div>
-
-      <!-- Beca 2 -->
-
-      <div class="beca-card">
-
-        <div class="beca-logo-wrap">🏦</div>
-
-        <div class="beca-info">
-
-          <div class="beca-title">
-            Santander Open Academy – Women in Tech
-          </div>
-
-          <div class="beca-org">
-            Santander Open Academy
-          </div>
-
-          <div class="beca-tags">
-            <span class="beca-tag intl">Internacional</span>
-            <span class="beca-tag full">Beca Completa</span>
-            <span class="beca-tag">Tecnología</span>
-            <span class="beca-tag">Mujeres</span>
-          </div>
-
-        </div>
-
-        <div class="beca-side">
-
-          <div class="match-circle">
-            <svg width="62" height="62" viewBox="0 0 62 62">
-              <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-              <circle cx="31" cy="31" r="27" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="20" stroke-linecap="round"/>
-            </svg>
-
-            <div class="match-circle-inner">
-              <div class="match-pct">91%</div>
-              <div class="match-lbl">compat.</div>
-            </div>
-          </div>
-
-          <div class="beca-deadline">
-            Convocatoria abierta
-          </div>
-
-          <button class="btn-apply">Ver requisitos →</button>
-          <button class="btn-save">Guardar</button>
-
-        </div>
-
-      </div>
-
-      <!-- Beca 3 -->
-
-      <div class="beca-card">
-
-        <div class="beca-logo-wrap">🇦🇷</div>
-
-        <div class="beca-info">
-
-          <div class="beca-title">
-            Becas CONICET – Doctorado Nacional
-          </div>
-
-          <div class="beca-org">
-            CONICET Argentina
-          </div>
-
-          <div class="beca-tags">
-            <span class="beca-tag">Nacional</span>
-            <span class="beca-tag full">Beca Completa</span>
-            <span class="beca-tag">Investigación</span>
-            <span class="beca-tag">Doctorado</span>
-          </div>
-
-        </div>
-
-        <div class="beca-side">
-
-          <div class="match-circle">
-            <svg width="62" height="62" viewBox="0 0 62 62">
-              <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-              <circle cx="31" cy="31" r="27" fill="none" stroke="#F59E0B" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="54" stroke-linecap="round"/>
-            </svg>
-
-            <div class="match-circle-inner">
-              <div class="match-pct" style="color:var(--gold)">68%</div>
-              <div class="match-lbl">compat.</div>
-            </div>
-          </div>
-
-          <div class="beca-deadline">
-            Convocatoria nacional
-          </div>
-
-          <button class="btn-apply">Ver requisitos →</button>
-          <button class="btn-save">Guardar</button>
-
-        </div>
-
-      </div>
-
-    </div>
-
+    <div id="becasGrid" class="becas-grid">
+      <!-- Las becas se cargarán aquí dinámicamente -->
   </div>
 
 </section>
