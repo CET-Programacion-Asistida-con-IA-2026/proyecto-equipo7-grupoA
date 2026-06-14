@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Perfil — OportunIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .perfil-page { max-width: 860px; margin: 40px auto; padding: 0 24px 80px; }
+
+  .perfil-header {
+    display: flex; align-items: center; gap: 24px;
+    background: #fff; border: 1px solid rgba(37,99,235,.10);
+    border-radius: 22px; padding: 28px 32px; margin-bottom: 28px;
+    box-shadow: 0 4px 24px rgba(37,99,235,.07);
+  }
+  .perfil-avatar {
+    width: 88px; height: 88px; border-radius: 50%; object-fit: cover;
+    border: 3px solid #2563EB; flex-shrink: 0;
+  }
+  .perfil-avatar-placeholder {
+    width: 88px; height: 88px; border-radius: 50%;
+    background: linear-gradient(135deg,#DDE7F5,#BFD8FF);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; flex-shrink: 0;
+  }
+  .perfil-header-info h1 { font-family: 'Manrope',sans-serif; font-size: 1.5rem; font-weight: 800; }
+  .perfil-header-info p { color: #64748b; font-size: .9rem; margin-top: 4px; }
+  .perfil-header-info .perfil-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(37,99,235,.08); color: #2563EB;
+    border-radius: 999px; padding: 4px 12px; font-size: .75rem; font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* CV UPLOAD */
+  .cv-upload-card {
+    background: linear-gradient(135deg, #EEF6FF, #F0F9FF);
+    border: 2px dashed rgba(37,99,235,.25); border-radius: 18px;
+    padding: 28px 32px; margin-bottom: 28px; text-align: center;
+    transition: border-color .2s, background .2s; cursor: pointer;
+  }
+  .cv-upload-card:hover { border-color: #2563EB; background: #E8F3FF; }
+  .cv-upload-card.drag-over { border-color: #2563EB; background: #dbeafe; }
+  .cv-icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .cv-upload-card h3 { font-family: 'Manrope',sans-serif; font-size: 1.05rem; font-weight: 700; color: #0F172A; }
+  .cv-upload-card p { color: #64748b; font-size: .85rem; margin-top: 6px; }
+  .cv-upload-card input[type="file"] { display: none; }
+  .btn-upload {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 14px; padding: 10px 22px;
+    background: #2563EB; color: #fff; border: none; border-radius: 999px;
+    font-size: .88rem; font-weight: 600; cursor: pointer; transition: background .2s;
+  }
+  .btn-upload:hover { background: #1D4ED8; }
+
+  /* PROCESSING */
+  .cv-processing {
+    display: none; background: #fff; border: 1px solid rgba(37,99,235,.12);
+    border-radius: 18px; padding: 24px 32px; margin-bottom: 28px;
+    text-align: center;
+  }
+  .cv-processing .spinner {
+    width: 40px; height: 40px; border: 3px solid #dbeafe;
+    border-top-color: #2563EB; border-radius: 50%;
+    animation: spin .8s linear infinite; margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .cv-processing h3 { font-family: 'Manrope',sans-serif; font-weight: 700; color: #0F172A; }
+  .cv-processing p { color: #64748b; font-size: .85rem; margin-top: 6px; }
+
+  /* SECCIONES DEL FORMULARIO */
+  .perfil-section {
+    background: #fff; border: 1px solid rgba(37,99,235,.10);
+    border-radius: 18px; padding: 28px 32px; margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(37,99,235,.05);
+  }
+  .perfil-section h2 {
+    font-family: 'Manrope',sans-serif; font-size: 1rem; font-weight: 700;
+    color: #0F172A; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: .8rem; font-weight: 600; color: #475569; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 10px 14px; border: 1.5px solid rgba(37,99,235,.15);
+    border-radius: 10px; font-size: .88rem; font-family: 'Inter',sans-serif;
+    color: #0F172A; background: #FAFCFF; transition: border-color .2s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #2563EB; background: #fff;
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+
+  /* TAG INPUT */
+  .tag-container {
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    padding: 8px 12px; border: 1.5px solid rgba(37,99,235,.15);
+    border-radius: 10px; background: #FAFCFF; min-height: 44px;
+    cursor: text;
+  }
+  .tag-container:focus-within { border-color: #2563EB; background: #fff; }
+  .tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(37,99,235,.1); color: #2563EB;
+    border-radius: 999px; padding: 3px 10px; font-size: .78rem; font-weight: 600;
+  }
+  .tag button { background: none; border: none; cursor: pointer; color: #2563EB; font-size: .85rem; line-height: 1; padding: 0; }
+  .tag-input { border: none; outline: none; background: none; font-size: .88rem; flex: 1; min-width: 120px; }
+
+  /* EXPERIENCIA / EDUCACIÓN items */
+  .exp-item {
+    border: 1px solid rgba(37,99,235,.10); border-radius: 12px;
+    padding: 16px; margin-bottom: 12px; position: relative; background: #FAFCFF;
+  }
+  .exp-item-header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .exp-item h4 { font-weight: 700; font-size: .92rem; }
+  .exp-item p { color: #64748b; font-size: .82rem; margin-top: 2px; }
+  .btn-remove {
+    background: none; border: none; cursor: pointer; color: #94a3b8;
+    font-size: 1.1rem; line-height: 1; padding: 2px;
+    transition: color .2s;
+  }
+  .btn-remove:hover { color: #EF4444; }
+  .btn-add {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border: 1.5px dashed rgba(37,99,235,.25);
+    border-radius: 999px; background: none; cursor: pointer;
+    color: #2563EB; font-size: .82rem; font-weight: 600;
+    transition: all .2s; margin-top: 4px;
+  }
+  .btn-add:hover { background: rgba(37,99,235,.06); border-color: #2563EB; }
+
+  /* SAVE BUTTON */
+  .btn-guardar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 14px; margin-top: 8px;
+    background: linear-gradient(135deg, #2563EB, #38BDF8);
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 1rem; font-weight: 700; cursor: pointer;
+    transition: opacity .2s; font-family: 'Manrope',sans-serif;
+  }
+  .btn-guardar:hover { opacity: .9; }
+
+  .alert-success {
+    display: none; background: #ECFDF5; border: 1px solid #6EE7B7;
+    border-radius: 10px; padding: 12px 18px; color: #065F46;
+    font-size: .88rem; font-weight: 500; margin-bottom: 20px;
+    align-items: center; gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .perfil-header { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="index.html">
+    <div class="logo-mark">OI</div>
+    <div>OportunIA<span class="logo-sub">Educación • Becas • Empleabilidad</span></div>
+  </a>
+  <ul>
+    <li><a href="index.html#hub">Cursos</a></li>
+    <li><a href="index.html#becas">Becas</a></li>
+    <li><a href="perfil.html" class="active">Mi Perfil</a></li>
+    <li><a href="index.html#ia">Asistente IA <span class="nav-badge">NEW</span></a></li>
+    <li><a href="index.html#empleos">Empleos</a></li>
+  </ul>
+  <div id="navUsuario" style="display:none; align-items:center; gap:8px; position:relative;">
+    <button id="navAvatarBtn" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:999px;transition:background .2s;">
+      <img id="navAvatar" src="" alt="avatar" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #2563EB;">
+      <span id="navNombre" style="font-size:.85rem;font-weight:600;color:#0F172A;"></span>
+      <span style="font-size:.7rem;color:#64748b;">▾</span>
+    </button>
+    <div id="navDropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid rgba(37,99,235,.12);border-radius:14px;box-shadow:0 8px 32px rgba(37,99,235,.12);min-width:200px;overflow:hidden;z-index:999;">
+      <a href="perfil.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;text-decoration:none;color:#0F172A;font-size:.88rem;font-weight:500;" onmouseover="this.style.background='#F0F7FF'" onmouseout="this.style.background='none'">👤 Ver mi perfil</a>
+      <hr style="border:none;border-top:1px solid rgba(37,99,235,.08);margin:4px 0;">
+      <button id="btnLogout" style="display:flex;align-items:center;gap:10px;padding:12px 16px;width:100%;background:none;border:none;cursor:pointer;color:#EF4444;font-size:.88rem;font-weight:500;" onmouseover="this.style.background='#FFF0F0'" onmouseout="this.style.background='none'">🚪 Cerrar sesión</button>
+    </div>
+  </div>
+  <div class="nav-actions" id="navActions">
+    <a href="index.html" class="btn-ghost" style="text-decoration:none;">← Volver</a>
+  </div>
+</nav>
+
+<div class="perfil-page">
+
+  <!-- HEADER DEL PERFIL -->
+  <div class="perfil-header">
+    <div id="avatarContainer" class="perfil-avatar-placeholder">👤</div>
+    <div class="perfil-header-info">
+      <h1 id="headerNombre">Cargando perfil...</h1>
+      <p id="headerEmail"></p>
+      <div class="perfil-badge">✨ Perfil conectado con Google</div>
+    </div>
+  </div>
+
+  <!-- SUBIR CV -->
+  <div class="cv-upload-card" id="cvDropZone">
+    <input type="file" id="cvFileInput" accept=".pdf,.doc,.docx">
+    <div class="cv-icon">📄</div>
+    <h3>Subí tu CV y la IA completa tu perfil automáticamente</h3>
+    <p>Arrastrá tu archivo acá o hacé click para seleccionarlo. Formatos: PDF, DOC, DOCX</p>
+    <button class="btn-upload" onclick="document.getElementById('cvFileInput').click()">
+      📎 Seleccionar CV
+    </button>
+  </div>
+
+  <div class="cv-processing" id="cvProcessing">
+    <div class="spinner"></div>
+    <h3>Analizando tu CV con IA...</h3>
+    <p>Estamos leyendo tu currículum y completando tu perfil automáticamente.</p>
+  </div>
+
+  <div class="alert-success" id="alertSuccess">
+    ✅ ¡Perfil guardado correctamente!
+  </div>
+
+  <!-- DATOS PERSONALES -->
+  <div class="perfil-section">
+    <h2>👤 Datos personales</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="pf-nombre" placeholder="Tu nombre">
+      </div>
+      <div class="form-group">
+        <label>Edad</label>
+        <input type="number" id="pf-edad" placeholder="Tu edad" min="14" max="99">
+      </div>
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input type="text" id="pf-ciudad" placeholder="Tu ciudad">
+      </div>
+      <div class="form-group">
+        <label>Provincia</label>
+        <input type="text" id="pf-provincia" placeholder="Tu provincia">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="pf-email" placeholder="Tu email">
+      </div>
+      <div class="form-group">
+        <label>LinkedIn u otra red profesional</label>
+        <input type="text" id="pf-red" placeholder="https://linkedin.com/in/tu-perfil">
+      </div>
+      <div class="form-group full">
+        <label>Objetivo profesional</label>
+        <textarea id="pf-objetivo" placeholder="Contanos qué te gustaría lograr profesionalmente"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- HABILIDADES -->
+  <div class="perfil-section">
+    <h2>⚡ Habilidades</h2>
+    <div class="form-group">
+      <label>Agregá tus habilidades (presioná Enter o coma para agregar)</label>
+      <div class="tag-container" id="habilidadesContainer">
+        <input class="tag-input" id="habilidadesInput" placeholder="Ej: Excel, atención al cliente...">
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERESES -->
+  <div class="perfil-section">
+    <h2>🎯 Intereses profesionales</h2>
+    <div class="form-group">
+      <label>¿En qué áreas te interesa trabajar o desarrollarte?</label>
+      <div class="tag-container" id="interesesContainer">
+        <input class="tag-input" id="interesesInput" placeholder="Ej: tecnología, marketing, administración...">
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCIA LABORAL -->
+  <div class="perfil-section">
+    <h2>💼 Experiencia laboral</h2>
+    <div id="experienciaList"></div>
+    <button class="btn-add" onclick="agregarExperiencia()">+ Agregar experiencia</button>
+  </div>
+
+  <!-- FORMACIÓN -->
+  <div class="perfil-section">
+    <h2>🎓 Formación</h2>
+    <div class="form-grid" style="margin-bottom:16px;">
+      <div class="form-group">
+        <label>Nivel educativo</label>
+        <select id="pf-nivel">
+          <option value="">Seleccioná tu nivel</option>
+          <option value="primario">Primario</option>
+          <option value="secundario">Secundario</option>
+          <option value="terciario">Terciario</option>
+          <option value="universitario">Universitario</option>
+          <option value="posgrado">Posgrado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Carrera / área de estudio</label>
+        <input type="text" id="pf-carrera" placeholder="Ej: Administración de Empresas">
+      </div>
+    </div>
+    <div id="educacionList"></div>
+    <button class="btn-add" onclick="agregarEducacion()">+ Agregar otra formación</button>
+  </div>
+
+  <button class="btn-guardar" onclick="guardarPerfil()">
+    💾 Guardar perfil
+  </button>
+
+</div>
+
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.18/auth0-spa-js.production.js"></script>
+<script>
+const AUTH0_DOMAIN    = "dev-mbzyilxh7ne6hp76.us.auth0.com";
+const AUTH0_CLIENT_ID = "70wCWpqF5n4UBDEPFYky3nsv09VJaj1M";
+
+let habilidades  = [];
+let intereses    = [];
+let experiencias = [];
+let educaciones  = [];
+
+// ── AUTH0 ──
+(async () => {
+  const client = await auth0.createAuth0Client({
+    domain: AUTH0_DOMAIN, clientId: AUTH0_CLIENT_ID,
+    authorizationParams: { redirect_uri: window.location.origin + "/perfil.html" }
+  });
+
+  if (location.search.includes("code=") && location.search.includes("state=")) {
+    await client.handleRedirectCallback();
+    history.replaceState({}, document.title, "/perfil.html");
+  }
+
+  if (await client.isAuthenticated()) {
+    const user = await client.getUser();
+    mostrarNav(client, user);
+    cargarDatosGoogle(user);
+    cargarPerfilGuardado();
+  } else {
+    window.location.href = "index.html";
+  }
+})();
+
+function mostrarNav(client, user) {
+  document.getElementById("navActions").style.display = "none";
+  const navUsuario = document.getElementById("navUsuario");
+  navUsuario.style.display = "flex";
+  document.getElementById("navNombre").textContent = user.given_name || user.name || user.email;
+  if (user.picture) document.getElementById("navAvatar").src = user.picture;
+
+  document.getElementById("navAvatarBtn").addEventListener("click", e => {
+    e.stopPropagation();
+    const dd = document.getElementById("navDropdown");
+    dd.style.display = dd.style.display === "block" ? "none" : "block";
+  });
+  document.addEventListener("click", () => {
+    document.getElementById("navDropdown").style.display = "none";
+  });
+  document.getElementById("btnLogout").addEventListener("click", async () => {
+    await client.logout({ logoutParams: { returnTo: window.location.origin } });
+  });
+}
+
+function cargarDatosGoogle(user) {
+  // Header
+  document.getElementById("headerNombre").textContent = user.name || "Mi perfil";
+  document.getElementById("headerEmail").textContent  = user.email || "";
+  if (user.picture) {
+    document.getElementById("avatarContainer").outerHTML =
+      `<img src="${user.picture}" class="perfil-avatar" id="avatarContainer">`;
+  }
+  // Formulario
+  if (user.name  && !document.getElementById("pf-nombre").value)
+    document.getElementById("pf-nombre").value = user.name;
+  if (user.email && !document.getElementById("pf-email").value)
+    document.getElementById("pf-email").value  = user.email;
+}
+
+// ── PERFIL GUARDADO ──
+function cargarPerfilGuardado() {
+  const guardado = localStorage.getItem("oportunia_perfil");
+  if (!guardado) return;
+  const p = JSON.parse(guardado);
+  if (p.nombre)   document.getElementById("pf-nombre").value   = p.nombre;
+  if (p.edad)     document.getElementById("pf-edad").value     = p.edad;
+  if (p.ciudad)   document.getElementById("pf-ciudad").value   = p.ciudad;
+  if (p.provincia)document.getElementById("pf-provincia").value= p.provincia;
+  if (p.email)    document.getElementById("pf-email").value    = p.email;
+  if (p.red)      document.getElementById("pf-red").value      = p.red;
+  if (p.objetivo) document.getElementById("pf-objetivo").value = p.objetivo;
+  if (p.nivel)    document.getElementById("pf-nivel").value    = p.nivel;
+  if (p.carrera)  document.getElementById("pf-carrera").value  = p.carrera;
+  if (p.habilidades)  { habilidades  = p.habilidades;  renderTags("habilidadesContainer","habilidadesInput",habilidades); }
+  if (p.intereses)    { intereses    = p.intereses;    renderTags("interesesContainer","interesesInput",intereses); }
+  if (p.experiencias) { experiencias = p.experiencias; renderExperiencias(); }
+  if (p.educaciones)  { educaciones  = p.educaciones;  renderEducaciones(); }
+}
+
+function guardarPerfil() {
+  const perfil = {
+    nombre:      document.getElementById("pf-nombre").value,
+    edad:        document.getElementById("pf-edad").value,
+    ciudad:      document.getElementById("pf-ciudad").value,
+    provincia:   document.getElementById("pf-provincia").value,
+    email:       document.getElementById("pf-email").value,
+    red:         document.getElementById("pf-red").value,
+    objetivo:    document.getElementById("pf-objetivo").value,
+    nivel:       document.getElementById("pf-nivel").value,
+    carrera:     document.getElementById("pf-carrera").value,
+    habilidades, intereses, experiencias, educaciones
+  };
+  localStorage.setItem("oportunia_perfil", JSON.stringify(perfil));
+  const alert = document.getElementById("alertSuccess");
+  alert.style.display = "flex";
+  setTimeout(() => alert.style.display = "none", 3000);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ── TAG INPUT ──
+function renderTags(containerId, inputId, arr) {
+  const container = document.getElementById(containerId);
+  container.querySelectorAll(".tag").forEach(t => t.remove());
+  arr.forEach((tag, i) => {
+    const el = document.createElement("span");
+    el.className = "tag";
+    el.innerHTML = `${tag} <button onclick="removeTag('${containerId}','${inputId}',${i})">×</button>`;
+    container.insertBefore(el, document.getElementById(inputId));
+  });
+}
+
+function removeTag(containerId, inputId, i) {
+  const arr = containerId.includes("habilidad") ? habilidades : intereses;
+  arr.splice(i, 1);
+  renderTags(containerId, inputId, arr);
+}
+
+function setupTagInput(inputId, containerId, arr) {
+  const input = document.getElementById(inputId);
+  input.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === ",") && input.value.trim()) {
+      e.preventDefault();
+      arr.push(input.value.trim().replace(/,$/, ""));
+      input.value = "";
+      renderTags(containerId, inputId, arr);
+    }
+  });
+  document.getElementById(containerId).addEventListener("click", () => input.focus());
+}
+
+setupTagInput("habilidadesInput", "habilidadesContainer", habilidades);
+setupTagInput("interesesInput",   "interesesContainer",   intereses);
+
+// ── EXPERIENCIA ──
+function agregarExperiencia(data = {}) {
+  experiencias.push({ puesto: data.puesto || "", empresa: data.empresa || "", periodo: data.periodo || "", descripcion: data.descripcion || "" });
+  renderExperiencias();
+}
+
+function renderExperiencias() {
+  const list = document.getElementById("experienciaList");
+  list.innerHTML = "";
+  experiencias.forEach((exp, i) => {
+    list.innerHTML += `
+      <div class="exp-item">
+        <div class="exp-item-header">
+          <div style="flex:1">
+            <div class="form-grid" style="gap:10px;">
+              <div class="form-group"><label>Puesto</label><input type="text" value="${exp.puesto}" onchange="experiencias[${i}].puesto=this.value" placeholder="Ej: Vendedora"></div>
+              <div class="form-group"><label>Empresa</label><input type="text" value="${exp.empresa}" onchange="experiencias[${i}].empresa=this.value" placeholder="Nombre de la empresa"></div>
+              <div class="form-group"><label>Período</label><input type="text" value="${exp.periodo}" onchange="experiencias[${i}].periodo=this.value" placeholder="Ej: 2022 – 2024"></div>
+              <div class="form-group"><label>Descripción</label><input type="text" value="${exp.descripcion}" onchange="experiencias[${i}].descripcion=this.value" placeholder="Tareas principales"></div>
+            </div>
+          </div>
+          <button class="btn-remove" onclick="experiencias.splice(${i},1);renderExperiencias()">✕</button>
+        </div>
+      </div>`;
+  });
+}
+
+// ── EDUCACIÓN ──
+function agregarEducacion(data = {}) {
+  educaciones.push({ titulo: data.titulo || "", institucion: data.institucion || "", periodo: data.periodo || "" });
+  renderEducaciones();
+}
+
+function renderEducaciones() {
+  const list = document.getElementById("educacionList");
+  list.innerHTML = "";
+  educaciones.forEach((edu, i) => {
+    list.innerHTML += `
+      <div class="exp-item">
+        <div class="exp-item-header">
+          <div style="flex:1">
+            <div class="form-grid" style="gap:10px;">
+              <div class="form-group"><label>Título / Carrera</label><input type="text" value="${edu.titulo}" onchange="educaciones[${i}].titulo=this.value" placeholder="Ej: Técnica en Administración"></div>
+              <div class="form-group"><label>Institución</label><input type="text" value="${edu.institucion}" onchange="educaciones[${i}].institucion=this.value" placeholder="Nombre de la institución"></div>
+              <div class="form-group full"><label>Período</label><input type="text" value="${edu.periodo}" onchange="educaciones[${i}].periodo=this.value" placeholder="Ej: 2019 – 2022"></div>
+            </div>
+          </div>
+          <button class="btn-remove" onclick="educaciones.splice(${i},1);renderEducaciones()">✕</button>
+        </div>
+      </div>`;
+  });
+}
+
+// ── SUBIR CV ──
+const cvDropZone  = document.getElementById("cvDropZone");
+const cvFileInput = document.getElementById("cvFileInput");
+
+cvDropZone.addEventListener("dragover", e => { e.preventDefault(); cvDropZone.classList.add("drag-over"); });
+cvDropZone.addEventListener("dragleave", () => cvDropZone.classList.remove("drag-over"));
+cvDropZone.addEventListener("drop", e => {
+  e.preventDefault(); cvDropZone.classList.remove("drag-over");
+  if (e.dataTransfer.files[0]) procesarCV(e.dataTransfer.files[0]);
+});
+cvFileInput.addEventListener("change", () => {
+  if (cvFileInput.files[0]) procesarCV(cvFileInput.files[0]);
+});
+
+async function procesarCV(file) {
+  cvDropZone.style.display    = "none";
+  document.getElementById("cvProcessing").style.display = "block";
+
+  // Leer el archivo como base64
+  const base64 = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload  = () => res(r.result.split(",")[1]);
+    r.onerror = () => rej(new Error("No se pudo leer el archivo"));
+    r.readAsDataURL(file);
+  });
+
+  const esPDF = file.type === "application/pdf";
+  let messages;
+
+  if (esPDF) {
+    messages = [{
+      role: "user",
+      content: [
+        { type: "document", source: { type: "base64", media_type: "application/pdf", data: base64 } },
+        { type: "text", text: `Analizá este CV y extraé la información en formato JSON con exactamente esta estructura:
+{
+  "nombre": "",
+  "email": "",
+  "telefono": "",
+  "ciudad": "",
+  "provincia": "",
+  "red": "",
+  "objetivo": "",
+  "habilidades": [],
+  "intereses": [],
+  "nivel": "",
+  "carrera": "",
+  "experiencias": [{ "puesto": "", "empresa": "", "periodo": "", "descripcion": "" }],
+  "educaciones": [{ "titulo": "", "institucion": "", "periodo": "" }]
+}
+Respondé SOLO el JSON, sin texto adicional ni backticks.` }
+      ]
+    }];
+  } else {
+    messages = [{
+      role: "user",
+      content: `No pude leer el archivo como PDF. Por favor subí el CV en formato PDF para que la IA pueda analizarlo.`
+    }];
+  }
+
+  try {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, messages })
+    });
+    const data = await resp.json();
+    const texto = data.content.map(b => b.text || "").join("").trim();
+
+    if (!esPDF) {
+      alert("Por favor subí el CV en formato PDF.");
+      resetCV(); return;
+    }
+
+    const perfil = JSON.parse(texto.replace(/```json|```/g, "").trim());
+    rellenarConCV(perfil);
+  } catch (err) {
+    console.error(err);
+    alert("Hubo un error al analizar el CV. Podés completar el perfil manualmente.");
+    resetCV();
+  }
+
+  document.getElementById("cvProcessing").style.display = "none";
+  cvDropZone.style.display = "block";
+  cvDropZone.innerHTML = `<div class="cv-icon">✅</div><h3>CV analizado correctamente</h3><p>Tu perfil fue completado automáticamente. Revisá y editá los datos si es necesario.</p>`;
+}
+
+function rellenarConCV(p) {
+  if (p.nombre)    document.getElementById("pf-nombre").value    = p.nombre;
+  if (p.email)     document.getElementById("pf-email").value     = p.email;
+  if (p.ciudad)    document.getElementById("pf-ciudad").value    = p.ciudad;
+  if (p.provincia) document.getElementById("pf-provincia").value = p.provincia;
+  if (p.red)       document.getElementById("pf-red").value       = p.red;
+  if (p.objetivo)  document.getElementById("pf-objetivo").value  = p.objetivo;
+  if (p.nivel)     document.getElementById("pf-nivel").value     = p.nivel;
+  if (p.carrera)   document.getElementById("pf-carrera").value   = p.carrera;
+  if (p.habilidades?.length)  { habilidades  = p.habilidades;  renderTags("habilidadesContainer","habilidadesInput",habilidades); }
+  if (p.intereses?.length)    { intereses    = p.intereses;    renderTags("interesesContainer","interesesInput",intereses); }
+  if (p.experiencias?.length) { experiencias = p.experiencias; renderExperiencias(); }
+  if (p.educaciones?.length)  { educaciones  = p.educaciones;  renderEducaciones(); }
+}
+
+function resetCV() {
+  document.getElementById("cvProcessing").style.display = "none";
+  cvDropZone.style.display = "block";
+}
+</script>
+</body>
+</html>

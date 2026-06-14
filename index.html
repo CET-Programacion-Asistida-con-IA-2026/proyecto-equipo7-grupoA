@@ -42,8 +42,22 @@
   </ul>
 
   <div class="nav-actions">
-    <button class="btn-ghost">Iniciar sesión</button>
-    <button class="btn-primary">Registrate gratis →</button>
+    <button class="btn-ghost" id="abrirLogin">Iniciar sesión</button>
+    <button class="btn-primary" id="abrirLogin2">Registrate gratis →</button>
+  </div>
+
+  <div id="navUsuario" style="display:none; align-items:center; gap:8px; position:relative;">
+    <button id="navAvatarBtn" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:999px;transition:background .2s;" onmouseover="this.style.background='rgba(37,99,235,.08)'" onmouseout="this.style.background='none'">
+      <img id="navAvatar" src="" alt="avatar" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #2563EB;">
+      <span id="navNombre" style="font-size:.85rem;font-weight:600;color:#0F172A;"></span>
+      <span style="font-size:.7rem;color:#64748b;">▾</span>
+    </button>
+    <div id="navDropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid rgba(37,99,235,.12);border-radius:14px;box-shadow:0 8px 32px rgba(37,99,235,.12);min-width:200px;overflow:hidden;z-index:999;">
+      <a href="perfil.html" style="display:flex;align-items:center;gap:10px;padding:12px 16px;text-decoration:none;color:#0F172A;font-size:.88rem;font-weight:500;transition:background .15s;" onmouseover="this.style.background='#F0F7FF'" onmouseout="this.style.background='none'">👤 Ver mi perfil</a>
+      <a href="perfil.html#editar" style="display:flex;align-items:center;gap:10px;padding:12px 16px;text-decoration:none;color:#0F172A;font-size:.88rem;font-weight:500;transition:background .15s;" onmouseover="this.style.background='#F0F7FF'" onmouseout="this.style.background='none'">✏️ Editar perfil</a>
+      <hr style="border:none;border-top:1px solid rgba(37,99,235,.08);margin:4px 0;">
+      <button id="btnLogout" style="display:flex;align-items:center;gap:10px;padding:12px 16px;width:100%;background:none;border:none;cursor:pointer;color:#EF4444;font-size:.88rem;font-weight:500;transition:background .15s;" onmouseover="this.style.background='#FFF0F0'" onmouseout="this.style.background='none'">🚪 Cerrar sesión</button>
+    </div>
   </div>
 
 </nav>
@@ -157,7 +171,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
     </div>
@@ -165,7 +178,7 @@
   </div>
 </section>
 
-<!-- ═══ HOW IT WORKS ═══ -->
+<!-- ═══ HOW IT WORKS / CÓMO FUNCIONA ═══ -->
 <section class="how-section section" id="how">
 
   <div class="section-header">
@@ -186,7 +199,7 @@
 
   <div class="steps-track">
 
-    <div class="step-item">
+    <div class="step-item" id="step1">
       <div class="step-bubble">
         <div class="step-emoji">✏️</div>
         <div class="step-num-badge">1</div>
@@ -197,9 +210,11 @@
       <div class="step-desc">
         Cargá tu experiencia, estudios, habilidades e intereses.
       </div>
+
     </div>
 
-    <div class="step-item">
+    <div class="step-item locked" id="step2">
+      
       <div class="step-bubble">
         <div class="step-emoji">🔍</div>
         <div class="step-num-badge">2</div>
@@ -212,7 +227,8 @@
       </div>
     </div>
 
-    <div class="step-item">
+    <div class="step-item locked" id="step3">
+
       <div class="step-bubble">
         <div class="step-emoji">🎓</div>
         <div class="step-num-badge">3</div>
@@ -225,7 +241,8 @@
       </div>
     </div>
 
-    <div class="step-item">
+    <div class="step-item locked" id="step4">
+
       <div class="step-bubble">
         <div class="step-emoji">🏆</div>
         <div class="step-num-badge">4</div>
@@ -238,7 +255,8 @@
       </div>
     </div>
 
-    <div class="step-item">
+    <div class="step-item locked" id="step5">
+
       <div class="step-bubble">
         <div class="step-emoji">💼</div>
         <div class="step-num-badge">5</div>
@@ -871,7 +889,7 @@
 
     </div>
 
-    <div class="profile-features">
+    <div class="profile-features" id="cvInteligente">
 
       <div class="profile-feature">
         <div class="pf-icon-wrap pf-icon-pink">📄</div>
@@ -1476,6 +1494,275 @@
   </div>
 
 </footer>
+
+<!-- MODAL ANALISIS IA -->
+
+<div class="analysis-modal" id="analysisModal">
+
+  <div class="analysis-box">
+
+    <div class="analysis-icon">
+      🤖
+    </div>
+
+    <h3>
+      Analizando tu perfil...
+    </h3>
+
+    <div class="analysis-list">
+
+      <div class="analysis-item" id="analisis1">
+        Detectando habilidades...
+      </div>
+
+      <div class="analysis-item" id="analisis2">
+        Analizando experiencia...
+      </div>
+
+      <div class="analysis-item" id="analisis3">
+        Identificando fortalezas...
+      </div>
+
+      <div class="analysis-item" id="analisis4">
+        Generando recomendaciones...
+      </div>
+
+    </div>
+
+    <div class="progress-bar">
+
+      <div class="progress-fill" id="progressFill"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Modal Login -->
+<div class="modal-login oculto" id="modalLogin">
+
+    <div class="login-box">
+
+        <span class="cerrar-modal" id="cerrarModal">✕</span>
+
+        <h2>Bienvenido a OportunIA</h2>
+
+        <p>Iniciá sesión o creá una cuenta para empezar a armar tu perfil.</p>
+
+        <!-- VISTA SOCIAL -->
+        <div id="vistaSocial">
+
+            <div class="social-login" id="socialLogin">
+
+                <button class="btn-social btn-google" id="btnGoogle">
+                    <span class="social-icon">🔵</span> Continuar con Google
+                </button>
+
+                <button class="btn-social btn-linkedin" id="btnLinkedIn">
+                    <span class="social-icon">💼</span> Continuar con LinkedIn
+                </button>
+
+                <button class="btn-social btn-email" id="btnEmailContinue">
+                    <span class="social-icon">✉️</span> Continuar con email
+                </button>
+
+            </div>
+
+            <div class="login-divider" id="loginDivider">
+                <span>o registrate manualmente</span>
+            </div>
+
+        </div>
+
+        <div class="social-loading oculto" id="socialLoading">
+            <div class="social-spinner"></div>
+            <span id="socialLoadingText">Conectando...</span>
+        </div>
+
+        <!-- VISTA MANUAL -->
+        <div id="manualLoginSection" class="oculto">
+
+            <button class="back-arrow" id="backToSocial">←</button>
+
+            <div class="tabs-login" id="tabsLogin">
+                <button class="tab-login active" id="btnRegistro">Registrarse</button>
+                <button class="tab-login" id="btnSesion">Iniciar sesión</button>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="registroForm">
+                <input type="text" placeholder="Nombre y apellido">
+                <input type="email" id="emailRegistro" placeholder="Email">
+                <span class="error-msg oculto" id="errorEmailRegistro">Ingresá un email válido (ej: nombre@dominio.com)</span>
+                <input type="password" placeholder="Contraseña">
+                <button class="btn-hero-main" id="btnCrearCuenta">Crear cuenta</button>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="sesionForm" style="display:none;">
+                <input type="email" id="emailSesion" placeholder="Email">
+                <span class="error-msg oculto" id="errorEmailSesion">Ingresá un email válido (ej: nombre@dominio.com)</span>
+                <input type="password" placeholder="Contraseña">
+                <button class="btn-hero-main" id="btnIngresar">Ingresar</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal Formulario de Perfil -->
+<div class="modal-login oculto" id="modalPerfil">
+
+    <div class="login-box perfil-box">
+
+        <button class="back-arrow" id="backToLogin">←</button>
+
+        <span class="cerrar-modal" id="cerrarModalPerfil">✕</span>
+
+        <h2>Creá tu perfil</h2>
+
+        <p>Contanos un poco sobre vos para que la IA pueda analizar tu perfil y recomendarte cursos, becas y empleos.</p>
+
+        <form id="profileForm">
+
+            <h4 class="perfil-section-title">Datos personales</h4>
+            <input type="text" id="pf-nombre" placeholder="Nombre y apellido" required>
+            <input type="number" id="pf-edad" placeholder="Edad" min="14" max="99" required>
+            <input type="text" id="pf-ciudad" placeholder="Ciudad" required>
+            <input type="text" id="pf-provincia" placeholder="Provincia" required>
+            <input type="email" id="pf-email" placeholder="Email" required>
+            <span class="error-msg oculto" id="errorPfEmail">Ingresá un email válido (ej: nombre@dominio.com)</span>
+            <input type="text" id="pf-red" placeholder="LinkedIn u otra red profesional (opcional)">
+
+            <h4 class="perfil-section-title">Formación</h4>
+            <select id="pf-nivel" required>
+                <option value="">Nivel educativo</option>
+                <option value="secundario">Secundario</option>
+                <option value="terciario">Terciario</option>
+                <option value="universitario">Universitario</option>
+                <option value="posgrado">Posgrado</option>
+            </select>
+            <input type="text" id="pf-carrera" placeholder="Carrera / área de estudio">
+
+            <h4 class="perfil-section-title">Habilidades</h4>
+            <input type="text" id="pf-habilidades" placeholder="Ej: Excel, atención al cliente, organización (separadas por coma)" required>
+
+            <h4 class="perfil-section-title">Intereses profesionales</h4>
+            <input type="text" id="pf-intereses" placeholder="Ej: tecnología, marketing, administración (separados por coma)" required>
+
+            <h4 class="perfil-section-title">Objetivo profesional</h4>
+            <textarea id="pf-objetivo" rows="3" placeholder="Contanos qué te gustaría lograr profesionalmente" required></textarea>
+
+            <button type="submit" class="btn-hero-main perfil-submit">Guardar perfil y continuar →</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div id="modalBecas" class="profile-modal oculto">
+
+    <h2>🏆 Becas compatibles con tu perfil</h2>
+
+    <div class="beca-card">
+        Santander Skills
+    </div>
+
+    <div class="beca-card">
+        Google Career Certificates
+    </div>
+
+    <div class="beca-card">
+        Potenciar Talento
+    </div>
+
+    <button id="finalizarBecas">
+
+        Continuar →
+
+    </button>
+
+</div>
+
+<div id="modalEmpleos" class="profile-modal oculto">
+
+    <h2>
+        💼 Oportunidades recomendadas para vos
+    </h2>
+
+    <div class="job-card">
+
+        Asistente Administrativo
+
+        <br>
+
+        Compatibilidad 94%
+
+    </div>
+
+    <div class="job-card">
+
+        Analista de Datos Jr.
+
+        <br>
+
+        Compatibilidad 88%
+
+    </div>
+
+    <button id="generarCV">
+
+        🤖 Generar CV con IA
+
+    </button>
+
+</div>
+
+<div id="modalCV" class="profile-modal oculto">
+
+    <h2>
+        🤖 CV Inteligente
+    </h2>
+
+    <p>
+
+        Elegí el tipo de empleo para el que querés generar tu CV.
+
+    </p>
+
+    <button class="btn-cv">
+
+        Administrativa
+
+    </button>
+
+    <button class="btn-cv">
+
+        Atención al Cliente
+
+    </button>
+
+    <button class="btn-cv">
+
+        Marketing Digital
+
+    </button>
+
+    <button class="btn-cv">
+
+        Analista de Datos
+
+    </button>
+
+</div>
+
+<!-- Auth0 SPA SDK -->
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.18/auth0-spa-js.production.js"></script>
+
 
 <script src="main.js"></script>
 
