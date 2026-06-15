@@ -331,10 +331,130 @@ const alcancesSeleccionados =
 
 
 // ======================================================
-// CREAR PERFIL
+// SESIÓN DE USUARIO (persistencia con localStorage)
 // ======================================================
 
-let perfilUsuario = {};
+const PERFIL_KEY = "oportunia_perfil";
+
+// Guarda el perfil del usuario en el navegador
+function guardarPerfil(perfil) {
+  localStorage.setItem(PERFIL_KEY, JSON.stringify(perfil));
+}
+
+// Recupera el perfil guardado (o null si no hay ninguno)
+function cargarPerfil() {
+  const data = localStorage.getItem(PERFIL_KEY);
+  return data ? JSON.parse(data) : null;
+}
+
+// Elimina el perfil guardado (cerrar sesión)
+function borrarPerfil() {
+  localStorage.removeItem(PERFIL_KEY);
+}
+
+// Genera un avatar circular con la inicial del nombre (sin pedir imágenes externas)
+function generarAvatar(nombre) {
+  const inicial = (nombre || "U").trim().charAt(0).toUpperCase() || "U";
+  const svg =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="68" height="68">' +
+    '<rect width="100%" height="100%" rx="34" fill="#2563EB"/>' +
+    '<text x="50%" y="54%" font-family="Manrope, sans-serif" font-size="30" ' +
+    'fill="#ffffff" font-weight="800" text-anchor="middle" dominant-baseline="middle">' +
+    inicial + '</text></svg>';
+  return "data:image/svg+xml," + encodeURIComponent(svg);
+}
+
+// Muestra el header como "usuario logueado" o como "visitante"
+function actualizarHeaderUsuario(perfil) {
+  const navActions = document.querySelector(".nav-actions");
+  const navUsuario = document.getElementById("navUsuario");
+
+  if (perfil && perfil.datosPersonales && perfil.datosPersonales.nombre) {
+    const nombreCompleto = perfil.datosPersonales.nombre.trim();
+    const primerNombre = nombreCompleto.split(" ")[0];
+
+    document.getElementById("navAvatar").src = generarAvatar(nombreCompleto);
+    document.getElementById("navNombre").textContent = primerNombre;
+
+    navActions.style.display = "none";
+    navUsuario.style.display = "flex";
+  } else {
+    navActions.style.display = "flex";
+    navUsuario.style.display = "none";
+    document.getElementById("navDropdown").style.display = "none";
+  }
+}
+
+// Marca un paso como "disponible" (pulso violeta)
+function activarPaso(numero) {
+  const paso = document.getElementById("step" + numero);
+  if (!paso) return;
+  paso.classList.remove("locked", "completed");
+  paso.classList.add("available");
+}
+
+// Marca un paso como "completado" (animación líquida)
+function completarPaso(numero) {
+  const paso = document.getElementById("step" + numero);
+  if (!paso) return;
+  paso.classList.remove("locked", "available");
+  paso.classList.add("completed");
+}
+
+// Pinta el mapa de "¿Cómo funciona?" según el progreso del usuario
+function restaurarProgreso(perfil) {
+  for (let n = 1; n <= 5; n++) {
+    const paso = document.getElementById("step" + n);
+    if (paso) paso.classList.remove("completed", "available", "locked");
+  }
+
+  if (perfil) {
+    completarPaso(1);
+    activarPaso(2);
+    [3, 4, 5].forEach(n => {
+      const paso = document.getElementById("step" + n);
+      if (paso) paso.classList.add("locked");
+    });
+  } else {
+    activarPaso(1);
+    [2, 3, 4, 5].forEach(n => {
+      const paso = document.getElementById("step" + n);
+      if (paso) paso.classList.add("locked");
+    });
+  }
+}
+
+// Carga los datos guardados en el formulario de perfil (para editarlo)
+function precargarFormularioPerfil(perfil) {
+  if (!perfil || !perfil.datosPersonales) return;
+
+  document.getElementById("pf-nombre").value = perfil.datosPersonales.nombre || "";
+  document.getElementById("pf-edad").value = perfil.datosPersonales.edad || "";
+  document.getElementById("pf-ciudad").value = perfil.datosPersonales.ciudad || "";
+  document.getElementById("pf-provincia").value = perfil.datosPersonales.provincia || "";
+  document.getElementById("pf-email").value = perfil.datosPersonales.email || "";
+  document.getElementById("pf-red").value = perfil.datosPersonales.redProfesional || "";
+
+  document.getElementById("pf-nivel").value = (perfil.formacion && perfil.formacion.nivelEducativo) || "";
+  document.getElementById("pf-carrera").value = (perfil.formacion && perfil.formacion.carrera) || "";
+
+  document.getElementById("pf-habilidades").value = (perfil.habilidades || []).join(", ");
+  document.getElementById("pf-intereses").value = (perfil.interesesProfesionales || []).join(", ");
+  document.getElementById("pf-objetivo").value = perfil.objetivoProfesional || "";
+}
+
+// ======================================================
+// INICIALIZACIÓN: restaurar sesión al cargar la página
+// ======================================================
+
+let perfilUsuario = cargarPerfil() || {};
+
+actualizarHeaderUsuario(perfilUsuario.datosPersonales ? perfilUsuario : null);
+restaurarProgreso(perfilUsuario.datosPersonales ? perfilUsuario : null);
+
+// ======================================================
+// CREAR PERFIL
+// ======================================================
 
 const profileForm = document.getElementById("profileForm");
 
@@ -343,6 +463,12 @@ if (profileForm) {
   profileForm.addEventListener("submit", function(e) {
 
     e.preventDefault();
+
+    // Validar email antes de guardar nada
+    const inputEmail = document.getElementById("pf-email");
+    const errorEmail = document.getElementById("errorPfEmail");
+
+    if (!validarEmail(inputEmail, errorEmail)) return;
 
     const nombre = document.getElementById("pf-nombre").value;
     const edad = document.getElementById("pf-edad").value;
@@ -374,7 +500,8 @@ if (profileForm) {
       objetivoProfesional
     };
 
-    console.log(perfilUsuario);
+    guardarPerfil(perfilUsuario);
+    actualizarHeaderUsuario(perfilUsuario);
 
     document.getElementById("modalPerfil").classList.add("oculto");
 
@@ -383,6 +510,37 @@ if (profileForm) {
 
   });
 }
+
+// ======================================================
+// MENÚ DE USUARIO (avatar, editar perfil, cerrar sesión)
+// ======================================================
+
+// Abrir / cerrar el menú desplegable del avatar
+document.getElementById("navAvatarBtn").addEventListener("click", function(e){
+  e.stopPropagation();
+  const dropdown = document.getElementById("navDropdown");
+  dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+});
+
+// Cerrar el menú si se hace click en cualquier otro lugar de la página
+document.addEventListener("click", function(){
+  document.getElementById("navDropdown").style.display = "none";
+});
+
+// Editar perfil: precarga el formulario con los datos guardados
+document.getElementById("btnEditarPerfil").addEventListener("click", function(){
+  document.getElementById("navDropdown").style.display = "none";
+  precargarFormularioPerfil(perfilUsuario);
+  document.getElementById("modalPerfil").classList.remove("oculto");
+});
+
+// Cerrar sesión: borra el perfil guardado y vuelve a la vista de visitante
+document.getElementById("btnLogout").addEventListener("click", function(){
+  borrarPerfil();
+  perfilUsuario = {};
+  actualizarHeaderUsuario(null);
+  restaurarProgreso(null);
+});
 
 // ======================================================
 // FLUJO DE LOGIN / REGISTRO (PASO 1)
@@ -429,33 +587,113 @@ document.getElementById("cerrarModalPerfil").addEventListener("click", function(
   document.getElementById("modalPerfil").classList.add("oculto");
 });
 
-
 // ======================================================
-// CURSOS
+// FORMACIÓN Y CAPACITACIÓN
 // ======================================================
+// Links oficiales de cada plataforma (para las platform-card)
+const enlacesPlataformas = {
+  "Coursera": "https://www.coursera.org/search?productTypeDescription=Professional%20Certificates&sortBy=BEST_MATCH",
+  "edX": "https://www.edx.org/",
+  "Udemy": "https://www.udemy.com/",
+  "Google Career Certificates": "https://grow.google/certificates/",
+  "Cisco Networking Academy": "https://www.netacad.com/es/",
+  "Fundación Carlos Slim": "https://capacitateparaelempleo.org/",
+  "Santander Open Academy": "https://www.santanderopenacademy.com/",
+  "LinkedIn Learning": "https://www.linkedin.com/learning/",
+  "Harvard Online": "https://pll.harvard.edu/",
+  "MIT OpenCourseWare": "https://ocw.mit.edu/"
+};
 
-// Mostrar cursos recomendados
-// Filtrar por categoría
-// Buscar cursos
+// Conecta las tarjetas de plataformas y de cursos con sus links externos
+function activarClicksDeCursos() {
 
+  // Tarjetas de plataformas (Coursera, edX, etc.)
+  document.querySelectorAll('.platform-card').forEach(card => {
+    const nombre = card.querySelector('.platform-name').textContent.trim();
+    const url = enlacesPlataformas[nombre];
 
-// ======================================================
-// BECAS
-// ======================================================
+    if (!url) return; // si la plataforma no está en el mapa, no hace nada
 
-// Mostrar becas disponibles
-// Filtrar becas
-// Recomendar becas compatibles
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function () {
+      window.open(url, '_blank');
+    });
+  });
+
+  // Tarjetas de cursos (las que tienen data-curso-id)
+  document.querySelectorAll('.course-card[data-curso-id]').forEach(card => {
+    const curso = catalogoCursos.find(c => c.id === card.dataset.cursoId);
+
+    if (!curso || !curso.url) return;
+
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function () {
+      window.open(curso.url, '_blank');
+    });
+  });
+}
+
+activarClicksDeCursos();
 
 // ======================================================
 // EMPLEABILIDAD
 // ======================================================
 
-// Calcular porcentaje de compatibilidad
-// Ordenar empleos por afinidad
-// Filtrar por modalidad
-// Filtrar por nivel
-// Mostrar empleos recomendados
+// Catálogo de empleos disponibles.
+const catalogoEmpleos = [
+  {
+    id: "empleo-asistente-admin",
+    titulo: "Asistente Administrativo",
+    empresa: "Empresa Nacional",
+    icono: "📊",
+    modalidad: "Híbrido",      // Remoto / Presencial / Híbrido
+    tipo: "Full Time",         // Full Time / Part Time / Pasantía / Freelance
+    nivel: "Junior",           // Junior / Semi Senior / Senior
+    tags: ["excel", "administración", "organización"]
+  },
+  {
+    id: "empleo-analista-datos",
+    titulo: "Analista de Datos Jr.",
+    empresa: "Empresa Tecnológica",
+    icono: "📈",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Junior",
+    tags: ["excel", "power bi", "datos", "análisis de datos"]
+  },
+  {
+    id: "empleo-atencion-cliente",
+    titulo: "Atención al Cliente",
+    empresa: "Empresa de Servicios",
+    icono: "🎧",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Junior",
+    tags: ["comunicación", "crm", "atención al cliente"]
+  },
+  {
+    id: "empleo-marketing-digital",
+    titulo: "Marketing Digital Jr.",
+    empresa: "Agencia de Marketing",
+    icono: "📱",
+    modalidad: "Híbrido",
+    tipo: "Full Time",
+    nivel: "Junior",
+    tags: ["redes sociales", "contenido", "marketing"]
+  },
+
+  // 👉 Plantilla para agregar un empleo nuevo:
+  // {
+  //   id: "empleo-xxx",
+  //   titulo: "...",
+  //   empresa: "...",
+  //   icono: "💼",
+  //   modalidad: "Remoto|Presencial|Híbrido",
+  //   tipo: "Full Time|Part Time|Pasantía|Freelance",
+  //   nivel: "Junior|Semi Senior|Senior",
+  //   tags: ["...", "...", "..."]
+  // },
+];
 
 // Abrir modal login
 document.getElementById("abrirLogin").addEventListener("click", function(){
@@ -544,16 +782,8 @@ document.getElementById("btnIngresar").addEventListener("click", function(e){
   document.getElementById("modalPerfil").classList.remove("oculto");
 });
 
-// Validar email en el formulario de perfil
-profileForm.addEventListener("submit", function(e){
-  e.preventDefault();
-
-  const input = document.getElementById("pf-email");
-  const error = document.getElementById("errorPfEmail");
-
-  if (!validarEmail(input, error)) return;
-
-});
+// (La validación del email de perfil ya se hace dentro del submit principal,
+// más arriba, antes de guardar el perfil y cerrar el modal.)
 
 // ======================================================
 // FOOTER - SUSCRIPCIÓN POR EMAIL
@@ -579,3 +809,4 @@ if (footerEmailBtn) {
   });
 
 }
+
