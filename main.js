@@ -200,6 +200,11 @@ if (profileForm) {
     completarPaso(1);
     activarPaso(2);
 
+    mostrarToast("✅ ¡Perfil guardado! Ahora la IA puede analizar tus oportunidades.");
+
+    // Reordenar becas y empleos por compatibilidad con el perfil guardado
+    reordenarPorPerfil(perfilUsuario);
+
   });
 }
 
@@ -240,7 +245,18 @@ document.getElementById("btnLogout").addEventListener("click", function(){
 
 // Click en "Creá tu perfil" -> abre modal de login/registro
 document.getElementById("step1").addEventListener("click", function(){
-  document.getElementById("modalLogin").classList.remove("oculto");
+  abrirModalLogin();
+});
+
+// Click en "Analizá tu perfil" -> si tiene perfil, reordena todo por compatibilidad
+document.getElementById("step2").addEventListener("click", function(){
+  const perfil = cargarPerfil();
+  if (!perfil || !perfil.datosPersonales) return;
+  reordenarPorPerfil(perfil);
+  completarPaso(2);
+  activarPaso(3);
+  // Scroll suave a cursos
+  document.getElementById("hub").scrollIntoView({ behavior: "smooth" });
 });
 
 // Continuar con email -> muestra el formulario manual de registro/login
@@ -558,10 +574,18 @@ document.querySelectorAll('.edu-tab').forEach(tab => {
     document.querySelectorAll('.edu-tab').forEach(t => t.classList.remove('active'));
     this.classList.add('active');
 
-    aplicarFiltroCursos(this.textContent.trim());
+    const categoria = this.textContent.trim();
+    filtrarPlataformasPorTab(categoria);
   });
 });
 
+function filtrarPlataformasPorTab(categoria) {
+  document.querySelectorAll('.platform-card').forEach(card => {
+    const areas = (card.dataset.areas || '').split(',');
+    const mostrar = categoria === 'Todos' || areas.includes(categoria.toLowerCase().replace('& ', '').replace(/ /g, '-'));
+    card.style.display = mostrar ? '' : 'none';
+  });
+}
 
 // ======================================================
 // BECAS
@@ -955,56 +979,7 @@ const becas = [
   }
 ];
 
-// ── RENDERIZADO BECAS ─────────────────────────────────────────────────────────
-
-function renderizarBecas(lista) {
-  const contenedor = document.getElementById('becasGrid');
-  if (!lista.length) {
-    contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#888;">No hay becas que coincidan con los filtros.</p>';
-    return;
-  }
-
-  contenedor.innerHTML = lista.map(b => {
-    const colorMatch = b.compatibilidad >= 85 ? '#22c55e' : b.compatibilidad >= 70 ? '#f59e0b' : '#ef4444';
-    const estadoBadge = b.estado === 'abierta'
-      ? '<span style="background:#dcfce7; color:#16a34a; padding:2px 8px; border-radius:999px; font-size:.75rem;">● Abierta</span>'
-      : '<span style="background:#fef9c3; color:#ca8a04; padding:2px 8px; border-radius:999px; font-size:.75rem;">○ Próximamente</span>';
-    const cierre = b.fechaCierre
-      ? `<div style="font-size:.8rem; color:#888;">Cierra: ${b.fechaCierre}</div>`
-      : '';
-
-    return `
-      <div class="beca-card${b.destacada ? ' top-match' : ''}"
-           data-modalidad="${b.modalidad}"
-           data-nivel="${b.nivel}"
-           data-area="${b.area}"
-           data-alcance="${b.alcance}"
-           data-idioma="${b.idioma}">
-        <div class="beca-logo">${b.logo}</div>
-        <div class="beca-info">
-          <div class="beca-title">${b.titulo}</div>
-          <div class="beca-org">${b.organizacion} · ${b.pais}</div>
-          <div class="beca-desc">${b.descripcion}</div>
-          <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.4rem;">
-            ${estadoBadge}
-            <span class="job-tag">${b.tipo}</span>
-            <span class="job-tag">${b.idioma}</span>
-            <span class="job-tag">${b.financiamiento}</span>
-          </div>
-          ${cierre}
-        </div>
-        <div class="job-right">
-          <div class="job-match" style="color:${colorMatch}; font-weight:700; font-size:1.1rem;">${b.compatibilidad}%</div>
-          <a href="${b.url}" target="_blank" rel="noopener" class="btn-apply-job">
-            Ver beca →
-          </a>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-/// ── PAGINACIÓN BECAS ──────────────────────────────────────────────────────────
+// ── PAGINACIÓN BECAS ──────────────────────────────────────────────────────────
 
 const BECAS_POR_PAGINA = 6;
 let becasFiltradas = [...becas];
@@ -1037,7 +1012,7 @@ function renderizarPagina() {
       ? '<span style="background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:999px;font-size:.75rem;">● Abierta</span>'
       : '<span style="background:#fef9c3;color:#ca8a04;padding:2px 8px;border-radius:999px;font-size:.75rem;">○ Próximamente</span>';
     const cierre = b.fechaCierre
-      ? `<div style="font-size:.8rem;color:#888;margin-top:.3rem;">Cierra: ${b.fechaCierre}</div>`
+      ? `<div style="font-size:.8rem;color:#888;margin-top:.3rem;">Cierra: ${formatearFecha(b.fechaCierre)}</div>`
       : '';
 
     return `
@@ -1108,38 +1083,6 @@ function filtrarBecas() {
 
   renderizarBecas(filtradas);
 }
-
-// ── INICIO ────────────────────────────────────────────────────────────────────
-
-document.addEventListener('DOMContentLoaded', () => {
-
-  // Becas
-  renderizarBecas(becas);
-
-  const slider = document.getElementById('filtroCompatMin');
-  const label  = document.getElementById('filtroCompatMinLabel');
-  if (slider) slider.addEventListener('input', () => label.textContent = slider.value + '%+');
-
-  const btnFiltros = document.getElementById('btnAplicarFiltrosBecas');
-  if (btnFiltros) btnFiltros.addEventListener('click', filtrarBecas);
-
-  const btnPrev = document.getElementById('becasPrev');
-  const btnNext = document.getElementById('becasNext');
-  if (btnPrev) btnPrev.addEventListener('click', () => {
-    if (paginaActual > 0) irAPagina(paginaActual - 1);
-  });
-  if (btnNext) btnNext.addEventListener('click', () => {
-    if (paginaActual < totalPaginas() - 1) irAPagina(paginaActual + 1);
-  });
-
-  // Empleos (si ya lo tenés)
-  renderizarEmpleos(empleos);
-  ['filtroModalidad','filtroTipo','filtroNivel','filtroFuente'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('change', filtrarEmpleos);
-  });
-
-});
 
 // ======================================================
 // EMPLEABILIDAD
@@ -1354,21 +1297,106 @@ function filtrarEmpleos() {
 // ── INICIO ────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
-  renderizarEmpleos(empleos);
 
-  ['filtroModalidad', 'filtroTipo', 'filtroNivel', 'filtroFuente'].forEach(id => {
+  // Si hay perfil guardado, reordenar por compatibilidad al cargar
+  const perfilGuardado = cargarPerfil();
+  if (perfilGuardado && perfilGuardado.datosPersonales) {
+    reordenarPorPerfil(perfilGuardado);
+  } else {
+    // Sin perfil: renderizar en orden por defecto
+    renderizarBecas(becas);
+  }
+
+  const slider = document.getElementById('filtroCompatMin');
+  const label  = document.getElementById('filtroCompatMinLabel');
+  if (slider) slider.addEventListener('input', () => label.textContent = slider.value + '%+');
+
+  const btnFiltros = document.getElementById('btnAplicarFiltrosBecas');
+  if (btnFiltros) btnFiltros.addEventListener('click', filtrarBecas);
+
+  const btnPrev = document.getElementById('becasPrev');
+  const btnNext = document.getElementById('becasNext');
+  if (btnPrev) btnPrev.addEventListener('click', () => {
+    if (paginaActual > 0) irAPagina(paginaActual - 1);
+  });
+  if (btnNext) btnNext.addEventListener('click', () => {
+    if (paginaActual < totalPaginas() - 1) irAPagina(paginaActual + 1);
+  });
+
+  // Empleos
+  renderizarEmpleos(empleos);
+  ['filtroModalidad','filtroTipo','filtroNivel','filtroFuente'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('change', filtrarEmpleos);
   });
+
+  // Filtros de cursos (selects de área, nivel, modalidad, etc.)
+  document.querySelectorAll('.course-filters .filter-select').forEach(sel => {
+    sel.addEventListener('change', aplicarFiltrosSelectCursos);
+  });
+
 });
 
-// Abrir modal login
-document.getElementById("abrirLogin").addEventListener("click", function(){
-  document.getElementById("modalLogin").classList.remove("oculto");
-});
+// Aplica los filtros de los <select> de la sección cursos
+function aplicarFiltrosSelectCursos() {
+  const area      = document.querySelector('.course-filters .filter-select:nth-child(1)')?.value;
+  const nivel     = document.querySelector('.course-filters .filter-select:nth-child(2)')?.value;
+  const precio    = document.querySelector('.course-filters .filter-select:nth-child(5)')?.value;
 
-document.getElementById("abrirLogin2").addEventListener("click", function(){
+  // Obtener la categoría activa de las pestañas
+  const tabActiva = document.querySelector('.edu-tab.active')?.textContent.trim() || 'Todos';
+
+  let lista = (!tabActiva || tabActiva === 'Todos') ? catalogoCursos : catalogoCursos.filter(c => c.categoria === tabActiva);
+
+  if (area && area !== 'Área profesional') {
+    lista = lista.filter(c => c.categoria.toLowerCase().includes(area.toLowerCase()) || c.tags.some(t => t.toLowerCase().includes(area.toLowerCase())));
+  }
+  if (nivel && nivel !== 'Nivel') {
+    lista = lista.filter(c => c.nivel === nivel);
+  }
+  if (precio === 'Gratuito') {
+    lista = lista.filter(c => c.gratis);
+  } else if (precio === 'Pago') {
+    lista = lista.filter(c => !c.gratis);
+  }
+
+  renderCursos(lista);
+}
+
+
+// ── Función helper para abrir el modal de login ────────────────────────────────
+function abrirModalLogin() {
+  // Resetear el modal al estado inicial (por si ya fue abierto antes)
+  document.getElementById("vistaSocial").classList.remove("oculto");
+  document.getElementById("manualLoginSection").classList.add("oculto");
+  document.getElementById("socialLogin").classList.remove("oculto");
+  document.getElementById("loginDivider").classList.remove("oculto");
+  document.getElementById("registroForm").style.display = "block";
+  document.getElementById("sesionForm").style.display = "none";
+  document.getElementById("btnRegistro").classList.add("active");
+  document.getElementById("btnSesion").classList.remove("active");
   document.getElementById("modalLogin").classList.remove("oculto");
+}
+
+// Abrir modal login (nav)
+document.getElementById("abrirLogin").addEventListener("click", abrirModalLogin);
+document.getElementById("abrirLogin2").addEventListener("click", abrirModalLogin);
+
+// Botones del hero y CTA final
+document.querySelectorAll('.btn-hero-main').forEach(btn => {
+  // Solo los que NO son submit de formulario
+  if (!btn.closest('form') && btn.id !== 'btnCrearCuenta' && btn.id !== 'btnIngresar') {
+    btn.addEventListener('click', function() {
+      const perfil = cargarPerfil();
+      if (perfil && perfil.datosPersonales) {
+        // Ya tiene perfil: abrir modal de edición
+        precargarFormularioPerfil(perfil);
+        document.getElementById("modalPerfil").classList.remove("oculto");
+      } else {
+        abrirModalLogin();
+      }
+    });
+  }
 });
 
 // Cerrar modal login
@@ -1453,6 +1481,133 @@ document.getElementById("btnIngresar").addEventListener("click", function(e){
 // más arriba, antes de guardar el perfil y cerrar el modal.)
 
 // ======================================================
+// REORDENAR POR PERFIL (compatibilidad real con la IA)
+// ======================================================
+
+function reordenarPorPerfil(perfil) {
+  if (!perfil || !perfil.habilidades) return;
+
+  const palabrasClave = [
+    ...(perfil.habilidades || []),
+    ...(perfil.interesesProfesionales || []),
+    (perfil.formacion?.carrera || ''),
+    (perfil.objetivoProfesional || '')
+  ].map(p => p.toLowerCase());
+
+  function calcularScore(tags) {
+    if (!tags || !tags.length) return 0;
+    const matches = tags.filter(t => palabrasClave.some(p => p.includes(t) || t.includes(p)));
+    return Math.round((matches.length / tags.length) * 100);
+  }
+
+  // Actualizar scores de cursos y reordenar
+  const cursosOrdenados = [...catalogoCursos].map(c => ({
+    ...c,
+    matchScore: Math.max(c.matchScore, calcularScore(c.tags))
+  })).sort((a, b) => b.matchScore - a.matchScore);
+
+  renderCursos(cursosOrdenados);
+
+  // Reordenar becas
+  const becasOrdenadas = [...becas].sort((a, b) => b.compatibilidad - a.compatibilidad);
+  renderizarBecas(becasOrdenadas);
+
+  // Reordenar empleos
+  const empleosOrdenados = [...empleos].sort((a, b) => b.compatibilidad - a.compatibilidad);
+  renderizarEmpleos(empleosOrdenados);
+
+  mostrarToast("🤖 ¡IA activa! Reordenamos cursos, becas y empleos según tu perfil.");
+}
+
+// ======================================================
+// TOAST / NOTIFICACIÓN
+// ======================================================
+
+function mostrarToast(mensaje, duracion = 3500) {
+  // Eliminar toast anterior si existe
+  const anterior = document.getElementById("oportunia-toast");
+  if (anterior) anterior.remove();
+
+  const toast = document.createElement("div");
+  toast.id = "oportunia-toast";
+  toast.textContent = mensaje;
+  toast.style.cssText = `
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #0F172A;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: .93rem;
+    font-weight: 500;
+    font-family: Manrope, sans-serif;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity .3s ease, transform .3s ease;
+    max-width: 90vw;
+    text-align: center;
+  `;
+  document.body.appendChild(toast);
+
+  // Animar entrada
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      toast.style.opacity = "1";
+      toast.style.transform = "translateX(-50%) translateY(0)";
+    });
+  });
+
+  // Animar salida y remover
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateX(-50%) translateY(10px)";
+    setTimeout(() => toast.remove(), 350);
+  }, duracion);
+}
+
+// ======================================================
+// FORMATO DE FECHA DE CIERRE (becas)
+// ======================================================
+
+function formatearFecha(fechaISO) {
+  if (!fechaISO) return '';
+  const [anio, mes, dia] = fechaISO.split('-');
+  const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return `${parseInt(dia)} de ${meses[parseInt(mes) - 1]} de ${anio}`;
+}
+
+// ======================================================
+// HAMBURGUER MENU (mobile)
+// ======================================================
+
+(function() {
+  const btn = document.getElementById('navHamburger');
+  const ul  = document.querySelector('nav ul');
+  const actions = document.querySelector('.nav-actions');
+  if (!btn || !ul) return;
+
+  btn.addEventListener('click', () => {
+    const isOpen = btn.classList.toggle('open');
+    ul.classList.toggle('open', isOpen);
+    if (actions) actions.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Cerrar al clickear un link del nav
+  ul.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      btn.classList.remove('open');
+      ul.classList.remove('open');
+      if (actions) actions.classList.remove('open');
+      btn.setAttribute('aria-expanded', false);
+    });
+  });
+})();
+
+// ======================================================
 // FOOTER - SUSCRIPCIÓN POR EMAIL
 // ======================================================
 
@@ -1469,8 +1624,7 @@ if (footerEmailBtn) {
 
     if (!validarEmail(input, error)) return;
 
-    alert("¡Listo! Vamos a avisarte a " + input.value + " sobre nuevas becas, cursos y empleos.");
-
+    mostrarToast("✅ ¡Listo! Te avisamos a " + input.value + " sobre nuevas oportunidades.");
     input.value = "";
 
   });
