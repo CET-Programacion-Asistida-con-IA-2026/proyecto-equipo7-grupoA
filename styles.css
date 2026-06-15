@@ -1696,6 +1696,84 @@ nav ul li a.active {
   text-align: right;
 }
 
+/* Navegación carrusel becas */
+.becas-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.becas-flecha {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 6px;
+  width: 26px;
+  height: 26px;
+  font-size: .8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  line-height: 1;
+}
+
+.becas-flecha:hover:not(:disabled) {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #fff;
+}
+
+.becas-flecha:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.becas-puntos {
+  display: flex;
+  gap: .3rem;
+  align-items: center;
+}
+
+.beca-punto {
+  min-width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  padding: 0 5px;
+}
+
+.beca-punto.activo {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #fff;
+}
+
+.beca-punto:hover:not(.activo) {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+
+.becas-contador {
+  font-size: .75rem;
+  color: var(--text-dim);
+  margin-left: .3rem;
+  white-space: nowrap;
+}
+
 /* Match IA */
 .match-circle {
   width: 62px;

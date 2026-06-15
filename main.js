@@ -567,234 +567,800 @@ document.querySelectorAll('.edu-tab').forEach(tab => {
 // BECAS
 // ======================================================
 
-// Las becas viven en becas.json (las administra la persona encargada
-// de esa sección). Acá solo las cargamos, las mostramos y las filtramos.
+const becas = [
+  {
+    id: 1, logo: "🌎", titulo: "Becas Hubert H. Humphrey",
+    organizacion: "Fulbright Argentina", pais: "Estados Unidos",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Políticas Públicas",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 84,
+    destacada: true, requiereIngles: true,
+    descripcion: "Programa de perfeccionamiento profesional y académico en EE.UU. durante un año académico para profesionales argentinos de trayectoria intermedia.",
+    url: "https://fulbright.edu.ar/course/humphrey/",
+    fechaCierre: "2026-07-15"
+  },
+  {
+    id: 2, logo: "🏦", titulo: "Alumnos de Grado Argentina 2026",
+    organizacion: "Santander Open Academy", pais: "Argentina",
+    modalidad: "Online", nivel: "Grado", area: "Educación",
+    tipo: "Único pago", alcance: "Nacional", idioma: "Español",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 91,
+    destacada: true, requiereIngles: false,
+    descripcion: "Becas para alumnos de universidades argentinas con necesidades económicas y alto desempeño académico.",
+    url: "https://app.santanderopenacademy.com/es/program/alumnos-de-grado-argentina-2026",
+    fechaCierre: "2026-07-30"
+  },
+  {
+    id: 3, logo: "🌐", titulo: "Progresar Formación Profesional 2026",
+    organizacion: "ANSES", pais: "Argentina",
+    modalidad: "Presencial", nivel: "Indistinto", area: "Educación",
+    tipo: "Mensual", alcance: "Nacional", idioma: "Español",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 88,
+    destacada: true, requiereIngles: false,
+    descripcion: "Ayuda económica para ciudadanos que desean realizar cursos de Formación Profesional.",
+    url: "https://www.argentina.gob.ar/educacion/progresar",
+    fechaCierre: "2026-11-27"
+  },
+  {
+    id: 4, logo: "🇩🇪", titulo: "Cursos universitarios de invierno en Alemania",
+    organizacion: "DAAD", pais: "Alemania",
+    modalidad: "Presencial", nivel: "Grado", area: "Idioma",
+    tipo: "Completa", alcance: "Internacional", idioma: "Alemán",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 50,
+    destacada: false, requiereIngles: false,
+    descripcion: "Profundización en el idioma alemán y ampliación de conocimientos en estudios regionales.",
+    url: "https://www2.daad.de/deutschland/stipendium/datenbank/en/21148-scholarship-database/",
+    fechaCierre: "2026-07-31"
+  },
+  {
+    id: 5, logo: "🇬🇧", titulo: "Chevening Scholarships",
+    organizacion: "Chevening", pais: "Reino Unido",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 88,
+    destacada: true, requiereIngles: true,
+    descripcion: "Becas del Gobierno del Reino Unido para realizar maestrías de un año en universidades británicas.",
+    url: "https://www.chevening.org",
+    fechaCierre: "2026-11-05"
+  },
+  {
+    id: 6, logo: "🇪🇺", titulo: "Erasmus Mundus Joint Master",
+    organizacion: "Erasmus Mundus", pais: "Europa",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 85,
+    destacada: true, requiereIngles: true,
+    descripcion: "Becas para realizar maestrías conjuntas en universidades europeas.",
+    url: "https://ec.europa.eu/programmes/erasmus-plus/opportunities/individuals/students/erasmus-mundus-joint-master-degrees_en",
+    fechaCierre: "2026-12-31"
+  },
+  {
+    id: 7, logo: "🇪🇸", titulo: "Fundación Carolina Posgrado",
+    organizacion: "Fundación Carolina", pais: "España",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Español",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 89,
+    destacada: true, requiereIngles: false,
+    descripcion: "Becas para estudios de posgrado en universidades españolas.",
+    url: "https://www.fundacioncarolina.es",
+    fechaCierre: "2026-03-15"
+  },
+  {
+    id: 8, logo: "🇯🇵", titulo: "MEXT Scholarship",
+    organizacion: "Gobierno de Japón", pais: "Japón",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 86,
+    destacada: true, requiereIngles: true,
+    descripcion: "Programa de becas para estudiar carreras, maestrías y doctorados en Japón.",
+    url: "https://www.studyinjapan.go.jp",
+    fechaCierre: "2026-06-15"
+  },
+  {
+    id: 9, logo: "🇰🇷", titulo: "Global Korea Scholarship (GKS)",
+    organizacion: "Gobierno de Corea del Sur", pais: "Corea del Sur",
+    modalidad: "Presencial", nivel: "Grado y Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 84,
+    destacada: true, requiereIngles: true,
+    descripcion: "Becas completas para grado y posgrado en universidades coreanas.",
+    url: "https://www.studyinkorea.go.kr",
+    fechaCierre: "2026-04-01"
+  },
+  {
+    id: 10, logo: "🇨🇭", titulo: "Swiss Government Excellence Scholarships",
+    organizacion: "Gobierno de Suiza", pais: "Suiza",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Investigación",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 82,
+    destacada: false, requiereIngles: true,
+    descripcion: "Becas para investigadores y estudiantes internacionales en Suiza.",
+    url: "https://www.sbfi.admin.ch",
+    fechaCierre: "2026-11-01"
+  },
+  {
+    id: 11, logo: "🇦🇺", titulo: "Australia Awards Scholarships",
+    organizacion: "Gobierno de Australia", pais: "Australia",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 87,
+    destacada: true, requiereIngles: true,
+    descripcion: "Becas completas para estudiantes internacionales en universidades australianas.",
+    url: "https://www.australiaawards.gov.au",
+    fechaCierre: "2026-04-30"
+  },
+  {
+    id: 12, logo: "🇮🇪", titulo: "Ireland Fellows Programme",
+    organizacion: "Gobierno de Irlanda", pais: "Irlanda",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 85,
+    destacada: false, requiereIngles: true,
+    descripcion: "Programa de maestrías financiadas para estudiantes internacionales en Irlanda.",
+    url: "https://www.irishaidfellowships.ie",
+    fechaCierre: "2026-08-01"
+  },
+  {
+    id: 13, logo: "🌎", titulo: "Becas OEA Académicas",
+    organizacion: "OEA", pais: "América",
+    modalidad: "Mixta", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Español",
+    financiamiento: "50%", estado: "abierta", compatibilidad: 78,
+    destacada: false, requiereIngles: false,
+    descripcion: "Programa de apoyo para estudios superiores en instituciones asociadas de América.",
+    url: "https://www.oas.org",
+    fechaCierre: "2026-06-01"
+  },
+  {
+    id: 14, logo: "🇳🇱", titulo: "Orange Knowledge Programme",
+    organizacion: "Gobierno de Países Bajos", pais: "Países Bajos",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Educación",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 81,
+    destacada: false, requiereIngles: true,
+    descripcion: "Programa para fortalecer capacidades profesionales mediante estudios internacionales en los Países Bajos.",
+    url: "https://www.nuffic.nl",
+    fechaCierre: "2026-05-15"
+  },
+  {
+    id: 15, logo: "🏛️", titulo: "Joint Japan World Bank Scholarship",
+    organizacion: "Banco Mundial", pais: "Internacional",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Políticas Públicas",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 90,
+    destacada: true, requiereIngles: true,
+    descripcion: "Becas para estudios de desarrollo económico y políticas públicas.",
+    url: "https://www.worldbank.org",
+    fechaCierre: "2026-05-31"
+  },
+  {
+    id: 16, logo: "🇧🇷", titulo: "GCUB-Mob 2026",
+    organizacion: "GCUB", pais: "Brasil",
+    modalidad: "Presencial", nivel: "Maestría y Doctorado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Portugués",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 85,
+    destacada: true, requiereIngles: false,
+    descripcion: "Programa internacional con becas de maestría y doctorado en universidades brasileñas.",
+    url: "https://www.gcub.org.br",
+    fechaCierre: "2026-07-06"
+  },
+  {
+    id: 17, logo: "🍁", titulo: "McCall MacBain Scholarships",
+    organizacion: "McGill University", pais: "Canadá",
+    modalidad: "Presencial", nivel: "Maestría", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 89,
+    destacada: true, requiereIngles: true,
+    descripcion: "Beca completa para estudios de maestría y programas profesionales en McGill University.",
+    url: "https://mccallmacbainscholars.org",
+    fechaCierre: "2026-08-19"
+  },
+  {
+    id: 18, logo: "🎓", titulo: "Knight-Hennessy Scholars",
+    organizacion: "Stanford University", pais: "Estados Unidos",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 92,
+    destacada: true, requiereIngles: true,
+    descripcion: "Programa de financiamiento completo para estudios de posgrado en Stanford University.",
+    url: "https://knight-hennessy.stanford.edu",
+    fechaCierre: "2026-10-06"
+  },
+  {
+    id: 19, logo: "🇯🇵", titulo: "METI Internship Program",
+    organizacion: "Ministerio de Economía de Japón", pais: "Japón",
+    modalidad: "Presencial", nivel: "Universitario", area: "Tecnología",
+    tipo: "Pasantía", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "abierta", compatibilidad: 83,
+    destacada: false, requiereIngles: true,
+    descripcion: "Programa internacional de pasantías en empresas japonesas para estudiantes y jóvenes profesionales.",
+    url: "https://internshipprogram.go.jp",
+    fechaCierre: "2026-06-30"
+  },
+  {
+    id: 20, logo: "🇪🇸", titulo: "Universidad de Murcia - AIUP",
+    organizacion: "Universidad de Murcia", pais: "España",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Español",
+    financiamiento: "Parcial", estado: "pendiente", compatibilidad: 74,
+    destacada: false, requiereIngles: false,
+    descripcion: "Becas para estudiantes de universidades miembro de AIUP en la Universidad de Murcia.",
+    url: "https://www.um.es",
+    fechaCierre: ""
+  },
+  {
+    id: 21, logo: "🌍", titulo: "Universidad Europea - OEA",
+    organizacion: "Universidad Europea", pais: "España",
+    modalidad: "Online", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Español",
+    financiamiento: "Parcial", estado: "pendiente", compatibilidad: 78,
+    destacada: false, requiereIngles: false,
+    descripcion: "Programa conjunto con la OEA para estudios de posgrado online.",
+    url: "https://universidadeuropea.com",
+    fechaCierre: ""
+  },
+  {
+    id: 22, logo: "🔬", titulo: "L'Oréal-UNESCO For Women in Science",
+    organizacion: "L'Oréal UNESCO", pais: "Internacional",
+    modalidad: "Presencial", nivel: "Investigación", area: "Ciencia",
+    tipo: "Premio", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 81,
+    destacada: true, requiereIngles: true,
+    descripcion: "Reconocimiento y financiamiento para investigadoras destacadas a nivel mundial.",
+    url: "https://www.forwomeninscience.com",
+    fechaCierre: ""
+  },
+  {
+    id: 23, logo: "👩", titulo: "AAUW International Fellowships",
+    organizacion: "AAUW", pais: "Estados Unidos",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 87,
+    destacada: true, requiereIngles: true,
+    descripcion: "Becas para mujeres internacionales que realizan estudios de posgrado en Estados Unidos.",
+    url: "https://www.aauw.org",
+    fechaCierre: ""
+  },
+  {
+    id: 24, logo: "💼", titulo: "Forté MBA Fellowship",
+    organizacion: "Forté Foundation", pais: "Internacional",
+    modalidad: "Presencial", nivel: "MBA", area: "Negocios",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "Parcial", estado: "pendiente", compatibilidad: 80,
+    destacada: false, requiereIngles: true,
+    descripcion: "Programa para mujeres que buscan realizar estudios MBA.",
+    url: "https://www.fortefoundation.org",
+    fechaCierre: ""
+  },
+  {
+    id: 25, logo: "🇺🇸", titulo: "SUSI Program",
+    organizacion: "U.S. Department of State", pais: "Estados Unidos",
+    modalidad: "Presencial", nivel: "Universitario", area: "Liderazgo",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 82,
+    destacada: false, requiereIngles: true,
+    descripcion: "Study of the U.S. Institutes para líderes estudiantiles internacionales.",
+    url: "https://exchanges.state.gov",
+    fechaCierre: ""
+  },
+  {
+    id: 26, logo: "🇸🇦", titulo: "King Abdulaziz University Scholarship",
+    organizacion: "King Abdulaziz University", pais: "Arabia Saudita",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 77,
+    destacada: false, requiereIngles: true,
+    descripcion: "Programa de becas para estudiantes internacionales de maestría y doctorado en Arabia Saudita.",
+    url: "https://graduatestudies.kau.edu.sa",
+    fechaCierre: ""
+  },
+  {
+    id: 27, logo: "🇮🇹", titulo: "MAECI Scholarships",
+    organizacion: "Ministerio de Asuntos Exteriores de Italia", pais: "Italia",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Italiano",
+    financiamiento: "Parcial", estado: "pendiente", compatibilidad: 79,
+    destacada: false, requiereIngles: false,
+    descripcion: "Becas para estudiantes extranjeros que deseen cursar estudios superiores en Italia.",
+    url: "https://studyinitaly.esteri.it",
+    fechaCierre: ""
+  },
+  {
+    id: 28, logo: "🇫🇷", titulo: "Eiffel Excellence Scholarship",
+    organizacion: "Campus France", pais: "Francia",
+    modalidad: "Presencial", nivel: "Maestría y Doctorado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Francés o Inglés",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 90,
+    destacada: true, requiereIngles: true,
+    descripcion: "Programa del gobierno francés para atraer estudiantes internacionales de excelencia.",
+    url: "https://www.campusfrance.org",
+    fechaCierre: ""
+  },
+  {
+    id: 29, logo: "🕊️", titulo: "P.E.O. International Peace Scholarship",
+    organizacion: "P.E.O. Sisterhood", pais: "Estados Unidos y Canadá",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "Parcial", estado: "pendiente", compatibilidad: 84,
+    destacada: false, requiereIngles: true,
+    descripcion: "Becas para mujeres internacionales que cursan estudios de posgrado en EE.UU. y Canadá.",
+    url: "https://www.peointernational.org",
+    fechaCierre: ""
+  },
+  {
+    id: 30, logo: "👩‍🎓", titulo: "Women Scholarship for International Students",
+    organizacion: "Multiple Institutions", pais: "Internacional",
+    modalidad: "Presencial", nivel: "Posgrado", area: "Multidisciplinaria",
+    tipo: "Parcial", alcance: "Internacional", idioma: "Inglés",
+    financiamiento: "Variable", estado: "pendiente", compatibilidad: 73,
+    destacada: false, requiereIngles: true,
+    descripcion: "Oportunidades de financiamiento para mujeres estudiantes internacionales.",
+    url: "https://www.scholarshipsforwomen.net",
+    fechaCierre: ""
+  },
+  {
+    id: 31, logo: "🎓", titulo: "Beca de Fortalecimiento Académico para Mujeres Universitarias",
+    organizacion: "UNAM", pais: "México",
+    modalidad: "Presencial", nivel: "Grado", area: "Educación",
+    tipo: "Parcial", alcance: "Nacional", idioma: "Español",
+    financiamiento: "Parcial", estado: "pendiente", compatibilidad: 86,
+    destacada: false, requiereIngles: false,
+    descripcion: "Programa de apoyo destinado a fortalecer la permanencia académica de mujeres universitarias.",
+    url: "https://www.unam.mx",
+    fechaCierre: ""
+  },
+  {
+    id: 32, logo: "🇲🇽", titulo: "CONAHCYT Posgrados México",
+    organizacion: "CONAHCYT", pais: "México",
+    modalidad: "Presencial", nivel: "Maestría y Doctorado", area: "Investigación",
+    tipo: "Completa", alcance: "Nacional", idioma: "Español",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 82,
+    destacada: false, requiereIngles: false,
+    descripcion: "Programa de apoyo para estudios de posgrado en instituciones mexicanas.",
+    url: "https://conahcyt.mx",
+    fechaCierre: ""
+  },
+  {
+    id: 33, logo: "🌎", titulo: "AMEXCID Becas para Extranjeros",
+    organizacion: "AMEXCID", pais: "México",
+    modalidad: "Presencial", nivel: "Grado y Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Español",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 88,
+    destacada: true, requiereIngles: false,
+    descripcion: "Programa del Gobierno de México para estudiantes internacionales.",
+    url: "https://www.gob.mx/amexcid",
+    fechaCierre: ""
+  },
+  {
+    id: 34, logo: "🌍", titulo: "Programa Líderes Latinoamericanos",
+    organizacion: "Fundación FAES", pais: "España",
+    modalidad: "Presencial", nivel: "Profesional", area: "Liderazgo",
+    tipo: "Completa", alcance: "Internacional", idioma: "Español",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 81,
+    destacada: false, requiereIngles: false,
+    descripcion: "Programa de formación y liderazgo dirigido a jóvenes de América Latina.",
+    url: "https://fundacionfaes.org",
+    fechaCierre: ""
+  },
+  {
+    id: 35, logo: "🇧🇷", titulo: "UNILA",
+    organizacion: "Universidad Federal de Integración Latinoamericana", pais: "Brasil",
+    modalidad: "Presencial", nivel: "Grado y Posgrado", area: "Multidisciplinaria",
+    tipo: "Completa", alcance: "Internacional", idioma: "Portugués",
+    financiamiento: "100%", estado: "pendiente", compatibilidad: 80,
+    destacada: false, requiereIngles: false,
+    descripcion: "Programas de formación universitaria para estudiantes de América Latina en Brasil.",
+    url: "https://portal.unila.edu.br",
+    fechaCierre: ""
+  }
+];
 
-let catalogoBecas = []; // se llena con fetch() al cargar la página
+// ── RENDERIZADO BECAS ─────────────────────────────────────────────────────────
 
-// Convierte el % de compatibilidad en el stroke-dashoffset del círculo SVG
-// (circunferencia = 2 * π * 27 ≈ 169.6)
-function dashoffsetCompatibilidad(pct) {
-  const circunferencia = 169.6;
-  const valor = Math.max(0, Math.min(100, Number(pct) || 0));
-  return (circunferencia - (circunferencia * valor / 100)).toFixed(1);
-}
-
-// Construye el HTML de una sola beca-card a partir de un objeto del JSON
-function crearBecaCard(beca) {
-  const featuredClass = beca.destacada ? " featured" : "";
-  const featuredBadge = beca.destacada
-    ? '<div style="margin-bottom:6px"><span class="beca-featured-badge">⭐ Destacada</span></div>'
-    : "";
-
-  const tagAlcanceClass = beca.alcance === "Internacional" ? "intl" : "";
-  const tagTipoClass = beca.tipo === "Completa" ? "full" : "";
-
-  const tags = [
-    `<span class="beca-tag ${tagAlcanceClass}">${beca.alcance}</span>`,
-    `<span class="beca-tag ${tagTipoClass}">${beca.tipo}</span>`,
-    `<span class="beca-tag">${beca.area}</span>`,
-    beca.requiereIngles ? '<span class="beca-tag">Inglés requerido</span>' : ""
-  ].filter(Boolean).join("\n");
-
-  const offset = dashoffsetCompatibilidad(beca.compatibilidad);
-
-  return `
-    <div class="beca-card${featuredClass}" data-beca-id="${beca.id}">
-
-      <div class="beca-logo-wrap">${beca.logo || "🏆"}</div>
-
-      <div class="beca-info">
-        ${featuredBadge}
-
-        <div class="beca-title">${beca.titulo}</div>
-        <div class="beca-org">${beca.organizacion}</div>
-
-        <div class="beca-tags">${tags}</div>
-      </div>
-
-      <div class="beca-side">
-
-        <div class="match-circle">
-          <svg width="62" height="62" viewBox="0 0 62 62">
-            <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-            <circle cx="31" cy="31" r="27" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="${offset}" stroke-linecap="round"/>
-          </svg>
-
-          <div class="match-circle-inner">
-            <div class="match-pct">${beca.compatibilidad}%</div>
-            <div class="match-lbl">compat.</div>
-          </div>
-        </div>
-
-        <div class="beca-deadline">
-          Cierra: ${beca.fechaCierre || "Sin fecha"}
-        </div>
-
-        <button class="btn-apply" type="button" data-url="${beca.url || ""}">Ver requisitos →</button>
-        <button class="btn-save" type="button">Guardar</button>
-
-      </div>
-
-    </div>
-  `;
-}
-
-// Pinta en pantalla un listado de becas (ya filtrado)
-function renderBecas(lista) {
-  const grid = document.getElementById("becasGrid");
-  if (!grid) return;
-
+function renderizarBecas(lista) {
+  const contenedor = document.getElementById('becasGrid');
   if (!lista.length) {
-    grid.innerHTML = '<p class="becas-empty">No encontramos becas que coincidan con esos filtros. Probá ajustando las opciones de la izquierda.</p>';
+    contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#888;">No hay becas que coincidan con los filtros.</p>';
     return;
   }
 
-  grid.innerHTML = lista.map(crearBecaCard).join("");
+  contenedor.innerHTML = lista.map(b => {
+    const colorMatch = b.compatibilidad >= 85 ? '#22c55e' : b.compatibilidad >= 70 ? '#f59e0b' : '#ef4444';
+    const estadoBadge = b.estado === 'abierta'
+      ? '<span style="background:#dcfce7; color:#16a34a; padding:2px 8px; border-radius:999px; font-size:.75rem;">● Abierta</span>'
+      : '<span style="background:#fef9c3; color:#ca8a04; padding:2px 8px; border-radius:999px; font-size:.75rem;">○ Próximamente</span>';
+    const cierre = b.fechaCierre
+      ? `<div style="font-size:.8rem; color:#888;">Cierra: ${b.fechaCierre}</div>`
+      : '';
 
-  // Conectar el botón "Ver requisitos" de cada tarjeta con su URL
-  grid.querySelectorAll(".btn-apply").forEach(btn => {
-    const url = btn.dataset.url;
-    if (!url) return;
-    btn.addEventListener("click", () => window.open(url, "_blank"));
+    return `
+      <div class="beca-card${b.destacada ? ' top-match' : ''}"
+           data-modalidad="${b.modalidad}"
+           data-nivel="${b.nivel}"
+           data-area="${b.area}"
+           data-alcance="${b.alcance}"
+           data-idioma="${b.idioma}">
+        <div class="beca-logo">${b.logo}</div>
+        <div class="beca-info">
+          <div class="beca-title">${b.titulo}</div>
+          <div class="beca-org">${b.organizacion} · ${b.pais}</div>
+          <div class="beca-desc">${b.descripcion}</div>
+          <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.4rem;">
+            ${estadoBadge}
+            <span class="job-tag">${b.tipo}</span>
+            <span class="job-tag">${b.idioma}</span>
+            <span class="job-tag">${b.financiamiento}</span>
+          </div>
+          ${cierre}
+        </div>
+        <div class="job-right">
+          <div class="job-match" style="color:${colorMatch}; font-weight:700; font-size:1.1rem;">${b.compatibilidad}%</div>
+          <a href="${b.url}" target="_blank" rel="noopener" class="btn-apply-job">
+            Ver beca →
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/// ── PAGINACIÓN BECAS ──────────────────────────────────────────────────────────
+
+const BECAS_POR_PAGINA = 6;
+let becasFiltradas = [...becas];
+let paginaActual = 0;
+
+function totalPaginas() {
+  return Math.ceil(becasFiltradas.length / BECAS_POR_PAGINA);
+}
+
+function renderizarBecas(lista) {
+  becasFiltradas = lista;
+  paginaActual = 0;
+  renderizarPagina();
+}
+
+function renderizarPagina() {
+  const contenedor = document.getElementById('becasGrid');
+  const inicio = paginaActual * BECAS_POR_PAGINA;
+  const slice  = becasFiltradas.slice(inicio, inicio + BECAS_POR_PAGINA);
+
+  if (!slice.length) {
+    contenedor.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">No hay becas que coincidan con los filtros.</p>';
+    actualizarNavegacion();
+    return;
+  }
+
+  contenedor.innerHTML = slice.map(b => {
+    const colorMatch = b.compatibilidad >= 85 ? '#22c55e' : b.compatibilidad >= 70 ? '#f59e0b' : '#ef4444';
+    const estadoBadge = b.estado === 'abierta'
+      ? '<span style="background:#dcfce7;color:#16a34a;padding:2px 8px;border-radius:999px;font-size:.75rem;">● Abierta</span>'
+      : '<span style="background:#fef9c3;color:#ca8a04;padding:2px 8px;border-radius:999px;font-size:.75rem;">○ Próximamente</span>';
+    const cierre = b.fechaCierre
+      ? `<div style="font-size:.8rem;color:#888;margin-top:.3rem;">Cierra: ${b.fechaCierre}</div>`
+      : '';
+
+    return `
+      <div class="beca-card${b.destacada ? ' top-match' : ''}">
+        <div class="beca-logo">${b.logo}</div>
+        <div class="beca-info">
+          <div class="beca-title">${b.titulo}</div>
+          <div class="beca-org">${b.organizacion} · ${b.pais}</div>
+          <div class="beca-desc">${b.descripcion}</div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.4rem;">
+            ${estadoBadge}
+            <span class="job-tag">${b.tipo}</span>
+            <span class="job-tag">${b.idioma}</span>
+            <span class="job-tag">${b.financiamiento}</span>
+          </div>
+          ${cierre}
+        </div>
+        <div class="job-right">
+          <div class="job-match" style="color:${colorMatch};font-weight:700;font-size:1.1rem;">${b.compatibilidad}%</div>
+          <a href="${b.url}" target="_blank" rel="noopener" class="btn-apply-job">Ver beca →</a>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  actualizarNavegacion();
+}
+
+function actualizarNavegacion() {
+  const total = totalPaginas();
+
+  // Flechas
+  document.getElementById('becasPrev').disabled = paginaActual === 0;
+  document.getElementById('becasNext').disabled = paginaActual >= total - 1;
+
+  // Puntos
+  const puntosEl = document.getElementById('becasPuntos');
+  puntosEl.innerHTML = Array.from({ length: total }, (_, i) => `
+    <button class="beca-punto${i === paginaActual ? ' activo' : ''}"
+            onclick="irAPagina(${i})" aria-label="Página ${i + 1}"></button>
+  `).join('');
+
+  // Contador
+  document.getElementById('becasContador').textContent =
+    total > 0 ? `${paginaActual + 1} / ${total}` : '';
+}
+
+function irAPagina(n) {
+  paginaActual = n;
+  renderizarPagina();
+  document.getElementById('becasGrid').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── FILTROS BECAS ─────────────────────────────────────────────────────────────
+
+function filtrarBecas() {
+  const tipos    = [...document.querySelectorAll('[data-filtro="tipo"]:checked')].map(el => el.value);
+  const alcances = [...document.querySelectorAll('[data-filtro="alcance"]:checked')].map(el => el.value);
+  const areas    = [...document.querySelectorAll('[data-filtro="area"]:checked')].map(el => el.value);
+  const compatMin = parseInt(document.getElementById('filtroCompatMin').value);
+
+  const filtradas = becas.filter(b =>
+    (tipos.length    === 0 || tipos.includes(b.tipo))       &&
+    (alcances.length === 0 || alcances.includes(b.alcance)) &&
+    (areas.length    === 0 || areas.includes(b.area))       &&
+    b.compatibilidad >= compatMin
+  );
+
+  renderizarBecas(filtradas);
+}
+
+// ── INICIO ────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Becas
+  renderizarBecas(becas);
+
+  const slider = document.getElementById('filtroCompatMin');
+  const label  = document.getElementById('filtroCompatMinLabel');
+  if (slider) slider.addEventListener('input', () => label.textContent = slider.value + '%+');
+
+  const btnFiltros = document.getElementById('btnAplicarFiltrosBecas');
+  if (btnFiltros) btnFiltros.addEventListener('click', filtrarBecas);
+
+  const btnPrev = document.getElementById('becasPrev');
+  const btnNext = document.getElementById('becasNext');
+  if (btnPrev) btnPrev.addEventListener('click', () => {
+    if (paginaActual > 0) irAPagina(paginaActual - 1);
   });
-}
-
-// Lee el estado actual de los filtros de la sidebar
-function leerFiltrosBecas() {
-  const tipos = Array.from(document.querySelectorAll('[data-filtro="tipo"]:checked')).map(i => i.value);
-  const alcances = Array.from(document.querySelectorAll('[data-filtro="alcance"]:checked')).map(i => i.value);
-  const areas = Array.from(document.querySelectorAll('[data-filtro="area"]:checked')).map(i => i.value);
-
-  const sliderCompat = document.getElementById("filtroCompatMin");
-  const compatMin = sliderCompat ? Number(sliderCompat.value) : 0;
-
-  return { tipos, alcances, areas, compatMin };
-}
-
-// Aplica los filtros actuales sobre catalogoBecas y vuelve a renderizar
-function aplicarFiltrosBecas() {
-  const { tipos, alcances, areas, compatMin } = leerFiltrosBecas();
-
-  const filtradas = catalogoBecas.filter(beca => {
-    // Si no hay ningún checkbox tildado en un grupo, ese grupo no filtra (deja pasar todo)
-    const pasaTipo = tipos.length === 0 || tipos.includes(beca.tipo);
-    const pasaAlcance = alcances.length === 0 || alcances.includes(beca.alcance);
-    const pasaArea = areas.length === 0 || areas.includes(beca.area);
-    const pasaCompat = (beca.compatibilidad || 0) >= compatMin;
-
-    return pasaTipo && pasaAlcance && pasaArea && pasaCompat;
+  if (btnNext) btnNext.addEventListener('click', () => {
+    if (paginaActual < totalPaginas() - 1) irAPagina(paginaActual + 1);
   });
 
-  renderBecas(filtradas);
-}
-
-// Vista inicial: solo unas pocas becas (destacadas primero), antes de filtrar
-function renderBecasIniciales() {
-  const destacadas = catalogoBecas.filter(b => b.destacada);
-  const resto = catalogoBecas.filter(b => !b.destacada);
-
-  const vistaInicial = [...destacadas, ...resto].slice(0, 3);
-  renderBecas(vistaInicial);
-}
-
-// Carga becas.json y deja todo listo para filtrar
-function inicializarBecas() {
-  fetch("becas.json")
-    .then(resp => {
-      if (!resp.ok) throw new Error("No se pudo cargar becas.json");
-      return resp.json();
-    })
-    .then(data => {
-      catalogoBecas = data;
-      renderBecasIniciales(); // primer render: solo un puñado de becas, como antes
-    })
-    .catch(err => {
-      console.error("Error cargando becas.json:", err);
-      const grid = document.getElementById("becasGrid");
-      if (grid) {
-        grid.innerHTML = '<p class="becas-empty">No pudimos cargar las becas en este momento. Intentá de nuevo más tarde.</p>';
-      }
-    });
-}
-
-inicializarBecas();
-
-// Los checkboxes y el slider solo actualizan la etiqueta / estado visual;
-// el filtrado real se dispara al tocar "Aplicar filtros".
-const sliderCompatMin = document.getElementById("filtroCompatMin");
-if (sliderCompatMin) {
-  const labelCompatMin = document.getElementById("filtroCompatMinLabel");
-
-  sliderCompatMin.addEventListener("input", function () {
-    if (labelCompatMin) labelCompatMin.textContent = this.value + "%+";
+  // Empleos (si ya lo tenés)
+  renderizarEmpleos(empleos);
+  ['filtroModalidad','filtroTipo','filtroNivel','filtroFuente'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', filtrarEmpleos);
   });
-}
 
-const btnAplicarFiltrosBecas = document.getElementById("btnAplicarFiltrosBecas");
-if (btnAplicarFiltrosBecas) {
-  btnAplicarFiltrosBecas.addEventListener("click", aplicarFiltrosBecas);
-}
+});
 
 // ======================================================
 // EMPLEABILIDAD
 // ======================================================
 
 // Catálogo de empleos disponibles.
-const catalogoEmpleos = [
+// ── EMPLEOS ──────────────────────────────────────────────────────────────────
+
+const empleos = [
+  // ── PRESENCIALES / HÍBRIDOS ──
   {
-    id: "empleo-asistente-admin",
-    titulo: "Asistente Administrativo",
-    empresa: "Empresa Nacional",
-    icono: "📊",
-    modalidad: "Híbrido",      // Remoto / Presencial / Híbrido
-    tipo: "Full Time",         // Full Time / Part Time / Pasantía / Freelance
-    nivel: "Junior",           // Junior / Semi Senior / Senior
-    tags: ["excel", "administración", "organización"]
-  },
-  {
-    id: "empleo-analista-datos",
-    titulo: "Analista de Datos Jr.",
-    empresa: "Empresa Tecnológica",
-    icono: "📈",
-    modalidad: "Remoto",
+    titulo: "Analista Administrativo",
+    modalidad: "Presencial",
     tipo: "Full Time",
-    nivel: "Junior",
-    tags: ["excel", "power bi", "datos", "análisis de datos"]
+    nivel: "Semi Senior",
+    fuente: "LinkedIn",
+    url: "https://www.linkedin.com/jobs/search/?keywords=analista+administrativo&location=Argentina",
+    tags: ["Administración", "Excel", "Gestión"],
+    compatibilidad: 91,
+    emoji: "📋"
   },
   {
-    id: "empleo-atencion-cliente",
-    titulo: "Atención al Cliente",
-    empresa: "Empresa de Servicios",
-    icono: "🎧",
-    modalidad: "Remoto",
-    tipo: "Full Time",
-    nivel: "Junior",
-    tags: ["comunicación", "crm", "atención al cliente"]
-  },
-  {
-    id: "empleo-marketing-digital",
-    titulo: "Marketing Digital Jr.",
-    empresa: "Agencia de Marketing",
-    icono: "📱",
+    titulo: "Desarrollador Web Jr.",
     modalidad: "Híbrido",
     tipo: "Full Time",
     nivel: "Junior",
-    tags: ["redes sociales", "contenido", "marketing"]
+    fuente: "Computrabajo",
+    url: "https://www.computrabajo.com.ar/trabajo-de-desarrollador-web",
+    tags: ["HTML", "CSS", "JavaScript"],
+    compatibilidad: 88,
+    emoji: "💻"
+  },
+  {
+    titulo: "Atención al Cliente",
+    modalidad: "Presencial",
+    tipo: "Part Time",
+    nivel: "Junior",
+    fuente: "Bumeran",
+    url: "https://www.bumeran.com.ar/empleos-busqueda-atencion+al+cliente.html",
+    tags: ["Comunicación", "CRM", "Ventas"],
+    compatibilidad: 82,
+    emoji: "🎧"
+  },
+  {
+    titulo: "Coordinador de Marketing",
+    modalidad: "Híbrido",
+    tipo: "Full Time",
+    nivel: "Semi Senior",
+    fuente: "Indeed",
+    url: "https://ar.indeed.com/jobs?q=coordinador+marketing&l=Argentina",
+    tags: ["Marketing", "Redes Sociales", "Contenido"],
+    compatibilidad: 85,
+    emoji: "📣"
+  },
+  {
+    titulo: "Asistente Contable",
+    modalidad: "Presencial",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "Zona Jobs",
+    url: "https://www.zonajobs.com.ar/empleos-asistente-contable.html",
+    tags: ["Contabilidad", "Excel", "Facturación"],
+    compatibilidad: 79,
+    emoji: "🧾"
+  },
+  {
+    titulo: "Vendedor Comercial",
+    modalidad: "Presencial",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "Computrabajo",
+    url: "https://www.computrabajo.com.ar/trabajo-de-vendedor",
+    tags: ["Ventas", "Negociación", "Cartera"],
+    compatibilidad: 76,
+    emoji: "🤝"
   },
 
-  // 👉 Plantilla para agregar un empleo nuevo:
-  // {
-  //   id: "empleo-xxx",
-  //   titulo: "...",
-  //   empresa: "...",
-  //   icono: "💼",
-  //   modalidad: "Remoto|Presencial|Híbrido",
-  //   tipo: "Full Time|Part Time|Pasantía|Freelance",
-  //   nivel: "Junior|Semi Senior|Senior",
-  //   tags: ["...", "...", "..."]
-  // },
+  // ── REMOTOS ──
+  {
+    titulo: "Desarrollador Full Stack",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Semi Senior",
+    fuente: "Get on Board",
+    url: "https://www.getonbrd.com/jobs/programming",
+    tags: ["React", "Node.js", "API"],
+    compatibilidad: 93,
+    emoji: "🚀"
+  },
+  {
+    titulo: "Diseñador UX/UI Freelance",
+    modalidad: "Remoto",
+    tipo: "Freelance",
+    nivel: "Semi Senior",
+    fuente: "Workana",
+    url: "https://www.workana.com/jobs?category=design-multimedia&language=es",
+    tags: ["Figma", "Diseño", "UX"],
+    compatibilidad: 87,
+    emoji: "🎨"
+  },
+  {
+    titulo: "Data Analyst",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "Torre.ai",
+    url: "https://torre.ai/jobs/data-analyst",
+    tags: ["SQL", "Power BI", "Datos"],
+    compatibilidad: 84,
+    emoji: "📊"
+  },
+  {
+    titulo: "Backend Developer",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Senior",
+    fuente: "Remote OK",
+    url: "https://remoteok.com/remote-backend-jobs",
+    tags: ["Python", "APIs", "Cloud"],
+    compatibilidad: 80,
+    emoji: "⚙️"
+  },
+  {
+    titulo: "Frontend Developer",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "We Work Remotely",
+    url: "https://weworkremotely.com/remote-jobs/search?term=frontend",
+    tags: ["React", "TypeScript", "CSS"],
+    compatibilidad: 86,
+    emoji: "🖥️"
+  },
+  {
+    titulo: "Product Manager",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Semi Senior",
+    fuente: "Himalayas",
+    url: "https://himalayas.app/jobs/product-manager",
+    tags: ["Producto", "Agile", "Roadmap"],
+    compatibilidad: 78,
+    emoji: "🗺️"
+  },
+  {
+    titulo: "Customer Success",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "LinkedIn",
+    url: "https://www.linkedin.com/jobs/search/?keywords=customer+success&f_WT=2",
+    tags: ["Inglés", "CRM", "Soporte"],
+    compatibilidad: 83,
+    emoji: "⭐"
+  }
 ];
+
+// ── RENDERIZADO ───────────────────────────────────────────────────────────────
+
+function renderizarEmpleos(lista) {
+  const contenedor = document.getElementById('jobsGrid');
+  if (!lista.length) {
+    contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#888;">No hay empleos que coincidan con los filtros.</p>';
+    return;
+  }
+
+  contenedor.innerHTML = lista.map(e => {
+    const tags = e.tags.map(t => `<span class="job-tag">${t}</span>`).join('');
+    const colorMatch = e.compatibilidad >= 85 ? '#22c55e' : e.compatibilidad >= 75 ? '#f59e0b' : '#ef4444';
+
+    return `
+      <div class="job-card"
+           data-modalidad="${e.modalidad}"
+           data-tipo="${e.tipo}"
+           data-nivel="${e.nivel}"
+           data-fuente="${e.fuente}">
+        <div class="job-logo">${e.emoji}</div>
+        <div class="job-info">
+          <div class="job-title">${e.titulo}</div>
+          <div class="job-company">${e.fuente} · ${e.modalidad}</div>
+          <div class="job-tags">${tags}</div>
+        </div>
+        <div class="job-right">
+          <div class="job-match" style="color:${colorMatch}; font-weight:700; font-size:1.1rem;">${e.compatibilidad}%</div>
+          <a href="${e.url}" target="_blank" rel="noopener" class="btn-apply-job">
+            Ver en ${e.fuente} →
+          </a>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── FILTROS ───────────────────────────────────────────────────────────────────
+
+function filtrarEmpleos() {
+  const modalidad = document.getElementById('filtroModalidad').value;
+  const tipo      = document.getElementById('filtroTipo').value;
+  const nivel     = document.getElementById('filtroNivel').value;
+  const fuente    = document.getElementById('filtroFuente').value;
+
+  const filtrados = empleos.filter(e =>
+    (!modalidad || e.modalidad === modalidad) &&
+    (!tipo      || e.tipo      === tipo)      &&
+    (!nivel     || e.nivel     === nivel)     &&
+    (!fuente    || e.fuente    === fuente)
+  );
+
+  renderizarEmpleos(filtrados);
+}
+
+// ── INICIO ────────────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderizarEmpleos(empleos);
+
+  ['filtroModalidad', 'filtroTipo', 'filtroNivel', 'filtroFuente'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', filtrarEmpleos);
+  });
+});
 
 // Abrir modal login
 document.getElementById("abrirLogin").addEventListener("click", function(){

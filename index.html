@@ -508,6 +508,13 @@
     <div class="becas-grid" id="becasGrid">
       <p class="becas-empty">Cargando becas...</p>
     </div>
+    <!-- Navegación carrusel -->
+    <div class="becas-nav">
+      <button class="becas-flecha" id="becasPrev" aria-label="Anterior">&#8592;</button>
+      <div id="becasPuntos" class="becas-puntos"></div>
+      <span id="becasContador" class="becas-contador"></span>
+      <button class="becas-flecha" id="becasNext" aria-label="Siguiente">&#8594;</button>
+    </div>
 
   </div>
 
@@ -541,188 +548,90 @@
 
       <div class="jobs-filters">
 
-        <select class="filter-select">
-          <option>Todas las fuentes</option>
-          <option>LinkedIn Jobs</option>
-          <option>Computrabajo</option>
-          <option>Bumeran</option>
+        <select class="filter-select" id="filtroModalidad">
+          <option value="">Modalidad</option>
+          <option value="Presencial">Presencial</option>
+          <option value="Híbrido">Híbrido</option>
+          <option value="Remoto">Remoto</option>
         </select>
 
-        <select class="filter-select">
-          <option>Modalidad</option>
-          <option>Remoto</option>
-          <option>Presencial</option>
-          <option>Híbrido</option>
+        <select class="filter-select" id="filtroTipo">
+          <option value="">Tipo</option>
+          <option value="Full Time">Full Time</option>
+          <option value="Part Time">Part Time</option>
+          <option value="Freelance">Freelance</option>
         </select>
 
-        <select class="filter-select">
-          <option>Tipo</option>
-          <option>Full Time</option>
-          <option>Part Time</option>
-          <option>Pasantía</option>
-          <option>Freelance</option>
+        <select class="filter-select" id="filtroNivel">
+          <option value="">Nivel</option>
+          <option value="Junior">Junior</option>
+          <option value="Semi Senior">Semi Senior</option>
+          <option value="Senior">Senior</option>
         </select>
 
-        <select class="filter-select">
-          <option>Nivel</option>
-          <option>Junior</option>
-          <option>Semi Senior</option>
-          <option>Senior</option>
+        <select class="filter-select" id="filtroFuente">
+          <option value="">Fuente</option>
+          <option value="LinkedIn">LinkedIn</option>
+          <option value="Computrabajo">Computrabajo</option>
+          <option value="Bumeran">Bumeran</option>
+          <option value="Indeed">Indeed</option>
+          <option value="Zona Jobs">Zona Jobs</option>
+          <option value="Get on Board">Get on Board</option>
+          <option value="Workana">Workana</option>
+          <option value="Torre.ai">Torre.ai</option>
+          <option value="Remote OK">Remote OK</option>
+          <option value="We Work Remotely">We Work Remotely</option>
+          <option value="Himalayas">Himalayas</option>
         </select>
 
       </div>
 
-      <!-- EMPLEOS -->
-
-      <div class="job-card top-match">
-        <div class="job-logo">📊</div>
-
-        <div class="job-info">
-          <div class="job-title">Asistente Administrativo</div>
-          <div class="job-company">
-            Empresa Nacional · Modalidad Híbrida
-          </div>
-
-          <div class="job-tags">
-            <span class="job-tag">Excel</span>
-            <span class="job-tag">Administración</span>
-            <span class="job-tag">Organización</span>
-            <span class="job-tag">Híbrido</span>
-          </div>
-        </div>
-
-        <div class="job-right">
-          <div class="job-match high">94%</div>
-
-          <div class="match-bar-wrap">
-            <div class="match-bar bar-green" style="width:94%"></div>
-          </div>
-
-          <button class="btn-apply-job">
-            Ver detalles →
-          </button>
-        </div>
-      </div>
-
-      <div class="job-card">
-        <div class="job-logo">📈</div>
-
-        <div class="job-info">
-          <div class="job-title">Analista de Datos Jr.</div>
-          <div class="job-company">
-            Empresa Tecnológica · Remoto
-          </div>
-
-          <div class="job-tags">
-            <span class="job-tag">Excel</span>
-            <span class="job-tag">Power BI</span>
-            <span class="job-tag">Datos</span>
-          </div>
-        </div>
-
-        <div class="job-right">
-          <div class="job-match high">88%</div>
-
-          <div class="match-bar-wrap">
-            <div class="match-bar bar-green" style="width:88%"></div>
-          </div>
-
-          <button class="btn-apply-job">
-            Ver detalles →
-          </button>
-        </div>
-      </div>
-
-      <div class="job-card">
-        <div class="job-logo">🎧</div>
-
-        <div class="job-info">
-          <div class="job-title">Atención al Cliente</div>
-          <div class="job-company">
-            Empresa de Servicios · Remoto
-          </div>
-
-          <div class="job-tags">
-            <span class="job-tag">Comunicación</span>
-            <span class="job-tag">CRM</span>
-            <span class="job-tag">Atención</span>
-          </div>
-        </div>
-
-        <div class="job-right">
-          <div class="job-match mid">76%</div>
-
-          <div class="match-bar-wrap">
-            <div class="match-bar bar-gold" style="width:76%"></div>
-          </div>
-
-          <button class="btn-apply-job">
-            Ver detalles →
-          </button>
-        </div>
-      </div>
-
-      <div class="job-card">
-        <div class="job-logo">📱</div>
-
-        <div class="job-info">
-          <div class="job-title">Marketing Digital Jr.</div>
-          <div class="job-company">
-            Agencia de Marketing · Híbrido
-          </div>
-
-          <div class="job-tags">
-            <span class="job-tag">Redes Sociales</span>
-            <span class="job-tag">Contenido</span>
-            <span class="job-tag">Marketing</span>
-          </div>
-        </div>
-
-        <div class="job-right">
-          <div class="job-match mid">73%</div>
-
-          <div class="match-bar-wrap">
-            <div class="match-bar bar-gold" style="width:73%"></div>
-          </div>
-
-          <button class="btn-apply-job">
-            Ver detalles →
-          </button>
-        </div>
-      </div>
+      <!-- Las tarjetas se generan automáticamente desde main.js -->
+      <div id="jobsGrid"></div>
 
       <!-- FUENTES DE EMPLEO -->
 
       <div class="job-sources-panel">
 
-        <div class="sources-title">
-          Fuentes de empleo
-        </div>
+        <div class="sources-title">Fuentes de empleo</div>
 
         <div class="source-item">
           <div class="source-logo">💼</div>
-
           <div>
             <div class="source-name">LinkedIn</div>
-            <div class="source-count">4.200 ofertas</div>
+            <div class="source-count">Red profesional líder</div>
           </div>
         </div>
 
         <div class="source-item">
           <div class="source-logo">🔍</div>
-
           <div>
             <div class="source-name">Indeed</div>
-            <div class="source-count">3.100 ofertas</div>
+            <div class="source-count">Mayor buscador de empleos</div>
           </div>
         </div>
 
         <div class="source-item">
           <div class="source-logo">📄</div>
-
           <div>
             <div class="source-name">Computrabajo</div>
-            <div class="source-count">2.700 ofertas</div>
+            <div class="source-count">Líder en Argentina</div>
+          </div>
+        </div>
+
+        <div class="source-item">
+          <div class="source-logo">🚀</div>
+          <div>
+            <div class="source-name">Get on Board</div>
+            <div class="source-count">Empleos remotos tech</div>
+          </div>
+        </div>
+
+        <div class="source-item">
+          <div class="source-logo">💻</div>
+          <div>
+            <div class="source-name">Workana</div>
+            <div class="source-count">Freelance y remoto</div>
           </div>
         </div>
 
