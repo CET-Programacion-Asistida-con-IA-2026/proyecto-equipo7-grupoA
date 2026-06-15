@@ -1,11 +1,3 @@
-// Tab switching / Cambio de pestañas
-document.querySelectorAll('.edu-tab').forEach(tab => {
-  tab.addEventListener('click', function() {
-    document.querySelectorAll('.edu-tab').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
 // Source toggles / Alternadores de fuente
 document.querySelectorAll('.source-toggle').forEach(toggle => {
   toggle.addEventListener('click', function() {
@@ -306,53 +298,25 @@ const enlacesPlataformas = {
   "MIT OpenCourseWare": "https://ocw.mit.edu/"
 };
 
-// Conecta las tarjetas de plataformas y de cursos con sus links externos
-function activarClicksDeCursos() {
-
-  // Tarjetas de plataformas (Coursera, edX, etc.)
-  document.querySelectorAll('.platform-card').forEach(card => {
-    const nombre = card.querySelector('.platform-name').textContent.trim();
-    const url = enlacesPlataformas[nombre];
-
-    if (!url) return; // si la plataforma no está en el mapa, no hace nada
-
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', function () {
-      window.open(url, '_blank');
-    });
-  });
-
-  // Tarjetas de cursos (las que tienen data-curso-id)
-  document.querySelectorAll('.course-card[data-curso-id]').forEach(card => {
-    const curso = catalogoCursos.find(c => c.id === card.dataset.cursoId);
-
-    if (!curso || !curso.url) return;
-
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', function () {
-      window.open(curso.url, '_blank');
-    });
-  });
-}
-
-activarClicksDeCursos();
-
 // Catálogo de cursos disponibles.
 // "tags" son las palabras clave que el asistente va a comparar
 // con perfilUsuario.habilidades e interesesProfesionales.
+// "categoria" debe coincidir EXACTAMENTE con el texto de un .edu-tab.
 const catalogoCursos = [
   {
     id: "curso-excel-datos",
     plataforma: "Google Career Certificates",
     plataformaIcono: "🔵",
     titulo: "Excel y Análisis de Datos para el Trabajo",
-    categoria: "Datos & IA",          // debe coincidir con un .edu-tab
+    categoria: "Datos & IA",
     nivel: "Principiante",
     duracion: "40 horas",
     certificado: true,
     gratis: true,
     icono: "📊",
     colorThumb: "linear-gradient(135deg,#2563EB,#38BDF8)",
+    url: "https://grow.google/intl/es/google-career-certificates/data-analytics/",
+    matchScore: 96,
     tags: ["excel", "datos", "análisis de datos", "administración"]
   },
   {
@@ -367,6 +331,8 @@ const catalogoCursos = [
     gratis: true,
     icono: "💼",
     colorThumb: "linear-gradient(135deg,#0EA5E9,#10B981)",
+    url: "https://www.santanderopenacademy.com/",
+    matchScore: 89,
     tags: ["empleabilidad", "comunicación", "organización", "atención al cliente"]
   },
   {
@@ -381,7 +347,89 @@ const catalogoCursos = [
     gratis: false,
     icono: "🤖",
     colorThumb: "linear-gradient(135deg,#1E40AF,#2563EB)",
+    url: "https://www.edx.org/",
+    matchScore: 82,
     tags: ["inteligencia artificial", "tecnología", "programación", "datos"]
+  },
+  {
+    id: "curso-ciberseguridad",
+    plataforma: "Cisco Networking Academy",
+    plataformaIcono: "🌐",
+    titulo: "Introducción a la Ciberseguridad",
+    categoria: "Tecnología",
+    nivel: "Principiante",
+    duracion: "6 horas",
+    certificado: true,
+    gratis: true,
+    icono: "🛡️",
+    colorThumb: "linear-gradient(135deg,#0EA5E9,#1E40AF)",
+    url: "https://www.netacad.com/courses/introduction-to-cybersecurity?courseLang=es-XL",
+    matchScore: 78,
+    tags: ["ciberseguridad", "redes", "tecnología", "seguridad informática"]
+  },
+  {
+    id: "curso-diseno-ux",
+    plataforma: "Coursera",
+    plataformaIcono: "🎓",
+    titulo: "Aspectos Básicos del Diseño de Experiencia del Usuario (UX)",
+    categoria: "Diseño",
+    nivel: "Principiante",
+    duracion: "25 horas",
+    certificado: true,
+    gratis: true,
+    icono: "🎨",
+    colorThumb: "linear-gradient(135deg,#7C3AED,#EC4899)",
+    url: "https://www.coursera.org/learn/aspectos-basicos-del-diseno-de-la-experiencia-del-usuario-ux",
+    matchScore: 75,
+    tags: ["diseño", "ux", "figma", "experiencia de usuario"]
+  },
+  {
+    id: "curso-marketing-digital",
+    plataforma: "Coursera",
+    plataformaIcono: "🎓",
+    titulo: "Fundamentos del Marketing Digital y Comercio Electrónico",
+    categoria: "Marketing",
+    nivel: "Principiante",
+    duracion: "30 horas",
+    certificado: true,
+    gratis: true,
+    icono: "📱",
+    colorThumb: "linear-gradient(135deg,#F59E0B,#EF4444)",
+    url: "https://www.coursera.org/learn/fundamentos-del-marketing-digital-y-comercio-electronico",
+    matchScore: 80,
+    tags: ["marketing", "redes sociales", "contenido", "comercio electrónico"]
+  },
+  {
+    id: "curso-ingles-profesional",
+    plataforma: "Coursera",
+    plataformaIcono: "🎓",
+    titulo: "Inglés para el Desarrollo Profesional",
+    categoria: "Idiomas",
+    nivel: "Intermedio",
+    duracion: "40 horas",
+    certificado: true,
+    gratis: true,
+    icono: "🗣️",
+    colorThumb: "linear-gradient(135deg,#10B981,#0EA5E9)",
+    url: "https://www.coursera.org/learn/careerdevelopment",
+    matchScore: 70,
+    tags: ["inglés", "idiomas", "entrevistas", "comunicación"]
+  },
+  {
+    id: "curso-salud-publica",
+    plataforma: "Coursera",
+    plataformaIcono: "🎓",
+    titulo: "Las Personas, el Poder y el Orgullo de la Salud Pública",
+    categoria: "Salud",
+    nivel: "Principiante",
+    duracion: "15 horas",
+    certificado: true,
+    gratis: true,
+    icono: "🩺",
+    colorThumb: "linear-gradient(135deg,#10B981,#059669)",
+    url: "https://www.coursera.org/learn/public-health",
+    matchScore: 65,
+    tags: ["salud", "salud pública", "comunidad", "bienestar"]
   },
 
   // 👉 Plantilla para agregar un curso nuevo (copiá y completá):
@@ -397,67 +445,296 @@ const catalogoCursos = [
   //   gratis: true/false,
   //   icono: "📊",
   //   colorThumb: "linear-gradient(135deg,#COLOR1,#COLOR2)",
+  //   url: "https://...",              // link directo al curso/plataforma
+  //   matchScore: 0,                   // 0-100, % de compatibilidad mostrado en la tarjeta
   //   tags: ["...", "...", "..."]      // 3 a 5 palabras clave en minúscula
   // },
 ];
+
+// Construye el HTML de una sola course-card a partir de un objeto del catálogo
+function crearCourseCard(curso) {
+  const badgeRecomendado = curso.matchScore >= 90
+    ? '<div class="course-ai-badge">🤖 Recomendado para tu perfil</div>'
+    : "";
+
+  const precio = curso.gratis
+    ? '<span class="course-price-free">✓ Gratis</span>'
+    : '<span class="course-price-paid">Certificación opcional</span>';
+
+  const certificadoTxt = curso.certificado ? "Certificado incluido" : "Certificado opcional";
+
+  return `
+    <div class="course-card" data-curso-id="${curso.id}">
+
+      ${badgeRecomendado}
+
+      <div class="course-thumb" style="background:${curso.colorThumb}">
+        ${curso.icono}
+      </div>
+
+      <div class="course-body">
+
+        <div class="course-platform-badge">
+          ${curso.plataformaIcono} ${curso.plataforma}
+        </div>
+
+        <div class="course-title">
+          ${curso.titulo}
+        </div>
+
+        <div class="course-meta">
+          <span>${curso.nivel}</span>
+          <span class="dot"></span>
+          <span>${curso.duracion}</span>
+          <span class="dot"></span>
+          <span>${certificadoTxt}</span>
+        </div>
+
+        <div class="course-footer">
+          ${precio}
+          <span class="course-match-score">Match: <span>${curso.matchScore}%</span></span>
+        </div>
+
+      </div>
+
+    </div>
+  `;
+}
+
+// Pinta en pantalla un listado de cursos (ya filtrado) y conecta los clicks
+function renderCursos(lista) {
+  const grid = document.getElementById("courseGrid");
+  if (!grid) return;
+
+  if (!lista.length) {
+    grid.innerHTML = '<p class="becas-empty">No encontramos cursos en esta categoría todavía. Probá con otra pestaña.</p>';
+    return;
+  }
+
+  grid.innerHTML = lista.map(crearCourseCard).join("");
+
+  // Conecta cada course-card con el link real del curso
+  grid.querySelectorAll(".course-card[data-curso-id]").forEach(card => {
+    const curso = catalogoCursos.find(c => c.id === card.dataset.cursoId);
+    if (!curso || !curso.url) return;
+
+    card.style.cursor = "pointer";
+    card.addEventListener("click", () => window.open(curso.url, "_blank"));
+  });
+}
+
+// Filtra catalogoCursos según la pestaña activa ("Todos" no filtra nada)
+function aplicarFiltroCursos(categoria) {
+  const filtrados = (!categoria || categoria === "Todos")
+    ? catalogoCursos
+    : catalogoCursos.filter(c => c.categoria === categoria);
+
+  renderCursos(filtrados);
+}
+
+// Conecta las tarjetas de plataformas con sus links externos
+function activarClicksDePlataformas() {
+  document.querySelectorAll('.platform-card').forEach(card => {
+    const nombre = card.querySelector('.platform-name').textContent.trim();
+    const url = enlacesPlataformas[nombre];
+
+    if (!url) return; // si la plataforma no está en el mapa, no hace nada
+
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function () {
+      window.open(url, '_blank');
+    });
+  });
+}
+
+activarClicksDePlataformas();
+
+// Render inicial: "Todos" los cursos
+aplicarFiltroCursos("Todos");
+
+// Conectar las pestañas .edu-tab para filtrar por categoría
+document.querySelectorAll('.edu-tab').forEach(tab => {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.edu-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+
+    aplicarFiltroCursos(this.textContent.trim());
+  });
+});
+
 
 // ======================================================
 // BECAS
 // ======================================================
 
-// Catálogo de becas disponibles.
-const catalogoBecas = [
-  {
-    id: "beca-fulbright",
-    nombre: "Programa Fulbright – Posgrados Internacionales",
-    organizacion: "Comisión Fulbright Argentina",
-    icono: "🌎",
-    destacada: true,
-    tipo: "Beca completa",        // Beca completa / Beca parcial / Subsidio de viaje / Beca de investigación
-    alcance: "Internacional",     // Internacional / Nacional / Regional
-    area: "Tecnología",           // área de estudio principal
-    deadline: "Convocatoria anual",
-    tags: ["posgrado", "inglés", "investigación", "internacional"]
-  },
-  {
-    id: "beca-santander-women-tech",
-    nombre: "Santander Open Academy – Women in Tech",
-    organizacion: "Santander Open Academy",
-    icono: "🏦",
-    destacada: false,
-    tipo: "Beca completa",
-    alcance: "Internacional",
-    area: "Tecnología",
-    deadline: "Convocatoria abierta",
-    tags: ["tecnología", "mujeres", "programación", "datos"]
-  },
-  {
-    id: "beca-conicet-doctorado",
-    nombre: "Becas CONICET – Doctorado Nacional",
-    organizacion: "CONICET Argentina",
-    icono: "🇦🇷",
-    destacada: false,
-    tipo: "Beca completa",
-    alcance: "Nacional",
-    area: "Ciencias Sociales",
-    deadline: "Convocatoria nacional",
-    tags: ["investigación", "doctorado", "nacional", "académico"]
-  },
+// Las becas viven en becas.json (las administra la persona encargada
+// de esa sección). Acá solo las cargamos, las mostramos y las filtramos.
 
-  // 👉 Plantilla para agregar una beca nueva:
-  // {
-  //   id: "beca-xxx",
-  //   nombre: "...",
-  //   organizacion: "...",
-  //   icono: "🏆",
-  //   destacada: true/false,
-  //   tipo: "Beca completa|Beca parcial|Subsidio de viaje|Beca de investigación",
-  //   alcance: "Internacional|Nacional|Regional",
-  //   area: "Tecnología|Ciencias Sociales|Arte y Diseño|Salud|Negocios",
-  //   deadline: "...",
-  //   tags: ["...", "...", "..."]
-  // },
-];
+let catalogoBecas = []; // se llena con fetch() al cargar la página
+
+// Convierte el % de compatibilidad en el stroke-dashoffset del círculo SVG
+// (circunferencia = 2 * π * 27 ≈ 169.6)
+function dashoffsetCompatibilidad(pct) {
+  const circunferencia = 169.6;
+  const valor = Math.max(0, Math.min(100, Number(pct) || 0));
+  return (circunferencia - (circunferencia * valor / 100)).toFixed(1);
+}
+
+// Construye el HTML de una sola beca-card a partir de un objeto del JSON
+function crearBecaCard(beca) {
+  const featuredClass = beca.destacada ? " featured" : "";
+  const featuredBadge = beca.destacada
+    ? '<div style="margin-bottom:6px"><span class="beca-featured-badge">⭐ Destacada</span></div>'
+    : "";
+
+  const tagAlcanceClass = beca.alcance === "Internacional" ? "intl" : "";
+  const tagTipoClass = beca.tipo === "Completa" ? "full" : "";
+
+  const tags = [
+    `<span class="beca-tag ${tagAlcanceClass}">${beca.alcance}</span>`,
+    `<span class="beca-tag ${tagTipoClass}">${beca.tipo}</span>`,
+    `<span class="beca-tag">${beca.area}</span>`,
+    beca.requiereIngles ? '<span class="beca-tag">Inglés requerido</span>' : ""
+  ].filter(Boolean).join("\n");
+
+  const offset = dashoffsetCompatibilidad(beca.compatibilidad);
+
+  return `
+    <div class="beca-card${featuredClass}" data-beca-id="${beca.id}">
+
+      <div class="beca-logo-wrap">${beca.logo || "🏆"}</div>
+
+      <div class="beca-info">
+        ${featuredBadge}
+
+        <div class="beca-title">${beca.titulo}</div>
+        <div class="beca-org">${beca.organizacion}</div>
+
+        <div class="beca-tags">${tags}</div>
+      </div>
+
+      <div class="beca-side">
+
+        <div class="match-circle">
+          <svg width="62" height="62" viewBox="0 0 62 62">
+            <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
+            <circle cx="31" cy="31" r="27" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+          </svg>
+
+          <div class="match-circle-inner">
+            <div class="match-pct">${beca.compatibilidad}%</div>
+            <div class="match-lbl">compat.</div>
+          </div>
+        </div>
+
+        <div class="beca-deadline">
+          Cierra: ${beca.fechaCierre || "Sin fecha"}
+        </div>
+
+        <button class="btn-apply" type="button" data-url="${beca.url || ""}">Ver requisitos →</button>
+        <button class="btn-save" type="button">Guardar</button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+// Pinta en pantalla un listado de becas (ya filtrado)
+function renderBecas(lista) {
+  const grid = document.getElementById("becasGrid");
+  if (!grid) return;
+
+  if (!lista.length) {
+    grid.innerHTML = '<p class="becas-empty">No encontramos becas que coincidan con esos filtros. Probá ajustando las opciones de la izquierda.</p>';
+    return;
+  }
+
+  grid.innerHTML = lista.map(crearBecaCard).join("");
+
+  // Conectar el botón "Ver requisitos" de cada tarjeta con su URL
+  grid.querySelectorAll(".btn-apply").forEach(btn => {
+    const url = btn.dataset.url;
+    if (!url) return;
+    btn.addEventListener("click", () => window.open(url, "_blank"));
+  });
+}
+
+// Lee el estado actual de los filtros de la sidebar
+function leerFiltrosBecas() {
+  const tipos = Array.from(document.querySelectorAll('[data-filtro="tipo"]:checked')).map(i => i.value);
+  const alcances = Array.from(document.querySelectorAll('[data-filtro="alcance"]:checked')).map(i => i.value);
+  const areas = Array.from(document.querySelectorAll('[data-filtro="area"]:checked')).map(i => i.value);
+
+  const sliderCompat = document.getElementById("filtroCompatMin");
+  const compatMin = sliderCompat ? Number(sliderCompat.value) : 0;
+
+  return { tipos, alcances, areas, compatMin };
+}
+
+// Aplica los filtros actuales sobre catalogoBecas y vuelve a renderizar
+function aplicarFiltrosBecas() {
+  const { tipos, alcances, areas, compatMin } = leerFiltrosBecas();
+
+  const filtradas = catalogoBecas.filter(beca => {
+    // Si no hay ningún checkbox tildado en un grupo, ese grupo no filtra (deja pasar todo)
+    const pasaTipo = tipos.length === 0 || tipos.includes(beca.tipo);
+    const pasaAlcance = alcances.length === 0 || alcances.includes(beca.alcance);
+    const pasaArea = areas.length === 0 || areas.includes(beca.area);
+    const pasaCompat = (beca.compatibilidad || 0) >= compatMin;
+
+    return pasaTipo && pasaAlcance && pasaArea && pasaCompat;
+  });
+
+  renderBecas(filtradas);
+}
+
+// Vista inicial: solo unas pocas becas (destacadas primero), antes de filtrar
+function renderBecasIniciales() {
+  const destacadas = catalogoBecas.filter(b => b.destacada);
+  const resto = catalogoBecas.filter(b => !b.destacada);
+
+  const vistaInicial = [...destacadas, ...resto].slice(0, 3);
+  renderBecas(vistaInicial);
+}
+
+// Carga becas.json y deja todo listo para filtrar
+function inicializarBecas() {
+  fetch("becas.json")
+    .then(resp => {
+      if (!resp.ok) throw new Error("No se pudo cargar becas.json");
+      return resp.json();
+    })
+    .then(data => {
+      catalogoBecas = data;
+      renderBecasIniciales(); // primer render: solo un puñado de becas, como antes
+    })
+    .catch(err => {
+      console.error("Error cargando becas.json:", err);
+      const grid = document.getElementById("becasGrid");
+      if (grid) {
+        grid.innerHTML = '<p class="becas-empty">No pudimos cargar las becas en este momento. Intentá de nuevo más tarde.</p>';
+      }
+    });
+}
+
+inicializarBecas();
+
+// Los checkboxes y el slider solo actualizan la etiqueta / estado visual;
+// el filtrado real se dispara al tocar "Aplicar filtros".
+const sliderCompatMin = document.getElementById("filtroCompatMin");
+if (sliderCompatMin) {
+  const labelCompatMin = document.getElementById("filtroCompatMinLabel");
+
+  sliderCompatMin.addEventListener("input", function () {
+    if (labelCompatMin) labelCompatMin.textContent = this.value + "%+";
+  });
+}
+
+const btnAplicarFiltrosBecas = document.getElementById("btnAplicarFiltrosBecas");
+if (btnAplicarFiltrosBecas) {
+  btnAplicarFiltrosBecas.addEventListener("click", aplicarFiltrosBecas);
+}
 
 // ======================================================
 // EMPLEABILIDAD

@@ -423,114 +423,8 @@
 </div>
 
 <!-- Cursos -->
-<div class="course-grid">
-
-  <div class="course-card">
-
-    <div class="course-ai-badge">
-      🤖 Recomendado para tu perfil
-    </div>
-
-    <div class="course-thumb"
-         style="background:linear-gradient(135deg,#2563EB,#38BDF8)">
-      📊
-    </div>
-
-    <div class="course-body">
-
-      <div class="course-platform-badge">
-        🔵 Google Career Certificates
-      </div>
-
-      <div class="course-title">
-        Excel y Análisis de Datos para el Trabajo
-      </div>
-
-      <div class="course-meta">
-        <span>Principiante</span>
-        <span class="dot"></span>
-        <span>40 horas</span>
-        <span class="dot"></span>
-        <span>Certificado incluido</span>
-      </div>
-
-      <div class="course-footer">
-        <span class="course-price-free">✓ Gratis</span>
-        <span class="course-match-score">Match: <span>96%</span></span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="course-card">
-
-    <div class="course-thumb"
-         style="background:linear-gradient(135deg,#0EA5E9,#10B981)">
-      💼
-    </div>
-
-    <div class="course-body">
-
-      <div class="course-platform-badge">
-        🏦 Santander Open Academy
-      </div>
-
-      <div class="course-title">
-        Habilidades Profesionales y Empleabilidad
-      </div>
-
-      <div class="course-meta">
-        <span>Principiante</span>
-        <span class="dot"></span>
-        <span>20 horas</span>
-        <span class="dot"></span>
-        <span>Certificado incluido</span>
-      </div>
-
-      <div class="course-footer">
-        <span class="course-price-free">✓ Gratis</span>
-        <span class="course-match-score">Match: <span>89%</span></span>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="course-card">
-
-    <div class="course-thumb"
-         style="background:linear-gradient(135deg,#1E40AF,#2563EB)">
-      🤖
-    </div>
-
-    <div class="course-body">
-
-      <div class="course-platform-badge">
-        📘 edX
-      </div>
-
-      <div class="course-title">
-        Fundamentos de Inteligencia Artificial
-      </div>
-
-      <div class="course-meta">
-        <span>Intermedio</span>
-        <span class="dot"></span>
-        <span>12 semanas</span>
-        <span class="dot"></span>
-        <span>Certificado opcional</span>
-      </div>
-
-      <div class="course-footer">
-        <span class="course-price-paid">Certificación opcional</span>
-        <span class="course-match-score">Match: <span>82%</span></span>
-      </div>
-
-    </div>
-
-  </div>
-
+<div class="course-grid" id="courseGrid">
+  <p class="becas-empty">Cargando cursos...</p>
 </div>
 </section>
 
@@ -554,7 +448,7 @@
 
   </div>
 
-  <div class="becas-layout">
+<div class="becas-layout">
 
     <div class="becas-sidebar">
 
@@ -563,205 +457,56 @@
       <div class="filter-group">
         <span class="filter-label">Tipo de beca</span>
         <div class="filter-checks">
-          <label class="filter-check"><input type="checkbox" checked> <span>Beca completa</span></label>
-          <label class="filter-check"><input type="checkbox" checked> <span>Beca parcial</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Subsidio de viaje</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Beca de investigación</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Completa"> <span>Completa</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Parcial"> <span>Parcial</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Mensual"> <span>Mensual</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Único pago"> <span>Único pago</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Pasantía"> <span>Pasantía</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Premio"> <span>Premio</span></label>
         </div>
       </div>
 
       <div class="filter-group">
         <span class="filter-label">Alcance</span>
         <div class="filter-checks">
-          <label class="filter-check"><input type="checkbox" checked> <span>Internacional</span></label>
-          <label class="filter-check"><input type="checkbox" checked> <span>Nacional</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Regional</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="alcance" value="Internacional"> <span>Internacional</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="alcance" value="Nacional"> <span>Nacional</span></label>
         </div>
       </div>
 
       <div class="filter-group">
         <span class="filter-label">Área de estudio</span>
         <div class="filter-checks">
-          <label class="filter-check"><input type="checkbox" checked> <span>Tecnología</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Ciencias Sociales</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Arte y Diseño</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Salud</span></label>
-          <label class="filter-check"><input type="checkbox"> <span>Negocios</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Tecnología"> <span>Tecnología</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Negocios"> <span>Negocios</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Educación"> <span>Educación</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Ciencia"> <span>Ciencia</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Investigación"> <span>Investigación</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Idioma"> <span>Idioma</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Liderazgo"> <span>Liderazgo</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Políticas Públicas"> <span>Políticas Públicas</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Multidisciplinaria"> <span>Multidisciplinaria</span></label>
         </div>
       </div>
 
       <div class="filter-group">
         <span class="filter-label">Compatibilidad mínima</span>
-        <input type="range" class="range-slider" min="0" max="100" value="60">
+        <input type="range" class="range-slider" id="filtroCompatMin" min="0" max="100" value="0">
         <div class="range-labels">
           <span>0%</span>
-          <span>60%+</span>
+          <span id="filtroCompatMinLabel">0%+</span>
           <span>100%</span>
         </div>
       </div>
 
-      <button class="btn-primary" style="width:100%;margin-top:8px;justify-content:center;display:flex">
+      <button class="btn-primary" id="btnAplicarFiltrosBecas" type="button" style="width:100%;margin-top:8px;justify-content:center;display:flex">
         Aplicar filtros
       </button>
 
     </div>
 
-    <div class="becas-grid">
-
-      <!-- Beca 1 -->
-
-      <div class="beca-card featured">
-
-        <div class="beca-logo-wrap">🌎</div>
-
-        <div class="beca-info">
-
-          <div style="margin-bottom:6px">
-            <span class="beca-featured-badge">⭐ Destacada</span>
-          </div>
-
-          <div class="beca-title">
-            Programa Fulbright – Posgrados Internacionales
-          </div>
-
-          <div class="beca-org">
-            Comisión Fulbright Argentina
-          </div>
-
-          <div class="beca-tags">
-            <span class="beca-tag intl">Internacional</span>
-            <span class="beca-tag full">Beca Completa</span>
-            <span class="beca-tag">Posgrado</span>
-            <span class="beca-tag">Inglés requerido</span>
-          </div>
-
-        </div>
-
-        <div class="beca-side">
-
-          <div class="match-circle">
-            <svg width="62" height="62" viewBox="0 0 62 62">
-              <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-              <circle cx="31" cy="31" r="27" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="27" stroke-linecap="round"/>
-            </svg>
-
-            <div class="match-circle-inner">
-              <div class="match-pct">84%</div>
-              <div class="match-lbl">compat.</div>
-            </div>
-          </div>
-
-          <div class="beca-deadline">
-            Convocatoria anual
-          </div>
-
-          <button class="btn-apply">Ver requisitos →</button>
-          <button class="btn-save">Guardar</button>
-
-        </div>
-
-      </div>
-
-      <!-- Beca 2 -->
-
-      <div class="beca-card">
-
-        <div class="beca-logo-wrap">🏦</div>
-
-        <div class="beca-info">
-
-          <div class="beca-title">
-            Santander Open Academy – Women in Tech
-          </div>
-
-          <div class="beca-org">
-            Santander Open Academy
-          </div>
-
-          <div class="beca-tags">
-            <span class="beca-tag intl">Internacional</span>
-            <span class="beca-tag full">Beca Completa</span>
-            <span class="beca-tag">Tecnología</span>
-            <span class="beca-tag">Mujeres</span>
-          </div>
-
-        </div>
-
-        <div class="beca-side">
-
-          <div class="match-circle">
-            <svg width="62" height="62" viewBox="0 0 62 62">
-              <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-              <circle cx="31" cy="31" r="27" fill="none" stroke="#10B981" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="20" stroke-linecap="round"/>
-            </svg>
-
-            <div class="match-circle-inner">
-              <div class="match-pct">91%</div>
-              <div class="match-lbl">compat.</div>
-            </div>
-          </div>
-
-          <div class="beca-deadline">
-            Convocatoria abierta
-          </div>
-
-          <button class="btn-apply">Ver requisitos →</button>
-          <button class="btn-save">Guardar</button>
-
-        </div>
-
-      </div>
-
-      <!-- Beca 3 -->
-
-      <div class="beca-card">
-
-        <div class="beca-logo-wrap">🇦🇷</div>
-
-        <div class="beca-info">
-
-          <div class="beca-title">
-            Becas CONICET – Doctorado Nacional
-          </div>
-
-          <div class="beca-org">
-            CONICET Argentina
-          </div>
-
-          <div class="beca-tags">
-            <span class="beca-tag">Nacional</span>
-            <span class="beca-tag full">Beca Completa</span>
-            <span class="beca-tag">Investigación</span>
-            <span class="beca-tag">Doctorado</span>
-          </div>
-
-        </div>
-
-        <div class="beca-side">
-
-          <div class="match-circle">
-            <svg width="62" height="62" viewBox="0 0 62 62">
-              <circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
-              <circle cx="31" cy="31" r="27" fill="none" stroke="#F59E0B" stroke-width="5" stroke-dasharray="169.6" stroke-dashoffset="54" stroke-linecap="round"/>
-            </svg>
-
-            <div class="match-circle-inner">
-              <div class="match-pct" style="color:var(--gold)">68%</div>
-              <div class="match-lbl">compat.</div>
-            </div>
-          </div>
-
-          <div class="beca-deadline">
-            Convocatoria nacional
-          </div>
-
-          <button class="btn-apply">Ver requisitos →</button>
-          <button class="btn-save">Guardar</button>
-
-        </div>
-
-      </div>
-
+    <div class="becas-grid" id="becasGrid">
+      <p class="becas-empty">Cargando becas...</p>
     </div>
 
   </div>
