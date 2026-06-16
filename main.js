@@ -1630,3 +1630,27 @@ if (footerEmailBtn) {
   });
 
 }
+// Chat Agente IA
+const botonChat =
+document.getElementById(
+  "abrirChatIA"
+);
+
+const ventanaChat =
+document.getElementById(
+  "chatIA"
+);
+
+botonChat.addEventListener(
+  "click",
+  () => {
+
+    ventanaChat
+      .classList
+      .toggle("oculto");
+
+  }
+);
+console.log(botonChat);
+console.log(ventanaChat);
+console.log(cerrarChat);

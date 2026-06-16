@@ -3088,3 +3088,67 @@ footer {
     margin-left: auto;
   }
 }
+
+/* Agente IA */
+.chat-float {
+
+  position: fixed;
+
+  bottom: 25px;
+  right: 25px;
+
+  width: 65px;
+  height: 65px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #384eb3;
+  color: white;
+
+  font-size: 28px;
+
+  cursor: pointer;
+
+  z-index: 9999;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.3);
+
+}
+.chat-container {
+
+  position: fixed;
+
+  bottom: 100px;
+  right: 25px;
+
+  width: 450px;
+  height: 500px;
+
+  background: white;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.25);
+
+  z-index: 9999;
+
+}
+
+.oculto {
+
+  display: none;
+
+}
+
+.chat-header {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
