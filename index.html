@@ -871,35 +871,54 @@
 
         <form id="profileForm">
 
-            <h4 class="perfil-section-title">Datos personales</h4>
-            <input type="text" id="pf-nombre" placeholder="Nombre y apellido" required>
-            <input type="number" id="pf-edad" placeholder="Edad" min="14" max="99" required>
-            <input type="text" id="pf-ciudad" placeholder="Ciudad" required>
-            <input type="text" id="pf-provincia" placeholder="Provincia" required>
-            <input type="email" id="pf-email" placeholder="Email" required>
-            <span class="error-msg oculto" id="errorPfEmail">Ingresá un email válido (ej: nombre@dominio.com)</span>
-            <input type="text" id="pf-red" placeholder="LinkedIn u otra red profesional (opcional)">
+            <div class="perfil-tabs">
+                <button type="button" class="perfil-tab active" data-tab="datos">Datos personales</button>
+                <button type="button" class="perfil-tab" data-tab="formacion">Formación</button>
+                <button type="button" class="perfil-tab" data-tab="habilidades">Habilidades</button>
+                <button type="button" class="perfil-tab" data-tab="objetivo">Objetivo</button>
+            </div>
 
-            <h4 class="perfil-section-title">Formación</h4>
-            <select id="pf-nivel" required>
-                <option value="">Nivel educativo</option>
-                <option value="secundario">Secundario</option>
-                <option value="terciario">Terciario</option>
-                <option value="universitario">Universitario</option>
-                <option value="posgrado">Posgrado</option>
-            </select>
-            <input type="text" id="pf-carrera" placeholder="Carrera / área de estudio">
+            <div class="perfil-tab-panel active" data-tab="datos">
+                <h4 class="perfil-section-title">Datos personales</h4>
+                <input type="text" id="pf-nombre" placeholder="Nombre y apellido" required>
+                <input type="number" id="pf-edad" placeholder="Edad" min="14" max="99" required>
+                <input type="text" id="pf-ciudad" placeholder="Ciudad" required>
+                <input type="text" id="pf-provincia" placeholder="Provincia" required>
+                <input type="email" id="pf-email" placeholder="Email" required>
+                <span class="error-msg oculto" id="errorPfEmail">Ingresá un email válido (ej: nombre@dominio.com)</span>
+                <input type="text" id="pf-red" placeholder="LinkedIn u otra red profesional (opcional)">
+            </div>
 
-            <h4 class="perfil-section-title">Habilidades</h4>
-            <input type="text" id="pf-habilidades" placeholder="Ej: Excel, atención al cliente, organización (separadas por coma)" required>
+            <div class="perfil-tab-panel" data-tab="formacion">
+                <h4 class="perfil-section-title">Formación</h4>
+                <select id="pf-nivel" required>
+                    <option value="">Nivel educativo</option>
+                    <option value="secundario">Secundario</option>
+                    <option value="terciario">Terciario</option>
+                    <option value="universitario">Universitario</option>
+                    <option value="posgrado">Posgrado</option>
+                </select>
+                <input type="text" id="pf-carrera" placeholder="Carrera / área de estudio">
+            </div>
 
-            <h4 class="perfil-section-title">Intereses profesionales</h4>
-            <input type="text" id="pf-intereses" placeholder="Ej: tecnología, marketing, administración (separados por coma)" required>
+            <div class="perfil-tab-panel" data-tab="habilidades">
+                <h4 class="perfil-section-title">Habilidades</h4>
+                <input type="text" id="pf-habilidades" placeholder="Ej: Excel, atención al cliente, organización (separadas por coma)" required>
 
-            <h4 class="perfil-section-title">Objetivo profesional</h4>
-            <textarea id="pf-objetivo" rows="3" placeholder="Contanos qué te gustaría lograr profesionalmente" required></textarea>
+                <h4 class="perfil-section-title">Intereses profesionales</h4>
+                <input type="text" id="pf-intereses" placeholder="Ej: tecnología, marketing, administración (separados por coma)" required>
+            </div>
 
-            <button type="submit" class="btn-hero-main perfil-submit">Guardar perfil y continuar →</button>
+            <div class="perfil-tab-panel" data-tab="objetivo">
+                <h4 class="perfil-section-title">Objetivo profesional</h4>
+                <textarea id="pf-objetivo" rows="3" placeholder="Contanos qué te gustaría lograr profesionalmente" required></textarea>
+            </div>
+
+            <div class="perfil-tabs-nav">
+                <button type="button" class="btn-ghost perfil-tab-prev oculto" id="perfilTabPrev">← Anterior</button>
+                <button type="button" class="btn-primary perfil-tab-next" id="perfilTabNext">Siguiente →</button>
+                <button type="submit" class="btn-hero-main perfil-submit oculto" id="perfilSubmitBtn">Guardar perfil y continuar →</button>
+            </div>
 
         </form>
 

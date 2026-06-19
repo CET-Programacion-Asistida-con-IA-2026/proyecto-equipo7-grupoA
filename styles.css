@@ -2890,6 +2890,68 @@ footer {
   margin-top:8px;
 }
 
+/* Pestañas del formulario de perfil (estilo Bumeran) */
+.perfil-tabs{
+  display:flex;
+  gap:4px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:18px;
+  overflow-x:auto;
+}
+
+.perfil-tab{
+  flex:1;
+  white-space:nowrap;
+  padding:10px 12px;
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-family:var(--font-body);
+  font-size:.8rem;
+  font-weight:600;
+  color:var(--text-muted);
+  border-bottom:2px solid transparent;
+  transition:all .2s;
+}
+
+.perfil-tab:hover:not(.active){
+  color:var(--pink);
+}
+
+.perfil-tab.active{
+  color:var(--pink);
+  border-bottom-color:var(--pink);
+}
+
+.perfil-tab-panel{
+  display:none;
+}
+
+.perfil-tab-panel.active{
+  display:block;
+  animation:fadeInTab .25s ease;
+}
+
+@keyframes fadeInTab{
+  from{ opacity:0; transform:translateY(6px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.perfil-tabs-nav{
+  display:flex;
+  gap:10px;
+  margin-top:8px;
+}
+
+.perfil-tabs-nav .perfil-tab-next,
+.perfil-tabs-nav .perfil-submit{
+  flex:1;
+}
+
+.perfil-tabs-nav .perfil-tab-prev{
+  flex:0 0 auto;
+}
+
 /* Pantalla de "conectando" con Google/LinkedIn */
 .social-loading{
   display:flex;

@@ -133,7 +133,56 @@ function precargarFormularioPerfil(perfil) {
   document.getElementById("pf-habilidades").value = (perfil.habilidades || []).join(", ");
   document.getElementById("pf-intereses").value = (perfil.interesesProfesionales || []).join(", ");
   document.getElementById("pf-objetivo").value = perfil.objetivoProfesional || "";
+
+  irATabPerfil("datos");
 }
+
+// ======================================================
+// PESTAÑAS DEL FORMULARIO DE PERFIL (estilo Bumeran)
+// ======================================================
+
+const ORDEN_TABS_PERFIL = ["datos", "formacion", "habilidades", "objetivo"];
+
+function irATabPerfil(tab) {
+  // Botones de pestaña
+  document.querySelectorAll(".perfil-tab").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tab === tab);
+  });
+
+  // Paneles
+  document.querySelectorAll(".perfil-tab-panel").forEach(panel => {
+    panel.classList.toggle("active", panel.dataset.tab === tab);
+  });
+
+  const indice = ORDEN_TABS_PERFIL.indexOf(tab);
+  const esPrimera = indice === 0;
+  const esUltima = indice === ORDEN_TABS_PERFIL.length - 1;
+
+  document.getElementById("perfilTabPrev").classList.toggle("oculto", esPrimera);
+  document.getElementById("perfilTabNext").classList.toggle("oculto", esUltima);
+  document.getElementById("perfilSubmitBtn").classList.toggle("oculto", !esUltima);
+}
+
+// Click directo en cualquier pestaña
+document.querySelectorAll(".perfil-tab").forEach(btn => {
+  btn.addEventListener("click", () => irATabPerfil(btn.dataset.tab));
+});
+
+// Botón "Siguiente"
+document.getElementById("perfilTabNext").addEventListener("click", () => {
+  const actualBtn = document.querySelector(".perfil-tab.active");
+  const indiceActual = ORDEN_TABS_PERFIL.indexOf(actualBtn.dataset.tab);
+  const siguiente = ORDEN_TABS_PERFIL[indiceActual + 1];
+  if (siguiente) irATabPerfil(siguiente);
+});
+
+// Botón "Anterior"
+document.getElementById("perfilTabPrev").addEventListener("click", () => {
+  const actualBtn = document.querySelector(".perfil-tab.active");
+  const indiceActual = ORDEN_TABS_PERFIL.indexOf(actualBtn.dataset.tab);
+  const anterior = ORDEN_TABS_PERFIL[indiceActual - 1];
+  if (anterior) irATabPerfil(anterior);
+});
 
 // ======================================================
 // INICIALIZACIÓN: restaurar sesión al cargar la página
@@ -155,6 +204,20 @@ if (profileForm) {
   profileForm.addEventListener("submit", function(e) {
 
     e.preventDefault();
+
+    // Si el usuario saltó directo a una pestaña sin completar las anteriores,
+    // los campos requeridos de las otras pestañas quedan ocultos y el navegador
+    // no los valida solo. Los revisamos a mano antes de seguir.
+    const camposVacios = [...profileForm.querySelectorAll("[required]")]
+      .filter(campo => !campo.value || !campo.value.trim());
+
+    if (camposVacios.length) {
+      const panelConError = camposVacios[0].closest(".perfil-tab-panel");
+      if (panelConError) irATabPerfil(panelConError.dataset.tab);
+      camposVacios[0].focus();
+      mostrarToast("⚠️ Completá todos los campos obligatorios antes de guardar.");
+      return;
+    }
 
     // Validar email antes de guardar nada
     const inputEmail = document.getElementById("pf-email");
@@ -264,30 +327,6 @@ document.getElementById("btnEmailContinue").addEventListener("click", function()
   document.getElementById("socialLogin").classList.add("oculto");
   document.getElementById("loginDivider").classList.add("oculto");
   document.getElementById("manualLoginSection").classList.remove("oculto");
-});
-
-// Crear cuenta / Ingresar -> cierra login y abre el formulario de perfil
-document.getElementById("btnCrearCuenta").addEventListener("click", function(e){
-  e.preventDefault();
-  const input = document.getElementById("emailRegistro");
-  const error = document.getElementById("errorEmailRegistro");
-
-  if (!validarEmail(input, error)) return;
-
-  document.getElementById("modalLogin").classList.add("oculto");
-  document.getElementById("modalPerfil").classList.remove("oculto");
-});
-
-// Ingresar -> valida el email; si no es válido, muestra el error y NO avanza
-document.getElementById("btnIngresar").addEventListener("click", function(e){
-  e.preventDefault();
-  const input = document.getElementById("emailSesion");
-  const error = document.getElementById("errorEmailSesion");
-
-  if (!validarEmail(input, error)) return;
-  
-  document.getElementById("modalLogin").classList.add("oculto");
-  document.getElementById("modalPerfil").classList.remove("oculto");
 });
 
 // Cerrar modal de perfil
@@ -1462,6 +1501,7 @@ document.getElementById("btnCrearCuenta").addEventListener("click", function(e){
 
   document.getElementById("modalLogin").classList.add("oculto");
   document.getElementById("modalPerfil").classList.remove("oculto");
+  irATabPerfil("datos");
 });
 
 // Validar al iniciar sesión
@@ -1475,6 +1515,7 @@ document.getElementById("btnIngresar").addEventListener("click", function(e){
 
   document.getElementById("modalLogin").classList.add("oculto");
   document.getElementById("modalPerfil").classList.remove("oculto");
+  irATabPerfil("datos");
 });
 
 // (La validación del email de perfil ya se hace dentro del submit principal,
@@ -1651,6 +1692,3 @@ botonChat.addEventListener(
 
   }
 );
-console.log(botonChat);
-console.log(ventanaChat);
-console.log(cerrarChat);
