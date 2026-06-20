@@ -390,8 +390,8 @@
  
  <!-- Filtros -->
 <div class="course-filters">
-  <select class="filter-select">
-    <option>Área profesional</option>
+  <select class="filter-select" id="filtroAreaCursos">
+    <option value="">Área profesional</option>
     <option>Tecnología</option>
     <option>Diseño</option>
     <option>Negocios</option>
@@ -399,45 +399,57 @@
     <option>Administración</option>
   </select>
 
-  <select class="filter-select">
-    <option>Nivel</option>
+  <select class="filter-select" id="filtroNivelCursos">
+    <option value="">Nivel</option>
     <option>Principiante</option>
     <option>Intermedio</option>
     <option>Avanzado</option>
   </select>
 
-  <select class="filter-select">
-    <option>Modalidad</option>
+  <select class="filter-select" id="filtroModalidadCursos">
+    <option value="">Modalidad</option>
     <option>Online</option>
     <option>Presencial</option>
     <option>Híbrido</option>
   </select>
 
-  <select class="filter-select">
-    <option>Duración</option>
-    <option>Menos de 5h</option>
-    <option>5–20h</option>
-    <option>20–100h</option>
-    <option>+100h</option>
+  <select class="filter-select" id="filtroDuracionCursos">
+    <option value="">Duración (h/semana)</option>
+    <option value="2">Hasta 2 h/sem</option>
+    <option value="4">Hasta 4 h/sem</option>
+    <option value="6">Hasta 6 h/sem</option>
+    <option value="99">Sin límite</option>
   </select>
 
-  <select class="filter-select">
-    <option>Precio</option>
+  <select class="filter-select" id="filtroPrecioCursos">
+    <option value="">Precio</option>
     <option>Gratuito</option>
     <option>Pago</option>
   </select>
 
-  <select class="filter-select">
-    <option>Certificado</option>
+  <select class="filter-select" id="filtroCertificadoCursos">
+    <option value="">Certificado</option>
     <option>Con certificado</option>
     <option>Sin certificado</option>
   </select>
+
+  <button class="btn-primary" id="btnAplicarFiltrosCursos" type="button">
+    Aplicar filtros
+  </button>
 </div>
 
-<!-- Cursos -->
+<!-- Cursos (carrusel de a 3) -->
 <div class="course-grid" id="courseGrid">
   <p class="becas-empty">Cargando cursos...</p>
 </div>
+<!-- Navegación carrusel -->
+<div class="becas-nav">
+  <button class="becas-flecha" id="cursosPrev" aria-label="Anterior">&#8592;</button>
+  <div id="cursosPuntos" class="becas-puntos"></div>
+  <span id="cursosContador" class="becas-contador"></span>
+  <button class="becas-flecha" id="cursosNext" aria-label="Siguiente">&#8594;</button>
+</div>
+
 </section>
 
 <div class="section-divider"></div>
@@ -513,6 +525,10 @@
 
       <button class="btn-primary" id="btnAplicarFiltrosBecas" type="button" style="width:100%;margin-top:8px;justify-content:center;display:flex">
         Aplicar filtros
+      </button>
+
+      <button class="becas-flecha" id="btnLimpiarFiltrosBecas" type="button" style="width:100%;margin-top:8px;height:36px;border-radius:12px;font-size:.8rem">
+        Limpiar filtros
       </button>
 
     </div>
@@ -596,10 +612,22 @@
           <option value="Himalayas">Himalayas</option>
         </select>
 
+        <button class="btn-primary" id="btnAplicarFiltrosEmpleos" type="button">
+          Aplicar filtros
+        </button>
+
       </div>
 
       <!-- Las tarjetas se generan automáticamente desde main.js -->
       <div id="jobsGrid"></div>
+
+      <!-- Navegación carrusel -->
+      <div class="becas-nav">
+        <button class="becas-flecha" id="empleosPrev" aria-label="Anterior">&#8592;</button>
+        <div id="empleosPuntos" class="becas-puntos"></div>
+        <span id="empleosContador" class="becas-contador"></span>
+        <button class="becas-flecha" id="empleosNext" aria-label="Siguiente">&#8594;</button>
+      </div>
 
       <!-- FUENTES DE EMPLEO -->
 

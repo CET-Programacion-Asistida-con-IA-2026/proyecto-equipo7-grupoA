@@ -357,6 +357,7 @@ const enlacesPlataformas = {
 // "tags" son las palabras clave que el asistente va a comparar
 // con perfilUsuario.habilidades e interesesProfesionales.
 // "categoria" debe coincidir EXACTAMENTE con el texto de un .edu-tab.
+// "areaProfesional" se usa en el filtro de abajo: Tecnología / Diseño / Negocios / Marketing / Administración
 const catalogoCursos = [
   {
     id: "curso-excel-datos",
@@ -364,7 +365,10 @@ const catalogoCursos = [
     plataformaIcono: "🔵",
     titulo: "Excel y Análisis de Datos para el Trabajo",
     categoria: "Datos & IA",
+    areaProfesional: "Administración",
     nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 6,
     duracion: "40 horas",
     certificado: true,
     gratis: true,
@@ -380,7 +384,10 @@ const catalogoCursos = [
     plataformaIcono: "🏦",
     titulo: "Habilidades Profesionales y Empleabilidad",
     categoria: "Negocios",
+    areaProfesional: "Negocios",
     nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 3,
     duracion: "20 horas",
     certificado: true,
     gratis: true,
@@ -396,7 +403,10 @@ const catalogoCursos = [
     plataformaIcono: "📘",
     titulo: "Fundamentos de Inteligencia Artificial",
     categoria: "Datos & IA",
+    areaProfesional: "Tecnología",
     nivel: "Intermedio",
+    modalidad: "Online",
+    horasSemanales: 5,
     duracion: "12 semanas",
     certificado: false,
     gratis: false,
@@ -412,7 +422,10 @@ const catalogoCursos = [
     plataformaIcono: "🌐",
     titulo: "Introducción a la Ciberseguridad",
     categoria: "Tecnología",
+    areaProfesional: "Tecnología",
     nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 2,
     duracion: "6 horas",
     certificado: true,
     gratis: true,
@@ -428,7 +441,10 @@ const catalogoCursos = [
     plataformaIcono: "🎓",
     titulo: "Aspectos Básicos del Diseño de Experiencia del Usuario (UX)",
     categoria: "Diseño",
+    areaProfesional: "Diseño",
     nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 5,
     duracion: "25 horas",
     certificado: true,
     gratis: true,
@@ -444,7 +460,10 @@ const catalogoCursos = [
     plataformaIcono: "🎓",
     titulo: "Fundamentos del Marketing Digital y Comercio Electrónico",
     categoria: "Marketing",
+    areaProfesional: "Marketing",
     nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 5,
     duracion: "30 horas",
     certificado: true,
     gratis: true,
@@ -460,7 +479,10 @@ const catalogoCursos = [
     plataformaIcono: "🎓",
     titulo: "Inglés para el Desarrollo Profesional",
     categoria: "Idiomas",
+    areaProfesional: "Negocios",
     nivel: "Intermedio",
+    modalidad: "Online",
+    horasSemanales: 4,
     duracion: "40 horas",
     certificado: true,
     gratis: true,
@@ -476,7 +498,10 @@ const catalogoCursos = [
     plataformaIcono: "🎓",
     titulo: "Las Personas, el Poder y el Orgullo de la Salud Pública",
     categoria: "Salud",
+    areaProfesional: "Negocios",
     nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 3,
     duracion: "15 horas",
     certificado: true,
     gratis: true,
@@ -486,6 +511,139 @@ const catalogoCursos = [
     matchScore: 65,
     tags: ["salud", "salud pública", "comunidad", "bienestar"]
   },
+  {
+    id: "curso-programacion-python",
+    plataforma: "edX",
+    plataformaIcono: "📘",
+    titulo: "Python para Principiantes",
+    categoria: "Tecnología",
+    areaProfesional: "Tecnología",
+    nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 3,
+    duracion: "8 semanas",
+    certificado: true,
+    gratis: true,
+    icono: "🐍",
+    colorThumb: "linear-gradient(135deg,#1E40AF,#2563EB)",
+    url: "https://www.edx.org/learn/python",
+    matchScore: 84,
+    tags: ["programación", "python", "tecnología", "código"]
+  },
+  {
+    id: "curso-redes-cisco",
+    plataforma: "Cisco Networking Academy",
+    plataformaIcono: "🌐",
+    titulo: "Fundamentos de Redes (CCNA Intro)",
+    categoria: "Tecnología",
+    areaProfesional: "Tecnología",
+    nivel: "Intermedio",
+    modalidad: "Online",
+    horasSemanales: 4,
+    duracion: "10 semanas",
+    certificado: true,
+    gratis: true,
+    icono: "🔌",
+    colorThumb: "linear-gradient(135deg,#0284C7,#0EA5E9)",
+    url: "https://www.netacad.com/courses/networking-basics",
+    matchScore: 76,
+    tags: ["redes", "networking", "infraestructura", "cisco"]
+  },
+  {
+    id: "curso-diseno-grafico",
+    plataforma: "Udemy",
+    plataformaIcono: "🎯",
+    titulo: "Diseño Gráfico con Canva desde Cero",
+    categoria: "Diseño",
+    areaProfesional: "Diseño",
+    nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 2,
+    duracion: "12 horas",
+    certificado: true,
+    gratis: false,
+    icono: "🖼️",
+    colorThumb: "linear-gradient(135deg,#DB2777,#7C3AED)",
+    url: "https://www.udemy.com/course/canva-diseno-grafico/",
+    matchScore: 72,
+    tags: ["diseño gráfico", "canva", "redes sociales", "visual"]
+  },
+  {
+    id: "curso-gestion-proyectos",
+    plataforma: "Coursera",
+    plataformaIcono: "🎓",
+    titulo: "Fundamentos de Gestión de Proyectos",
+    categoria: "Negocios",
+    areaProfesional: "Negocios",
+    nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 6,
+    duracion: "6 semanas",
+    certificado: true,
+    gratis: true,
+    icono: "📋",
+    colorThumb: "linear-gradient(135deg,#2563EB,#0EA5E9)",
+    url: "https://www.coursera.org/learn/project-management-foundations",
+    matchScore: 85,
+    tags: ["gestión de proyectos", "planificación", "scrum", "negocios"]
+  },
+  {
+    id: "curso-seo",
+    plataforma: "Udemy",
+    plataformaIcono: "🎯",
+    titulo: "SEO: Posicionamiento Web desde Cero",
+    categoria: "Marketing",
+    areaProfesional: "Marketing",
+    nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 3,
+    duracion: "10 horas",
+    certificado: true,
+    gratis: false,
+    icono: "🔍",
+    colorThumb: "linear-gradient(135deg,#F97316,#EF4444)",
+    url: "https://www.udemy.com/course/seo-posicionamiento/",
+    matchScore: 74,
+    tags: ["seo", "posicionamiento", "google", "marketing digital"]
+  },
+  {
+    id: "curso-administracion-empresas",
+    plataforma: "Fundación Carlos Slim",
+    plataformaIcono: "🏛️",
+    titulo: "Administración de Empresas para No Administradores",
+    categoria: "Negocios",
+    areaProfesional: "Administración",
+    nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 2,
+    duracion: "8 horas",
+    certificado: true,
+    gratis: true,
+    icono: "🏢",
+    colorThumb: "linear-gradient(135deg,#0F766E,#10B981)",
+    url: "https://capacitateparaelempleo.org/",
+    matchScore: 88,
+    tags: ["administración", "empresa", "gestión", "organización"]
+  },
+  {
+    id: "curso-recursos-humanos",
+    plataforma: "Coursera",
+    plataformaIcono: "🎓",
+    titulo: "Introducción a la Gestión de Recursos Humanos",
+    categoria: "Negocios",
+    areaProfesional: "Administración",
+    nivel: "Principiante",
+    modalidad: "Online",
+    horasSemanales: 3,
+    duracion: "5 semanas",
+    certificado: true,
+    gratis: true,
+    icono: "👥",
+    colorThumb: "linear-gradient(135deg,#7C3AED,#2563EB)",
+    url: "https://www.coursera.org/learn/managing-human-resources",
+    matchScore: 81,
+    tags: ["recursos humanos", "rrhh", "selección", "gestión de personas"]
+  },
 
   // 👉 Plantilla para agregar un curso nuevo (copiá y completá):
   // {
@@ -494,7 +652,10 @@ const catalogoCursos = [
   //   plataformaIcono: "🔵",
   //   titulo: "...",
   //   categoria: "...",                // Tecnología / Negocios / Diseño / Datos & IA / Marketing / Idiomas / Salud
+  //   areaProfesional: "...",          // Tecnología / Diseño / Negocios / Marketing / Administración
   //   nivel: "Principiante|Intermedio|Avanzado",
+  //   modalidad: "Online|Presencial|Híbrido",
+  //   horasSemanales: 0,
   //   duracion: "...",
   //   certificado: true/false,
   //   gratis: true/false,
@@ -556,17 +717,36 @@ function crearCourseCard(curso) {
   `;
 }
 
-// Pinta en pantalla un listado de cursos (ya filtrado) y conecta los clicks
+// ── CARRUSEL DE CURSOS (3 por página) ─────────────────────────────────────
+const CURSOS_POR_PAGINA = 3;
+let cursosFiltradosActuales = [...catalogoCursos];
+let cursosPaginaActual = 0;
+
+function totalPaginasCursos() {
+  return Math.ceil(cursosFiltradosActuales.length / CURSOS_POR_PAGINA);
+}
+
+// Pinta en pantalla la página actual del carrusel de cursos
 function renderCursos(lista) {
+  cursosFiltradosActuales = lista;
+  cursosPaginaActual = 0;
+  renderPaginaCursos();
+}
+
+function renderPaginaCursos() {
   const grid = document.getElementById("courseGrid");
   if (!grid) return;
 
-  if (!lista.length) {
-    grid.innerHTML = '<p class="becas-empty">No encontramos cursos en esta categoría todavía. Probá con otra pestaña.</p>';
+  if (!cursosFiltradosActuales.length) {
+    grid.innerHTML = '<p class="becas-empty">No encontramos cursos con esos filtros. Probá ajustar las opciones.</p>';
+    actualizarNavegacionCursos();
     return;
   }
 
-  grid.innerHTML = lista.map(crearCourseCard).join("");
+  const inicio = cursosPaginaActual * CURSOS_POR_PAGINA;
+  const slice = cursosFiltradosActuales.slice(inicio, inicio + CURSOS_POR_PAGINA);
+
+  grid.innerHTML = slice.map(crearCourseCard).join("");
 
   // Conecta cada course-card con el link real del curso
   grid.querySelectorAll(".course-card[data-curso-id]").forEach(card => {
@@ -576,6 +756,34 @@ function renderCursos(lista) {
     card.style.cursor = "pointer";
     card.addEventListener("click", () => window.open(curso.url, "_blank"));
   });
+
+  actualizarNavegacionCursos();
+}
+
+function actualizarNavegacionCursos() {
+  const total = totalPaginasCursos();
+
+  const btnPrev = document.getElementById("cursosPrev");
+  const btnNext = document.getElementById("cursosNext");
+  if (btnPrev) btnPrev.disabled = cursosPaginaActual === 0;
+  if (btnNext) btnNext.disabled = cursosPaginaActual >= total - 1;
+
+  const puntosEl = document.getElementById("cursosPuntos");
+  if (puntosEl) {
+    puntosEl.innerHTML = Array.from({ length: total }, (_, i) => `
+      <button class="beca-punto${i === cursosPaginaActual ? ' activo' : ''}"
+              onclick="irAPaginaCursos(${i})" aria-label="Página ${i + 1}">${i + 1}</button>
+    `).join("");
+  }
+
+  const contadorEl = document.getElementById("cursosContador");
+  if (contadorEl) contadorEl.textContent = total > 0 ? `${cursosPaginaActual + 1} / ${total}` : "";
+}
+
+function irAPaginaCursos(n) {
+  cursosPaginaActual = n;
+  renderPaginaCursos();
+  document.getElementById("courseGrid").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 // Filtra catalogoCursos según la pestaña activa ("Todos" no filtra nada)
@@ -606,6 +814,16 @@ activarClicksDePlataformas();
 
 // Render inicial: "Todos" los cursos
 aplicarFiltroCursos("Todos");
+
+// Flechas del carrusel de cursos
+const cursosPrevBtn = document.getElementById("cursosPrev");
+const cursosNextBtn = document.getElementById("cursosNext");
+if (cursosPrevBtn) cursosPrevBtn.addEventListener("click", () => {
+  if (cursosPaginaActual > 0) irAPaginaCursos(cursosPaginaActual - 1);
+});
+if (cursosNextBtn) cursosNextBtn.addEventListener("click", () => {
+  if (cursosPaginaActual < totalPaginasCursos() - 1) irAPaginaCursos(cursosPaginaActual + 1);
+});
 
 // Conectar las pestañas .edu-tab para filtrar por categoría
 document.querySelectorAll('.edu-tab').forEach(tab => {
@@ -1091,7 +1309,7 @@ function actualizarNavegacion() {
   const puntosEl = document.getElementById('becasPuntos');
   puntosEl.innerHTML = Array.from({ length: total }, (_, i) => `
     <button class="beca-punto${i === paginaActual ? ' activo' : ''}"
-            onclick="irAPagina(${i})" aria-label="Página ${i + 1}"></button>
+            onclick="irAPagina(${i})" aria-label="Página ${i + 1}">${i + 1}</button>
   `).join('');
 
   // Contador
@@ -1276,19 +1494,106 @@ const empleos = [
     tags: ["Inglés", "CRM", "Soporte"],
     compatibilidad: 83,
     emoji: "⭐"
+  },
+
+  // ── MÁS OPORTUNIDADES ──
+  {
+    titulo: "Diseñador Gráfico Jr.",
+    modalidad: "Híbrido",
+    tipo: "Part Time",
+    nivel: "Junior",
+    fuente: "Bumeran",
+    url: "https://www.bumeran.com.ar/empleos-busqueda-diseñador+grafico.html",
+    tags: ["Photoshop", "Illustrator", "Canva"],
+    compatibilidad: 77,
+    emoji: "🖌️"
+  },
+  {
+    titulo: "Analista de Recursos Humanos",
+    modalidad: "Presencial",
+    tipo: "Full Time",
+    nivel: "Semi Senior",
+    fuente: "Zona Jobs",
+    url: "https://www.zonajobs.com.ar/empleos-analista-recursos-humanos.html",
+    tags: ["Selección", "RRHH", "Entrevistas"],
+    compatibilidad: 80,
+    emoji: "👥"
+  },
+  {
+    titulo: "Soporte Técnico IT",
+    modalidad: "Presencial",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "Computrabajo",
+    url: "https://www.computrabajo.com.ar/trabajo-de-soporte-tecnico",
+    tags: ["Redes", "Hardware", "Atención al cliente"],
+    compatibilidad: 75,
+    emoji: "🛠️"
+  },
+  {
+    titulo: "Social Media Manager",
+    modalidad: "Remoto",
+    tipo: "Part Time",
+    nivel: "Junior",
+    fuente: "Workana",
+    url: "https://www.workana.com/jobs?category=marketing-publicidad&language=es",
+    tags: ["Redes Sociales", "Contenido", "Canva"],
+    compatibilidad: 81,
+    emoji: "📲"
+  },
+  {
+    titulo: "QA Tester",
+    modalidad: "Remoto",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "Get on Board",
+    url: "https://www.getonbrd.com/jobs/qa",
+    tags: ["Testing", "Bugs", "Automatización"],
+    compatibilidad: 79,
+    emoji: "🧪"
+  },
+  {
+    titulo: "Recepcionista Administrativo",
+    modalidad: "Presencial",
+    tipo: "Full Time",
+    nivel: "Junior",
+    fuente: "Indeed",
+    url: "https://ar.indeed.com/jobs?q=recepcionista+administrativo&l=Argentina",
+    tags: ["Atención al público", "Agenda", "Organización"],
+    compatibilidad: 73,
+    emoji: "📞"
   }
 ];
 
-// ── RENDERIZADO ───────────────────────────────────────────────────────────────
+// ── CARRUSEL DE EMPLEOS (3 por página) ───────────────────────────────────────
+const EMPLEOS_POR_PAGINA = 3;
+let empleosFiltrados = [...empleos];
+let empleosPaginaActual = 0;
+
+function totalPaginasEmpleos() {
+  return Math.ceil(empleosFiltrados.length / EMPLEOS_POR_PAGINA);
+}
 
 function renderizarEmpleos(lista) {
+  empleosFiltrados = lista;
+  empleosPaginaActual = 0;
+  renderizarPaginaEmpleos();
+}
+
+function renderizarPaginaEmpleos() {
   const contenedor = document.getElementById('jobsGrid');
-  if (!lista.length) {
+  if (!contenedor) return;
+
+  if (!empleosFiltrados.length) {
     contenedor.innerHTML = '<p style="text-align:center; padding:2rem; color:#888;">No hay empleos que coincidan con los filtros.</p>';
+    actualizarNavegacionEmpleos();
     return;
   }
 
-  contenedor.innerHTML = lista.map(e => {
+  const inicio = empleosPaginaActual * EMPLEOS_POR_PAGINA;
+  const slice = empleosFiltrados.slice(inicio, inicio + EMPLEOS_POR_PAGINA);
+
+  contenedor.innerHTML = slice.map(e => {
     const tags = e.tags.map(t => `<span class="job-tag">${t}</span>`).join('');
     const colorMatch = e.compatibilidad >= 85 ? '#22c55e' : e.compatibilidad >= 75 ? '#f59e0b' : '#ef4444';
 
@@ -1313,6 +1618,34 @@ function renderizarEmpleos(lista) {
       </div>
     `;
   }).join('');
+
+  actualizarNavegacionEmpleos();
+}
+
+function actualizarNavegacionEmpleos() {
+  const total = totalPaginasEmpleos();
+
+  const btnPrev = document.getElementById('empleosPrev');
+  const btnNext = document.getElementById('empleosNext');
+  if (btnPrev) btnPrev.disabled = empleosPaginaActual === 0;
+  if (btnNext) btnNext.disabled = empleosPaginaActual >= total - 1;
+
+  const puntosEl = document.getElementById('empleosPuntos');
+  if (puntosEl) {
+    puntosEl.innerHTML = Array.from({ length: total }, (_, i) => `
+      <button class="beca-punto${i === empleosPaginaActual ? ' activo' : ''}"
+              onclick="irAPaginaEmpleos(${i})" aria-label="Página ${i + 1}">${i + 1}</button>
+    `).join('');
+  }
+
+  const contadorEl = document.getElementById('empleosContador');
+  if (contadorEl) contadorEl.textContent = total > 0 ? `${empleosPaginaActual + 1} / ${total}` : '';
+}
+
+function irAPaginaEmpleos(n) {
+  empleosPaginaActual = n;
+  renderizarPaginaEmpleos();
+  document.getElementById('jobsGrid').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // ── FILTROS ───────────────────────────────────────────────────────────────────
@@ -1353,6 +1686,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnFiltros = document.getElementById('btnAplicarFiltrosBecas');
   if (btnFiltros) btnFiltros.addEventListener('click', filtrarBecas);
 
+  const btnLimpiar = document.getElementById('btnLimpiarFiltrosBecas');
+  if (btnLimpiar) btnLimpiar.addEventListener('click', () => {
+    document.querySelectorAll('[data-filtro="tipo"], [data-filtro="alcance"], [data-filtro="area"]')
+      .forEach(input => { input.checked = false; });
+
+    const sliderEl = document.getElementById('filtroCompatMin');
+    const labelEl = document.getElementById('filtroCompatMinLabel');
+    if (sliderEl) sliderEl.value = 0;
+    if (labelEl) labelEl.textContent = '0%+';
+
+    renderizarBecas(becas);
+  });
+
   const btnPrev = document.getElementById('becasPrev');
   const btnNext = document.getElementById('becasNext');
   if (btnPrev) btnPrev.addEventListener('click', () => {
@@ -1369,35 +1715,46 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) el.addEventListener('change', filtrarEmpleos);
   });
 
-  // Filtros de cursos (selects de área, nivel, modalidad, etc.)
-  document.querySelectorAll('.course-filters .filter-select').forEach(sel => {
-    sel.addEventListener('change', aplicarFiltrosSelectCursos);
+  const btnFiltrosEmpleos = document.getElementById('btnAplicarFiltrosEmpleos');
+  if (btnFiltrosEmpleos) btnFiltrosEmpleos.addEventListener('click', filtrarEmpleos);
+
+  const empleosPrevBtn = document.getElementById('empleosPrev');
+  const empleosNextBtn = document.getElementById('empleosNext');
+  if (empleosPrevBtn) empleosPrevBtn.addEventListener('click', () => {
+    if (empleosPaginaActual > 0) irAPaginaEmpleos(empleosPaginaActual - 1);
   });
+  if (empleosNextBtn) empleosNextBtn.addEventListener('click', () => {
+    if (empleosPaginaActual < totalPaginasEmpleos() - 1) irAPaginaEmpleos(empleosPaginaActual + 1);
+  });
+
+  // Filtro de cursos: se aplica solo al tocar "Aplicar filtros"
+  const btnFiltrosCursos = document.getElementById("btnAplicarFiltrosCursos");
+  if (btnFiltrosCursos) btnFiltrosCursos.addEventListener("click", aplicarFiltrosSelectCursos);
 
 });
 
 // Aplica los filtros de los <select> de la sección cursos
 function aplicarFiltrosSelectCursos() {
-  const area      = document.querySelector('.course-filters .filter-select:nth-child(1)')?.value;
-  const nivel     = document.querySelector('.course-filters .filter-select:nth-child(2)')?.value;
-  const precio    = document.querySelector('.course-filters .filter-select:nth-child(5)')?.value;
+  const area        = document.getElementById("filtroAreaCursos")?.value;
+  const nivel       = document.getElementById("filtroNivelCursos")?.value;
+  const modalidad   = document.getElementById("filtroModalidadCursos")?.value;
+  const maxHoras    = document.getElementById("filtroDuracionCursos")?.value;
+  const precio      = document.getElementById("filtroPrecioCursos")?.value;
+  const cert        = document.getElementById("filtroCertificadoCursos")?.value;
 
-  // Obtener la categoría activa de las pestañas
+  // Obtener la categoría activa de las pestañas de arriba (academias)
   const tabActiva = document.querySelector('.edu-tab.active')?.textContent.trim() || 'Todos';
 
-  let lista = (!tabActiva || tabActiva === 'Todos') ? catalogoCursos : catalogoCursos.filter(c => c.categoria === tabActiva);
+  let lista = catalogoCursos;
 
-  if (area && area !== 'Área profesional') {
-    lista = lista.filter(c => c.categoria.toLowerCase().includes(area.toLowerCase()) || c.tags.some(t => t.toLowerCase().includes(area.toLowerCase())));
-  }
-  if (nivel && nivel !== 'Nivel') {
-    lista = lista.filter(c => c.nivel === nivel);
-  }
-  if (precio === 'Gratuito') {
-    lista = lista.filter(c => c.gratis);
-  } else if (precio === 'Pago') {
-    lista = lista.filter(c => !c.gratis);
-  }
+  if (area)      lista = lista.filter(c => c.areaProfesional === area);
+  if (nivel)     lista = lista.filter(c => c.nivel === nivel);
+  if (modalidad) lista = lista.filter(c => c.modalidad === modalidad);
+  if (maxHoras)  lista = lista.filter(c => c.horasSemanales <= Number(maxHoras));
+  if (precio === 'Gratuito') lista = lista.filter(c => c.gratis);
+  if (precio === 'Pago')     lista = lista.filter(c => !c.gratis);
+  if (cert === 'Con certificado') lista = lista.filter(c => c.certificado);
+  if (cert === 'Sin certificado') lista = lista.filter(c => !c.certificado);
 
   renderCursos(lista);
 }
