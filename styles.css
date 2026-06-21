@@ -3215,3 +3215,433 @@ footer {
   align-items: center;
 
 }
+/* ═══════════════════════════════
+   PERFIL — MODAL AMPLIADO ESTILO BUMERAN
+═══════════════════════════════ */
+
+.perfil-box-amplio {
+  width: 980px;
+  max-width: 95%;
+  max-height: 90vh;
+}
+
+.perfil-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 220px;
+  gap: 24px;
+  align-items: start;
+}
+
+.perfil-col {
+  min-width: 0;
+}
+
+.perfil-col-izq,
+.perfil-col-der {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+}
+
+/* Foto de perfil */
+.perfil-foto-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 12px;
+}
+
+.perfil-foto-preview {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  overflow: hidden;
+}
+
+.perfil-foto-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.perfil-foto-acciones {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  display: flex;
+  gap: 4px;
+}
+
+.perfil-foto-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--pink);
+  color: white;
+  font-size: .7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.perfil-foto-btn:hover {
+  filter: brightness(1.1);
+}
+
+.perfil-nombre-preview {
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* Filas de 2 columnas para inputs cortos */
+.pf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.pf-row input,
+.pf-row select {
+  margin-bottom: 0;
+}
+
+.pf-row-salario {
+  grid-template-columns: 100px 1fr;
+}
+
+.perfil-col-izq input,
+.perfil-col-izq select {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .82rem;
+}
+
+.pf-label-chico {
+  display: block;
+  font-size: .72rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.pf-tip {
+  font-size: .72rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 12px 0;
+}
+
+.pf-tip-disabled {
+  font-size: .65rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 4px;
+}
+
+.pf-btn-descargar {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+/* Columna central: tabs y subsecciones */
+.pf-subseccion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+}
+
+.pf-subseccion-header .perfil-section-title {
+  margin: 0;
+}
+
+.pf-btn-sumar {
+  background: none;
+  border: none;
+  color: var(--pink);
+  font-weight: 700;
+  font-size: .8rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pf-btn-sumar:hover {
+  text-decoration: underline;
+}
+
+.pf-lista-items {
+  margin: 10px 0 6px;
+}
+
+.pf-lista-vacia {
+  color: var(--text-muted);
+  font-size: .8rem;
+  font-style: italic;
+}
+
+.pf-item-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.pf-item-card-titulo {
+  font-weight: 700;
+  font-size: .88rem;
+  color: var(--text);
+  margin-bottom: 4px;
+  padding-right: 60px;
+}
+
+.pf-item-card-detalle {
+  font-size: .76rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.pf-item-card-acciones {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 6px;
+}
+
+.pf-item-card-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  font-size: .7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pf-item-card-btn:hover {
+  border-color: var(--pink);
+}
+
+/* Autocompletar con sugerencias */
+.pf-autocomplete-wrap {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.pf-autocomplete-wrap input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .85rem;
+}
+
+.pf-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  z-index: 50;
+}
+
+.pf-suggestion-item {
+  padding: 10px 14px;
+  font-size: .82rem;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.pf-suggestion-item:hover,
+.pf-suggestion-item.activa {
+  background: var(--pink-soft);
+  color: var(--pink);
+}
+
+.pf-suggestion-item.pf-suggestion-otro {
+  border-top: 1px solid var(--border);
+  font-style: italic;
+  color: var(--text-muted);
+}
+
+/* Tags de habilidades/intereses */
+.pf-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pf-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--pink-soft);
+  color: var(--pink);
+  padding: 6px 10px 6px 14px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 600;
+}
+
+.pf-tag-remove {
+  background: none;
+  border: none;
+  color: var(--pink);
+  cursor: pointer;
+  font-size: .85rem;
+  line-height: 1;
+  padding: 0;
+}
+
+/* Columna derecha: estado del CV */
+.pf-card-resumen {
+  margin-bottom: 16px;
+}
+
+.pf-card-resumen:last-child {
+  margin-bottom: 0;
+}
+
+.pf-resumen-label {
+  font-size: .72rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.pf-resumen-valor {
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.pf-barra-completitud {
+  width: 100%;
+  height: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.pf-barra-completitud-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #06b6d4, #22c55e, #8b5cf6);
+  transition: width .4s ease;
+}
+
+/* Submodal: Sumar estudio / Sumar experiencia / Sumar idioma */
+.pf-submodal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10010;
+}
+
+.pf-submodal-box {
+  width: 600px;
+  max-width: 92%;
+  max-height: 88vh;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 32px;
+  position: relative;
+}
+
+.pf-submodal-box h3 {
+  margin-bottom: 22px;
+}
+
+.pf-submodal-box .pf-row {
+  margin-bottom: 12px;
+}
+
+.pf-submodal-box input,
+.pf-submodal-box select,
+.pf-submodal-box textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  font-family: inherit;
+  font-size: .85rem;
+}
+
+.pf-submodal-cerrar {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+.pf-submodal-check-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: .82rem;
+}
+
+.pf-submodal-check-row input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.pf-submodal-acciones {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+/* Responsive: columnas a una sola columna en mobile */
+@media (max-width: 880px) {
+  .perfil-layout {
+    grid-template-columns: 1fr;
+  }
+  .perfil-box-amplio {
+    width: 95%;
+  }
+}

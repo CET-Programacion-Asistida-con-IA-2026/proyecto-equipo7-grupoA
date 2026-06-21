@@ -62,10 +62,11 @@ function actualizarHeaderUsuario(perfil) {
   const navUsuario = document.getElementById("navUsuario");
 
   if (perfil && perfil.datosPersonales && perfil.datosPersonales.nombre) {
-    const nombreCompleto = perfil.datosPersonales.nombre.trim();
-    const primerNombre = nombreCompleto.split(" ")[0];
+    const nombreCompleto = [perfil.datosPersonales.nombre, perfil.datosPersonales.apellido]
+      .filter(Boolean).join(" ").trim();
+    const primerNombre = perfil.datosPersonales.nombre.trim();
 
-    document.getElementById("navAvatar").src = generarAvatar(nombreCompleto);
+    document.getElementById("navAvatar").src = perfil.foto || generarAvatar(nombreCompleto);
     document.getElementById("navNombre").textContent = primerNombre;
 
     navActions.style.display = "none";
@@ -118,71 +119,840 @@ function restaurarProgreso(perfil) {
 
 // Carga los datos guardados en el formulario de perfil (para editarlo)
 function precargarFormularioPerfil(perfil) {
-  if (!perfil || !perfil.datosPersonales) return;
+  // Reseteamos listas dinámicas siempre, haya o no perfil
+  estudiosTemp = (perfil && perfil.estudios) ? [...perfil.estudios] : [];
+  experienciasTemp = (perfil && perfil.experiencias) ? [...perfil.experiencias] : [];
+  idiomasTemp = (perfil && perfil.idiomas) ? [...perfil.idiomas] : [];
+  habilidadesTemp = (perfil && perfil.habilidades) ? [...perfil.habilidades] : [];
+  interesesTemp = (perfil && perfil.interesesProfesionales) ? [...perfil.interesesProfesionales] : [];
 
-  document.getElementById("pf-nombre").value = perfil.datosPersonales.nombre || "";
-  document.getElementById("pf-edad").value = perfil.datosPersonales.edad || "";
-  document.getElementById("pf-ciudad").value = perfil.datosPersonales.ciudad || "";
-  document.getElementById("pf-provincia").value = perfil.datosPersonales.provincia || "";
-  document.getElementById("pf-email").value = perfil.datosPersonales.email || "";
-  document.getElementById("pf-red").value = perfil.datosPersonales.redProfesional || "";
+  renderEstudiosLista();
+  renderExperienciasLista();
+  renderIdiomasLista();
+  renderTagsHabilidades();
+  renderTagsIntereses();
 
-  document.getElementById("pf-nivel").value = (perfil.formacion && perfil.formacion.nivelEducativo) || "";
-  document.getElementById("pf-carrera").value = (perfil.formacion && perfil.formacion.carrera) || "";
+  if (!perfil || !perfil.datosPersonales) {
+    // Perfil nuevo: limpiar formulario
+    document.getElementById("pf-nombre").value = "";
+    document.getElementById("pf-apellido").value = "";
+    document.getElementById("pf-nacionalidad").value = "";
+    document.getElementById("pf-fecha-nacimiento").value = "";
+    document.getElementById("pf-genero").value = "";
+    document.getElementById("pf-estado-civil").value = "";
+    document.getElementById("pf-dni").value = "";
+    document.getElementById("pf-celular").value = "";
+    document.getElementById("pf-telefono").value = "";
+    document.getElementById("pf-email").value = "";
+    document.getElementById("pf-canal-principal").value = "";
+    document.getElementById("pf-canal-secundario").value = "";
+    document.getElementById("pf-objetivo").value = "";
+    document.getElementById("pf-moneda-salario").value = "ARS";
+    document.getElementById("pf-pretension-salarial").value = "";
+    document.getElementById("pf-discapacidad").value = "";
+    mostrarFotoPerfil(null);
+    document.getElementById("perfilNombrePreview").textContent = "Tu nombre";
+    document.getElementById("pfUltimaModificacion").textContent = "Sin guardar todavía";
+    irATabPerfil("formacion");
+    actualizarCompletitudPerfil();
+    return;
+  }
 
-  document.getElementById("pf-habilidades").value = (perfil.habilidades || []).join(", ");
-  document.getElementById("pf-intereses").value = (perfil.interesesProfesionales || []).join(", ");
+  const dp = perfil.datosPersonales;
+
+  document.getElementById("pf-nombre").value = dp.nombre || "";
+  document.getElementById("pf-apellido").value = dp.apellido || "";
+  document.getElementById("pf-nacionalidad").value = dp.nacionalidad || "";
+  document.getElementById("pf-fecha-nacimiento").value = dp.fechaNacimiento || "";
+  document.getElementById("pf-genero").value = dp.genero || "";
+  document.getElementById("pf-estado-civil").value = dp.estadoCivil || "";
+  document.getElementById("pf-dni").value = dp.dni || "";
+  document.getElementById("pf-celular").value = dp.celular || "";
+  document.getElementById("pf-telefono").value = dp.telefono || "";
+  document.getElementById("pf-email").value = dp.email || "";
+  document.getElementById("pf-canal-principal").value = dp.canalPrincipal || "";
+  document.getElementById("pf-canal-secundario").value = dp.canalSecundario || "";
+  document.getElementById("pf-discapacidad").value = dp.discapacidad || "";
+
+  document.getElementById("pf-moneda-salario").value = (dp.pretensionSalarial && dp.pretensionSalarial.moneda) || "ARS";
+  document.getElementById("pf-pretension-salarial").value = (dp.pretensionSalarial && dp.pretensionSalarial.monto) || "";
+
   document.getElementById("pf-objetivo").value = perfil.objetivoProfesional || "";
 
-  irATabPerfil("datos");
+  mostrarFotoPerfil(perfil.foto || null);
+
+  const nombreCompleto = [dp.nombre, dp.apellido].filter(Boolean).join(" ").trim();
+  document.getElementById("perfilNombrePreview").textContent = nombreCompleto || "Tu nombre";
+
+  document.getElementById("pfUltimaModificacion").textContent = perfil.ultimaModificacion
+    ? formatearFechaRelativa(perfil.ultimaModificacion)
+    : "Sin guardar todavía";
+
+  irATabPerfil("formacion");
+  actualizarCompletitudPerfil();
+}
+
+// Formatea una fecha ISO a algo legible tipo "hace 2 días"
+function formatearFechaRelativa(isoString) {
+  const fecha = new Date(isoString);
+  const ahora = new Date();
+  const diffMs = ahora - fecha;
+  const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDias <= 0) return "Hoy";
+  if (diffDias === 1) return "Hace 1 día";
+  if (diffDias < 30) return `Hace ${diffDias} días`;
+  const diffMeses = Math.floor(diffDias / 30);
+  if (diffMeses === 1) return "Hace 1 mes";
+  return `Hace ${diffMeses} meses`;
 }
 
 // ======================================================
-// PESTAÑAS DEL FORMULARIO DE PERFIL (estilo Bumeran)
+// PESTAÑAS DEL FORMULARIO DE PERFIL (Formación / Experiencia / Perfil)
 // ======================================================
 
-const ORDEN_TABS_PERFIL = ["datos", "formacion", "habilidades", "objetivo"];
-
 function irATabPerfil(tab) {
-  // Botones de pestaña
   document.querySelectorAll(".perfil-tab").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.tab === tab);
   });
-
-  // Paneles
   document.querySelectorAll(".perfil-tab-panel").forEach(panel => {
     panel.classList.toggle("active", panel.dataset.tab === tab);
   });
-
-  const indice = ORDEN_TABS_PERFIL.indexOf(tab);
-  const esPrimera = indice === 0;
-  const esUltima = indice === ORDEN_TABS_PERFIL.length - 1;
-
-  document.getElementById("perfilTabPrev").classList.toggle("oculto", esPrimera);
-  document.getElementById("perfilTabNext").classList.toggle("oculto", esUltima);
-  document.getElementById("perfilSubmitBtn").classList.toggle("oculto", !esUltima);
 }
 
-// Click directo en cualquier pestaña
+// Click directo en cualquier pestaña (son libres, no hay orden obligatorio)
 document.querySelectorAll(".perfil-tab").forEach(btn => {
   btn.addEventListener("click", () => irATabPerfil(btn.dataset.tab));
 });
 
-// Botón "Siguiente"
-document.getElementById("perfilTabNext").addEventListener("click", () => {
-  const actualBtn = document.querySelector(".perfil-tab.active");
-  const indiceActual = ORDEN_TABS_PERFIL.indexOf(actualBtn.dataset.tab);
-  const siguiente = ORDEN_TABS_PERFIL[indiceActual + 1];
-  if (siguiente) irATabPerfil(siguiente);
+// ======================================================
+// FOTO DE PERFIL
+// ======================================================
+
+function mostrarFotoPerfil(dataUrl) {
+  const img = document.getElementById("perfilFotoImg");
+  const iniciales = document.getElementById("perfilFotoIniciales");
+  if (dataUrl) {
+    img.src = dataUrl;
+    img.classList.remove("oculto");
+    iniciales.classList.add("oculto");
+  } else {
+    img.src = "";
+    img.classList.add("oculto");
+    iniciales.classList.remove("oculto");
+  }
+}
+
+let fotoPerfilTemp = null;
+
+const inputFotoPerfil = document.getElementById("inputFotoPerfil");
+const btnSubirFoto = document.getElementById("btnSubirFoto");
+const btnEliminarFoto = document.getElementById("btnEliminarFoto");
+
+if (btnSubirFoto) btnSubirFoto.addEventListener("click", () => inputFotoPerfil.click());
+
+if (inputFotoPerfil) inputFotoPerfil.addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 2 * 1024 * 1024) {
+    mostrarToast("⚠️ La imagen no puede pesar más de 2 MB.");
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    fotoPerfilTemp = ev.target.result;
+    mostrarFotoPerfil(fotoPerfilTemp);
+  };
+  reader.readAsDataURL(file);
 });
 
-// Botón "Anterior"
-document.getElementById("perfilTabPrev").addEventListener("click", () => {
-  const actualBtn = document.querySelector(".perfil-tab.active");
-  const indiceActual = ORDEN_TABS_PERFIL.indexOf(actualBtn.dataset.tab);
-  const anterior = ORDEN_TABS_PERFIL[indiceActual - 1];
-  if (anterior) irATabPerfil(anterior);
+if (btnEliminarFoto) btnEliminarFoto.addEventListener("click", () => {
+  fotoPerfilTemp = null;
+  mostrarFotoPerfil(null);
 });
+
+// ======================================================
+// LISTAS SUGERIDAS PARA AUTOCOMPLETAR (estilo Bumeran)
+// ======================================================
+
+const TIPOS_ESTUDIO = ["Secundario", "Terciario", "Universitario", "Posgrado", "Curso", "Certificación"];
+
+const PAISES_LATAM = [
+  "Argentina", "Bolivia", "Brasil", "Chile", "Colombia", "Costa Rica",
+  "Cuba", "Ecuador", "El Salvador", "Guatemala", "Honduras", "México",
+  "Nicaragua", "Panamá", "Paraguay", "Perú", "Uruguay", "Venezuela",
+  "España", "Estados Unidos", "Otro"
+];
+
+const INSTITUCIONES_SUGERIDAS = [
+  "UBA - Universidad de Buenos Aires", "UTN - Universidad Tecnológica Nacional",
+  "UNLP - Universidad Nacional de La Plata", "UNR - Universidad Nacional de Rosario",
+  "UNC - Universidad Nacional de Córdoba", "UNCuyo - Universidad Nacional de Cuyo",
+  "UNLZ - Universidad Nacional de Lomas de Zamora", "UNSAM - Universidad Nacional de San Martín",
+  "UNGS - Universidad Nacional de General Sarmiento", "UADE - Universidad Argentina de la Empresa",
+  "UCA - Universidad Católica Argentina", "Universidad de Palermo",
+  "Universidad de San Andrés", "Universidad Austral", "Universidad Siglo 21",
+  "ORT Argentina", "UNQ - Universidad Nacional de Quilmes", "UNTREF - Universidad Nacional de Tres de Febrero",
+  "UADER - Universidad Autónoma de Entre Ríos", "Instituto Tecnológico de Buenos Aires (ITBA)"
+];
+
+const AREAS_ESTUDIO = [
+  "Administración y Negocios", "Tecnología y Sistemas", "Diseño y Comunicación",
+  "Marketing y Publicidad", "Recursos Humanos", "Salud", "Educación",
+  "Ingeniería", "Ciencias Sociales", "Idiomas", "Contabilidad y Finanzas", "Derecho"
+];
+
+const ACTIVIDADES_EMPRESA = [
+  "Tecnología / Software", "Comercio / Retail", "Educación", "Salud",
+  "Industria / Manufactura", "Servicios Financieros", "Gastronomía / Hotelería",
+  "Construcción", "Logística y Transporte", "Marketing y Publicidad",
+  "Telecomunicaciones", "Sector Público"
+];
+
+const AREAS_PUESTO = [
+  "Abastecimiento y Logística", "Administración, Contabilidad y Finanzas",
+  "Aduana y Comercio Exterior", "Atención al Cliente, Call Center y Telemarketing",
+  "Comercial, Ventas y Negocios", "Diseño y Comunicación", "Educación",
+  "Gastronomía y Hotelería", "Ingeniería", "Marketing y Publicidad",
+  "Producción y Manufactura", "Recursos Humanos", "Salud",
+  "Tecnología, Sistemas y Telecomunicaciones"
+];
+
+const SUBAREAS_PUESTO = {
+  "Tecnología, Sistemas y Telecomunicaciones": ["Desarrollo de Software", "Soporte Técnico", "Redes e Infraestructura", "Ciberseguridad", "Datos / IA", "QA / Testing"],
+  "Administración, Contabilidad y Finanzas": ["Contabilidad", "Tesorería", "Administración General", "Auditoría", "Análisis Financiero"],
+  "Comercial, Ventas y Negocios": ["Ventas", "Desarrollo de Negocios", "Key Account Management", "Ventas Internas"],
+  "Marketing y Publicidad": ["Marketing Digital", "Redes Sociales", "Branding", "SEO/SEM", "Contenidos"],
+  "Recursos Humanos": ["Selección", "Capacitación", "Liquidación de Sueldos", "Relaciones Laborales"],
+  "Atención al Cliente, Call Center y Telemarketing": ["Atención al Cliente", "Soporte Telefónico", "Telemarketing"],
+  "Diseño y Comunicación": ["Diseño Gráfico", "UX/UI", "Comunicación Institucional", "Audiovisual"]
+};
+
+const NIVELES_EXPERIENCIA = ["Sin experiencia", "Junior", "Semi Senior", "Senior", "Jefe / Supervisor", "Gerencial"];
+
+const HABILIDADES_SUGERIDAS = [
+  "Excel", "JavaScript", "Python", "HTML", "CSS", "CRM", "Microsoft Word",
+  "Microsoft PowerPoint", "Google Analytics", "Google Drive", "Atención al cliente",
+  "Trabajo en equipo", "Organización", "Comunicación efectiva", "Ventas",
+  "Negociación", "Photoshop", "Illustrator", "Canva", "Figma", "Liderazgo",
+  "Resolución de problemas", "Inglés", "SQL", "Power BI"
+];
+
+const INTERESES_SUGERIDOS = [
+  "Tecnología", "Marketing", "Administración", "Diseño", "Datos & IA",
+  "Negocios", "Recursos Humanos", "Salud", "Educación", "Comercio Exterior",
+  "Finanzas", "Atención al Cliente"
+];
+
+// ======================================================
+// AUTOCOMPLETAR GENÉRICO (escribís 2+ letras y aparecen sugerencias)
+// ======================================================
+
+// Conecta un <input> de texto con un <div> de sugerencias.
+// onSelect(valor) se llama cuando el usuario elige una opción (incluida "Otro: ...").
+function initAutocomplete(inputId, suggestionsId, lista, onSelect, limpiarDespues) {
+  const input = document.getElementById(inputId);
+  const suggestionsBox = document.getElementById(suggestionsId);
+  if (!input || !suggestionsBox) return;
+
+  function render(filtro) {
+    const texto = filtro.trim().toLowerCase();
+    let opciones = texto.length
+      ? lista.filter(op => op.toLowerCase().includes(texto))
+      : lista.slice(0, 8);
+
+    opciones = opciones.slice(0, 8);
+
+    let html = opciones.map(op =>
+      `<div class="pf-suggestion-item" data-valor="${op.replace(/"/g, '&quot;')}">${op}</div>`
+    ).join("");
+
+    if (texto.length) {
+      html += `<div class="pf-suggestion-item pf-suggestion-otro" data-valor="${texto.replace(/"/g, '&quot;')}">Otro: "${filtro.trim()}"</div>`;
+    }
+
+    suggestionsBox.innerHTML = html;
+    suggestionsBox.classList.toggle("oculto", !html);
+
+    suggestionsBox.querySelectorAll(".pf-suggestion-item").forEach(item => {
+      item.addEventListener("click", () => {
+        const valor = item.dataset.valor;
+        onSelect(valor);
+        // Los campos "selector único" (idioma, área de estudio, etc.) mantienen
+        // el valor elegido visible en el input. Los buscadores de tags
+        // (habilidades/intereses) se vacían para poder buscar el siguiente.
+        input.value = limpiarDespues ? "" : valor;
+        suggestionsBox.classList.add("oculto");
+      });
+    });
+  }
+
+  input.addEventListener("input", () => render(input.value));
+  input.addEventListener("focus", () => render(input.value));
+  document.addEventListener("click", (e) => {
+    if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
+      suggestionsBox.classList.add("oculto");
+    }
+  });
+}
+
+// ======================================================
+// HABILIDADES E INTERESES (tags removibles con autocompletar)
+// ======================================================
+
+let habilidadesTemp = [];
+let interesesTemp = [];
+
+function renderTagsHabilidades() {
+  const cont = document.getElementById("pf-habilidades-tags");
+  cont.innerHTML = habilidadesTemp.map((h, i) => `
+    <span class="pf-tag">${h}<button type="button" class="pf-tag-remove" data-i="${i}">✕</button></span>
+  `).join("");
+  cont.querySelectorAll(".pf-tag-remove").forEach(btn => {
+    btn.addEventListener("click", () => {
+      habilidadesTemp.splice(Number(btn.dataset.i), 1);
+      renderTagsHabilidades();
+    });
+  });
+  document.getElementById("pf-habilidades").value = habilidadesTemp.join(", ");
+}
+
+function renderTagsIntereses() {
+  const cont = document.getElementById("pf-intereses-tags");
+  cont.innerHTML = interesesTemp.map((h, i) => `
+    <span class="pf-tag">${h}<button type="button" class="pf-tag-remove" data-i="${i}">✕</button></span>
+  `).join("");
+  cont.querySelectorAll(".pf-tag-remove").forEach(btn => {
+    btn.addEventListener("click", () => {
+      interesesTemp.splice(Number(btn.dataset.i), 1);
+      renderTagsIntereses();
+    });
+  });
+  document.getElementById("pf-intereses").value = interesesTemp.join(", ");
+}
+
+initAutocomplete("pf-habilidades-input", "pf-habilidades-suggestions", HABILIDADES_SUGERIDAS, (valor) => {
+  if (valor && !habilidadesTemp.includes(valor)) {
+    habilidadesTemp.push(valor);
+    renderTagsHabilidades();
+  }
+}, true);
+
+initAutocomplete("pf-intereses-input", "pf-intereses-suggestions", INTERESES_SUGERIDOS, (valor) => {
+  if (valor && !interesesTemp.includes(valor)) {
+    interesesTemp.push(valor);
+    renderTagsIntereses();
+  }
+}, true);
+
+// ======================================================
+// ESTUDIOS (submodal "Sumar estudio")
+// ======================================================
+
+let estudiosTemp = [];
+let estudioEditandoIndex = null;
+
+function renderEstudiosLista() {
+  const cont = document.getElementById("listaEstudios");
+  if (!estudiosTemp.length) {
+    cont.innerHTML = '<p class="pf-lista-vacia">Todavía no agregaste estudios.</p>';
+    return;
+  }
+  cont.innerHTML = estudiosTemp.map((e, i) => `
+    <div class="pf-item-card">
+      <div class="pf-item-card-acciones">
+        <button type="button" class="pf-item-card-btn" data-accion="editar" data-i="${i}" title="Editar">✏️</button>
+        <button type="button" class="pf-item-card-btn" data-accion="borrar" data-i="${i}" title="Eliminar">🗑️</button>
+      </div>
+      <div class="pf-item-card-titulo">${e.tituloCarrera}</div>
+      <div class="pf-item-card-detalle">
+        ${e.institucion ? e.institucion + " · " : ""}${e.tipoEstudio || ""}${e.estado ? " - " + e.estado : ""}<br>
+        ${e.fechaInicio || ""} - ${e.alPresente ? "Actualidad" : (e.fechaFin || "")}${e.pais ? ", " + e.pais : ""}
+      </div>
+    </div>
+  `).join("");
+
+  cont.querySelectorAll('[data-accion="borrar"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      estudiosTemp.splice(Number(btn.dataset.i), 1);
+      renderEstudiosLista();
+      actualizarCompletitudPerfil();
+    });
+  });
+  cont.querySelectorAll('[data-accion="editar"]').forEach(btn => {
+    btn.addEventListener("click", () => abrirSubmodalEstudio(Number(btn.dataset.i)));
+  });
+}
+
+function abrirSubmodalEstudio(index) {
+  estudioEditandoIndex = (index === undefined) ? null : index;
+  const datos = (estudioEditandoIndex !== null) ? estudiosTemp[estudioEditandoIndex] : {};
+
+  const overlay = document.createElement("div");
+  overlay.className = "pf-submodal-overlay";
+  overlay.id = "submodalEstudio";
+  overlay.innerHTML = `
+    <div class="pf-submodal-box">
+      <span class="pf-submodal-cerrar" id="cerrarSubmodalEstudio">✕</span>
+      <h3>${estudioEditandoIndex !== null ? "Editar estudio" : "Sumar estudio"}</h3>
+
+      <label class="pf-label-chico">Título / Carrera *</label>
+      <input type="text" id="sub-est-titulo" placeholder="Ingresá tu título o carrera" value="${datos.tituloCarrera || ""}">
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">País</label>
+          <div class="pf-autocomplete-wrap">
+            <input type="text" id="sub-est-pais" placeholder="Elegí una opción" value="${datos.pais || ""}">
+            <div class="pf-suggestions oculto" id="sub-est-pais-suggestions"></div>
+          </div>
+        </div>
+        <div>
+          <label class="pf-label-chico">Estado</label>
+          <select id="sub-est-estado">
+            <option value="">Elegí una opción</option>
+            <option ${datos.estado === "Graduado" ? "selected" : ""}>Graduado</option>
+            <option ${datos.estado === "En Curso" ? "selected" : ""}>En Curso</option>
+            <option ${datos.estado === "Abandonado" ? "selected" : ""}>Abandonado</option>
+          </select>
+        </div>
+      </div>
+
+      <label class="pf-label-chico">Tipo de estudio *</label>
+      <div class="pf-autocomplete-wrap">
+        <input type="text" id="sub-est-tipo" placeholder="Elegí una opción" value="${datos.tipoEstudio || ""}">
+        <div class="pf-suggestions oculto" id="sub-est-tipo-suggestions"></div>
+      </div>
+
+      <label class="pf-label-chico">Área de estudio *</label>
+      <div class="pf-autocomplete-wrap">
+        <input type="text" id="sub-est-area" placeholder="Elegí una opción" value="${datos.areaEstudio || ""}">
+        <div class="pf-suggestions oculto" id="sub-est-area-suggestions"></div>
+      </div>
+
+      <label class="pf-label-chico">Institución *</label>
+      <div class="pf-autocomplete-wrap">
+        <input type="text" id="sub-est-institucion" placeholder="Ingresá la institución" value="${datos.institucion || ""}">
+        <div class="pf-suggestions oculto" id="sub-est-institucion-suggestions"></div>
+      </div>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Fecha de inicio</label>
+          <input type="month" id="sub-est-inicio" value="${datos.fechaInicioRaw || ""}">
+        </div>
+        <div>
+          <label class="pf-label-chico">Fecha de finalización</label>
+          <input type="month" id="sub-est-fin" value="${datos.fechaFinRaw || ""}" ${datos.alPresente ? "disabled" : ""}>
+        </div>
+      </div>
+
+      <div class="pf-submodal-check-row">
+        <input type="checkbox" id="sub-est-presente" ${datos.alPresente ? "checked" : ""}>
+        <label for="sub-est-presente">Al presente</label>
+      </div>
+
+      <div class="pf-submodal-acciones">
+        <button type="button" class="btn-ghost" id="cancelarSubmodalEstudio">Cancelar</button>
+        <button type="button" class="btn-primary" id="guardarSubmodalEstudio">Guardar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  initAutocomplete("sub-est-tipo", "sub-est-tipo-suggestions", TIPOS_ESTUDIO, (v) => {
+    document.getElementById("sub-est-tipo").value = v;
+  });
+  initAutocomplete("sub-est-area", "sub-est-area-suggestions", AREAS_ESTUDIO, (v) => {
+    document.getElementById("sub-est-area").value = v;
+  });
+  initAutocomplete("sub-est-pais", "sub-est-pais-suggestions", PAISES_LATAM, (v) => {
+    document.getElementById("sub-est-pais").value = v;
+  });
+  initAutocomplete("sub-est-institucion", "sub-est-institucion-suggestions", INSTITUCIONES_SUGERIDAS, (v) => {
+    document.getElementById("sub-est-institucion").value = v;
+  });
+
+  document.getElementById("sub-est-presente").addEventListener("change", (e) => {
+    document.getElementById("sub-est-fin").disabled = e.target.checked;
+  });
+
+  document.getElementById("cerrarSubmodalEstudio").addEventListener("click", () => overlay.remove());
+  document.getElementById("cancelarSubmodalEstudio").addEventListener("click", () => overlay.remove());
+
+  document.getElementById("guardarSubmodalEstudio").addEventListener("click", () => {
+    const tituloCarrera = document.getElementById("sub-est-titulo").value.trim();
+    if (!tituloCarrera) {
+      mostrarToast("⚠️ Ingresá el título o carrera.");
+      return;
+    }
+
+    const inicioRaw = document.getElementById("sub-est-inicio").value;
+    const finRaw = document.getElementById("sub-est-fin").value;
+    const alPresente = document.getElementById("sub-est-presente").checked;
+
+    const nuevoEstudio = {
+      tituloCarrera,
+      pais: document.getElementById("sub-est-pais").value,
+      estado: document.getElementById("sub-est-estado").value,
+      tipoEstudio: document.getElementById("sub-est-tipo").value,
+      areaEstudio: document.getElementById("sub-est-area").value,
+      institucion: document.getElementById("sub-est-institucion").value.trim(),
+      fechaInicioRaw: inicioRaw,
+      fechaFinRaw: finRaw,
+      fechaInicio: formatearMesAnio(inicioRaw),
+      fechaFin: alPresente ? "" : formatearMesAnio(finRaw),
+      alPresente
+    };
+
+    if (estudioEditandoIndex !== null) {
+      estudiosTemp[estudioEditandoIndex] = nuevoEstudio;
+    } else {
+      estudiosTemp.push(nuevoEstudio);
+    }
+
+    renderEstudiosLista();
+    actualizarCompletitudPerfil();
+    overlay.remove();
+  });
+}
+
+document.getElementById("btnSumarEstudio").addEventListener("click", () => abrirSubmodalEstudio());
+
+// Convierte "2026-03" (input type=month) en "Mar 2026"
+function formatearMesAnio(valor) {
+  if (!valor) return "";
+  const [anio, mes] = valor.split("-");
+  const meses = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  const i = Number(mes) - 1;
+  return (meses[i] || "") + " " + anio;
+}
+
+// ======================================================
+// EXPERIENCIA LABORAL (submodal "Sumar experiencia laboral")
+// ======================================================
+
+let experienciasTemp = [];
+let experienciaEditandoIndex = null;
+
+function renderExperienciasLista() {
+  const cont = document.getElementById("listaExperiencias");
+  if (!experienciasTemp.length) {
+    cont.innerHTML = '<p class="pf-lista-vacia">Todavía no agregaste experiencia laboral.</p>';
+    return;
+  }
+  cont.innerHTML = experienciasTemp.map((e, i) => `
+    <div class="pf-item-card">
+      <div class="pf-item-card-acciones">
+        <button type="button" class="pf-item-card-btn" data-accion="editar" data-i="${i}" title="Editar">✏️</button>
+        <button type="button" class="pf-item-card-btn" data-accion="borrar" data-i="${i}" title="Eliminar">🗑️</button>
+      </div>
+      <div class="pf-item-card-titulo">${e.puesto} ${e.empresa ? "· " + e.empresa : ""}</div>
+      <div class="pf-item-card-detalle">
+        ${e.areaPuesto || ""}${e.subarea ? " - " + e.subarea : ""}${e.nivelExperiencia ? " · " + e.nivelExperiencia : ""}<br>
+        ${e.fechaInicio || ""} - ${e.alPresente ? "Actualidad" : (e.fechaFin || "")}${e.paisEmpresa ? ", " + e.paisEmpresa : ""}
+      </div>
+    </div>
+  `).join("");
+
+  cont.querySelectorAll('[data-accion="borrar"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      experienciasTemp.splice(Number(btn.dataset.i), 1);
+      renderExperienciasLista();
+      actualizarCompletitudPerfil();
+    });
+  });
+  cont.querySelectorAll('[data-accion="editar"]').forEach(btn => {
+    btn.addEventListener("click", () => abrirSubmodalExperiencia(Number(btn.dataset.i)));
+  });
+}
+
+function abrirSubmodalExperiencia(index) {
+  experienciaEditandoIndex = (index === undefined) ? null : index;
+  const datos = (experienciaEditandoIndex !== null) ? experienciasTemp[experienciaEditandoIndex] : {};
+
+  const overlay = document.createElement("div");
+  overlay.className = "pf-submodal-overlay";
+  overlay.id = "submodalExperiencia";
+  overlay.innerHTML = `
+    <div class="pf-submodal-box">
+      <span class="pf-submodal-cerrar" id="cerrarSubmodalExperiencia">✕</span>
+      <h3>${experienciaEditandoIndex !== null ? "Editar experiencia" : "Sumar experiencia laboral"}</h3>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Empresa *</label>
+          <input type="text" id="sub-exp-empresa" placeholder="Ingresá el nombre" value="${datos.empresa || ""}">
+        </div>
+        <div>
+          <label class="pf-label-chico">Puesto *</label>
+          <input type="text" id="sub-exp-puesto" placeholder="Ingresá el nombre" value="${datos.puesto || ""}">
+        </div>
+      </div>
+
+      <label class="pf-label-chico">Actividad de la empresa *</label>
+      <div class="pf-autocomplete-wrap">
+        <input type="text" id="sub-exp-actividad" placeholder="Elegí una opción" value="${datos.actividadEmpresa || ""}">
+        <div class="pf-suggestions oculto" id="sub-exp-actividad-suggestions"></div>
+      </div>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Nivel de experiencia *</label>
+          <div class="pf-autocomplete-wrap">
+            <input type="text" id="sub-exp-nivel" placeholder="Elegí una opción" value="${datos.nivelExperiencia || ""}">
+            <div class="pf-suggestions oculto" id="sub-exp-nivel-suggestions"></div>
+          </div>
+        </div>
+        <div>
+          <label class="pf-label-chico">País de la empresa</label>
+          <div class="pf-autocomplete-wrap">
+            <input type="text" id="sub-exp-pais" placeholder="Elegí una opción" value="${datos.paisEmpresa || ""}">
+            <div class="pf-suggestions oculto" id="sub-exp-pais-suggestions"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Área del puesto *</label>
+          <div class="pf-autocomplete-wrap">
+            <input type="text" id="sub-exp-area" placeholder="Elegí una opción" value="${datos.areaPuesto || ""}">
+            <div class="pf-suggestions oculto" id="sub-exp-area-suggestions"></div>
+          </div>
+        </div>
+        <div>
+          <label class="pf-label-chico">Subárea</label>
+          <div class="pf-autocomplete-wrap">
+            <input type="text" id="sub-exp-subarea" placeholder="Elegí una opción" value="${datos.subarea || ""}">
+            <div class="pf-suggestions oculto" id="sub-exp-subarea-suggestions"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Fecha de inicio</label>
+          <input type="month" id="sub-exp-inicio" value="${datos.fechaInicioRaw || ""}">
+        </div>
+        <div>
+          <label class="pf-label-chico">Fecha de finalización</label>
+          <input type="month" id="sub-exp-fin" value="${datos.fechaFinRaw || ""}" ${datos.alPresente ? "disabled" : ""}>
+        </div>
+      </div>
+
+      <div class="pf-submodal-check-row">
+        <input type="checkbox" id="sub-exp-presente" ${datos.alPresente ? "checked" : ""}>
+        <label for="sub-exp-presente">Al presente</label>
+      </div>
+
+      <label class="pf-label-chico">Descripción de responsabilidades</label>
+      <textarea id="sub-exp-descripcion" rows="3" placeholder="Escribí cuáles son tus tareas">${datos.descripcion || ""}</textarea>
+
+      <div class="pf-submodal-acciones">
+        <button type="button" class="btn-ghost" id="cancelarSubmodalExperiencia">Cancelar</button>
+        <button type="button" class="btn-primary" id="guardarSubmodalExperiencia">Guardar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  initAutocomplete("sub-exp-actividad", "sub-exp-actividad-suggestions", ACTIVIDADES_EMPRESA, (v) => {
+    document.getElementById("sub-exp-actividad").value = v;
+  });
+  initAutocomplete("sub-exp-nivel", "sub-exp-nivel-suggestions", NIVELES_EXPERIENCIA, (v) => {
+    document.getElementById("sub-exp-nivel").value = v;
+  });
+  initAutocomplete("sub-exp-area", "sub-exp-area-suggestions", AREAS_PUESTO, (v) => {
+    document.getElementById("sub-exp-area").value = v;
+    // Al elegir área, ofrecemos subáreas relacionadas
+    const subareasDelArea = SUBAREAS_PUESTO[v] || [];
+    initAutocomplete("sub-exp-subarea", "sub-exp-subarea-suggestions", subareasDelArea, (sub) => {
+      document.getElementById("sub-exp-subarea").value = sub;
+    });
+  });
+  initAutocomplete("sub-exp-subarea", "sub-exp-subarea-suggestions", SUBAREAS_PUESTO[datos.areaPuesto] || [], (v) => {
+    document.getElementById("sub-exp-subarea").value = v;
+  });
+  initAutocomplete("sub-exp-pais", "sub-exp-pais-suggestions", PAISES_LATAM, (v) => {
+    document.getElementById("sub-exp-pais").value = v;
+  });
+
+  document.getElementById("sub-exp-presente").addEventListener("change", (e) => {
+    document.getElementById("sub-exp-fin").disabled = e.target.checked;
+  });
+
+  document.getElementById("cerrarSubmodalExperiencia").addEventListener("click", () => overlay.remove());
+  document.getElementById("cancelarSubmodalExperiencia").addEventListener("click", () => overlay.remove());
+
+  document.getElementById("guardarSubmodalExperiencia").addEventListener("click", () => {
+    const empresa = document.getElementById("sub-exp-empresa").value.trim();
+    const puesto = document.getElementById("sub-exp-puesto").value.trim();
+    if (!empresa || !puesto) {
+      mostrarToast("⚠️ Completá al menos empresa y puesto.");
+      return;
+    }
+
+    const inicioRaw = document.getElementById("sub-exp-inicio").value;
+    const finRaw = document.getElementById("sub-exp-fin").value;
+    const alPresente = document.getElementById("sub-exp-presente").checked;
+
+    const nuevaExperiencia = {
+      empresa,
+      puesto,
+      actividadEmpresa: document.getElementById("sub-exp-actividad").value,
+      nivelExperiencia: document.getElementById("sub-exp-nivel").value,
+      areaPuesto: document.getElementById("sub-exp-area").value,
+      subarea: document.getElementById("sub-exp-subarea").value,
+      paisEmpresa: document.getElementById("sub-exp-pais").value,
+      fechaInicioRaw: inicioRaw,
+      fechaFinRaw: finRaw,
+      fechaInicio: formatearMesAnio(inicioRaw),
+      fechaFin: alPresente ? "" : formatearMesAnio(finRaw),
+      alPresente,
+      descripcion: document.getElementById("sub-exp-descripcion").value.trim()
+    };
+
+    if (experienciaEditandoIndex !== null) {
+      experienciasTemp[experienciaEditandoIndex] = nuevaExperiencia;
+    } else {
+      experienciasTemp.push(nuevaExperiencia);
+    }
+
+    renderExperienciasLista();
+    actualizarCompletitudPerfil();
+    overlay.remove();
+  });
+}
+
+document.getElementById("btnSumarExperiencia").addEventListener("click", () => abrirSubmodalExperiencia());
+
+// ======================================================
+// IDIOMAS (submodal "Sumar idioma")
+// ======================================================
+
+let idiomasTemp = [];
+
+const IDIOMAS_SUGERIDOS = ["Español", "Inglés", "Portugués", "Francés", "Italiano", "Alemán"];
+const NIVELES_IDIOMA = ["Nativo", "Avanzado", "Intermedio", "Básico"];
+
+function renderIdiomasLista() {
+  const cont = document.getElementById("listaIdiomas");
+  if (!idiomasTemp.length) {
+    cont.innerHTML = '<p class="pf-lista-vacia">Todavía no agregaste idiomas.</p>';
+    return;
+  }
+  cont.innerHTML = idiomasTemp.map((idi, i) => `
+    <div class="pf-item-card">
+      <div class="pf-item-card-acciones">
+        <button type="button" class="pf-item-card-btn" data-accion="borrar" data-i="${i}" title="Eliminar">🗑️</button>
+      </div>
+      <div class="pf-item-card-titulo">${idi.idioma}</div>
+      <div class="pf-item-card-detalle">Escrito: ${idi.escrito} · Oral: ${idi.oral}</div>
+    </div>
+  `).join("");
+
+  cont.querySelectorAll('[data-accion="borrar"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      idiomasTemp.splice(Number(btn.dataset.i), 1);
+      renderIdiomasLista();
+    });
+  });
+}
+
+function abrirSubmodalIdioma() {
+  const overlay = document.createElement("div");
+  overlay.className = "pf-submodal-overlay";
+  overlay.innerHTML = `
+    <div class="pf-submodal-box">
+      <span class="pf-submodal-cerrar" id="cerrarSubmodalIdioma">✕</span>
+      <h3>Sumar idioma</h3>
+
+      <label class="pf-label-chico">Idioma *</label>
+      <div class="pf-autocomplete-wrap">
+        <input type="text" id="sub-idi-nombre" placeholder="Elegí una opción">
+        <div class="pf-suggestions oculto" id="sub-idi-nombre-suggestions"></div>
+      </div>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Escrito *</label>
+          <select id="sub-idi-escrito">
+            <option value="">Elegí una opción</option>
+            ${NIVELES_IDIOMA.map(n => `<option>${n}</option>`).join("")}
+          </select>
+        </div>
+        <div>
+          <label class="pf-label-chico">Oral *</label>
+          <select id="sub-idi-oral">
+            <option value="">Elegí una opción</option>
+            ${NIVELES_IDIOMA.map(n => `<option>${n}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+
+      <div class="pf-submodal-acciones">
+        <button type="button" class="btn-ghost" id="cancelarSubmodalIdioma">Cancelar</button>
+        <button type="button" class="btn-primary" id="guardarSubmodalIdioma">Guardar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  initAutocomplete("sub-idi-nombre", "sub-idi-nombre-suggestions", IDIOMAS_SUGERIDOS, (v) => {
+    document.getElementById("sub-idi-nombre").value = v;
+  });
+
+  document.getElementById("cerrarSubmodalIdioma").addEventListener("click", () => overlay.remove());
+  document.getElementById("cancelarSubmodalIdioma").addEventListener("click", () => overlay.remove());
+
+  document.getElementById("guardarSubmodalIdioma").addEventListener("click", () => {
+    const idioma = document.getElementById("sub-idi-nombre").value.trim();
+    const escrito = document.getElementById("sub-idi-escrito").value;
+    const oral = document.getElementById("sub-idi-oral").value;
+
+    if (!idioma || !escrito || !oral) {
+      mostrarToast("⚠️ Completá idioma, escrito y oral.");
+      return;
+    }
+
+    idiomasTemp.push({ idioma, escrito, oral });
+    renderIdiomasLista();
+    overlay.remove();
+  });
+}
+
+document.getElementById("btnSumarIdioma").addEventListener("click", abrirSubmodalIdioma);
+
+// ======================================================
+// COMPLETITUD DEL PERFIL (barra de progreso visual)
+// ======================================================
+
+function actualizarCompletitudPerfil() {
+  const campos = [
+    document.getElementById("pf-nombre").value,
+    document.getElementById("pf-apellido").value,
+    document.getElementById("pf-email").value,
+    document.getElementById("pf-celular").value,
+    document.getElementById("pf-nacionalidad").value,
+    document.getElementById("pf-objetivo").value,
+    estudiosTemp.length ? "x" : "",
+    experienciasTemp.length ? "x" : "",
+    habilidadesTemp.length ? "x" : "",
+    interesesTemp.length ? "x" : ""
+  ];
+
+  const completos = campos.filter(c => c && c.trim && c.trim() !== "" || c === "x").length;
+  const porcentaje = Math.round((completos / campos.length) * 100);
+
+  const barra = document.getElementById("pfBarraCompletitud");
+  const texto = document.getElementById("pfPorcentajeCompletitud");
+  if (barra) barra.style.width = porcentaje + "%";
+  if (texto) texto.textContent = porcentaje + "% completo";
+}
+
+// Recalcular completitud cada vez que el usuario toca el formulario
+document.getElementById("profileForm").addEventListener("input", actualizarCompletitudPerfil);
 
 // ======================================================
 // INICIALIZACIÓN: restaurar sesión al cargar la página
@@ -205,17 +975,12 @@ if (profileForm) {
 
     e.preventDefault();
 
-    // Si el usuario saltó directo a una pestaña sin completar las anteriores,
-    // los campos requeridos de las otras pestañas quedan ocultos y el navegador
-    // no los valida solo. Los revisamos a mano antes de seguir.
-    const camposVacios = [...profileForm.querySelectorAll("[required]")]
-      .filter(campo => !campo.value || !campo.value.trim());
+    // Campos obligatorios: nombre, apellido y email (visibles siempre, no dependen de tabs)
+    const nombre = document.getElementById("pf-nombre").value.trim();
+    const apellido = document.getElementById("pf-apellido").value.trim();
 
-    if (camposVacios.length) {
-      const panelConError = camposVacios[0].closest(".perfil-tab-panel");
-      if (panelConError) irATabPerfil(panelConError.dataset.tab);
-      camposVacios[0].focus();
-      mostrarToast("⚠️ Completá todos los campos obligatorios antes de guardar.");
+    if (!nombre || !apellido) {
+      mostrarToast("⚠️ Completá nombre y apellido antes de guardar.");
       return;
     }
 
@@ -225,34 +990,43 @@ if (profileForm) {
 
     if (!validarEmail(inputEmail, errorEmail)) return;
 
-    const nombre = document.getElementById("pf-nombre").value;
-    const edad = document.getElementById("pf-edad").value;
-    const ciudad = document.getElementById("pf-ciudad").value;
-    const provincia = document.getElementById("pf-provincia").value;
-    const email = document.getElementById("pf-email").value;
-    const redProfesional = document.getElementById("pf-red").value;
+    const datosPersonales = {
+      nombre,
+      apellido,
+      nacionalidad: document.getElementById("pf-nacionalidad").value,
+      fechaNacimiento: document.getElementById("pf-fecha-nacimiento").value,
+      genero: document.getElementById("pf-genero").value,
+      estadoCivil: document.getElementById("pf-estado-civil").value,
+      dni: document.getElementById("pf-dni").value.trim(),
+      celular: document.getElementById("pf-celular").value.trim(),
+      telefono: document.getElementById("pf-telefono").value.trim(),
+      email: inputEmail.value.trim(),
+      canalPrincipal: document.getElementById("pf-canal-principal").value,
+      canalSecundario: document.getElementById("pf-canal-secundario").value,
+      discapacidad: document.getElementById("pf-discapacidad").value.trim(),
+      pretensionSalarial: {
+        moneda: document.getElementById("pf-moneda-salario").value,
+        monto: document.getElementById("pf-pretension-salarial").value
+      }
+    };
 
-    const nivelEducativo = document.getElementById("pf-nivel").value;
-    const carrera = document.getElementById("pf-carrera").value;
+    const objetivoProfesional = document.getElementById("pf-objetivo").value.trim();
 
-    const habilidades = document.getElementById("pf-habilidades").value
-      .split(",")
-      .map(h => h.trim())
-      .filter(h => h !== "");
-
-    const interesesProfesionales = document.getElementById("pf-intereses").value
-      .split(",")
-      .map(i => i.trim())
-      .filter(i => i !== "");
-
-    const objetivoProfesional = document.getElementById("pf-objetivo").value;
+    // "formacion.carrera" se deriva del estudio más reciente para no romper
+    // el matching existente en reordenarPorPerfil (usa perfil.formacion.carrera)
+    const ultimoEstudio = estudiosTemp[estudiosTemp.length - 1];
 
     perfilUsuario = {
-      datosPersonales: { nombre, edad, ciudad, provincia, email, redProfesional },
-      formacion: { nivelEducativo, carrera },
-      habilidades,
-      interesesProfesionales,
-      objetivoProfesional
+      foto: fotoPerfilTemp,
+      datosPersonales,
+      estudios: estudiosTemp,
+      experiencias: experienciasTemp,
+      idiomas: idiomasTemp,
+      formacion: { carrera: ultimoEstudio ? ultimoEstudio.tituloCarrera : "" },
+      habilidades: habilidadesTemp,
+      interesesProfesionales: interesesTemp,
+      objetivoProfesional,
+      ultimaModificacion: new Date().toISOString()
     };
 
     guardarPerfil(perfilUsuario);
@@ -317,9 +1091,32 @@ document.getElementById("step2").addEventListener("click", function(){
   if (!perfil || !perfil.datosPersonales) return;
   reordenarPorPerfil(perfil);
   completarPaso(2);
-  activarPaso(3);
+  activarPaso(3); // Descubrí cursos
+  activarPaso(4); // Explorá becas
+  activarPaso(5); // Encontrá empleos
   // Scroll suave a cursos
   document.getElementById("hub").scrollIntoView({ behavior: "smooth" });
+});
+
+// Click en "Descubrí cursos" -> si está desbloqueado, lleva directo a la sección de cursos
+document.getElementById("step3").addEventListener("click", function(){
+  if (this.classList.contains("locked")) return;
+  completarPaso(3);
+  document.getElementById("hub").scrollIntoView({ behavior: "smooth" });
+});
+
+// Click en "Explorá becas" -> si está desbloqueado, lleva directo a la sección de becas
+document.getElementById("step4").addEventListener("click", function(){
+  if (this.classList.contains("locked")) return;
+  completarPaso(4);
+  document.getElementById("becas").scrollIntoView({ behavior: "smooth" });
+});
+
+// Click en "Encontrá empleos" -> si está desbloqueado, lleva directo a la sección de empleos
+document.getElementById("step5").addEventListener("click", function(){
+  if (this.classList.contains("locked")) return;
+  completarPaso(5);
+  document.getElementById("empleos").scrollIntoView({ behavior: "smooth" });
 });
 
 // Continuar con email -> muestra el formulario manual de registro/login
