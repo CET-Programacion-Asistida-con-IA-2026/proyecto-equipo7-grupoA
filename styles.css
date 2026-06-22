@@ -3645,3 +3645,68 @@ footer {
     width: 95%;
   }
 }
+
+/* ── Referencias, certificados y extras dentro de tarjetas ── */
+.pf-item-card-extras {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+
+.pf-extra-item {
+  font-size: .76rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.pf-extra-item a {
+  color: var(--pink);
+  text-decoration: none;
+}
+
+.pf-extra-item a:hover {
+  text-decoration: underline;
+}
+
+.pf-item-btns-extra {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pf-btn-sumar-extra {
+  background: none;
+  border: none;
+  color: var(--pink);
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.pf-btn-sumar-extra:hover {
+  text-decoration: underline;
+}
+
+/* Fila de teléfono con prefijo */
+.pf-row-tel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  grid-template-columns: auto 1fr;
+}
+
+.pf-tel-prefijo {
+  font-size: .82rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding: 12px 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.pf-row-tel input {
+  flex: 1;
+}

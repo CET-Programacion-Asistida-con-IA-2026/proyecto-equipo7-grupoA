@@ -469,6 +469,18 @@ function renderEstudiosLista() {
         ${e.institucion ? e.institucion + " · " : ""}${e.tipoEstudio || ""}${e.estado ? " - " + e.estado : ""}<br>
         ${e.fechaInicio || ""} - ${e.alPresente ? "Actualidad" : (e.fechaFin || "")}${e.pais ? ", " + e.pais : ""}
       </div>
+      <div class="pf-item-card-extras">
+        ${(e.referencias || []).map(r => `
+          <div class="pf-extra-item">👤 Ref. académica: <strong>${r.nombre} ${r.apellido}</strong> · ${r.relacion || ""}</div>
+        `).join("")}
+        ${(e.certificados || []).map(c => `
+          <div class="pf-extra-item">📎 Certificado: <a href="${c.link}" target="_blank" rel="noopener">Ver link</a></div>
+        `).join("")}
+        <div class="pf-item-btns-extra">
+          <button type="button" class="pf-btn-sumar-extra" data-accion="ref-academica" data-i="${i}">+ Sumar referencia académica</button>
+          <button type="button" class="pf-btn-sumar-extra" data-accion="certificado" data-i="${i}">+ Sumar certificado</button>
+        </div>
+      </div>
     </div>
   `).join("");
 
@@ -481,6 +493,12 @@ function renderEstudiosLista() {
   });
   cont.querySelectorAll('[data-accion="editar"]').forEach(btn => {
     btn.addEventListener("click", () => abrirSubmodalEstudio(Number(btn.dataset.i)));
+  });
+  cont.querySelectorAll('[data-accion="ref-academica"]').forEach(btn => {
+    btn.addEventListener("click", () => abrirSubmodalReferencia("academica", Number(btn.dataset.i)));
+  });
+  cont.querySelectorAll('[data-accion="certificado"]').forEach(btn => {
+    btn.addEventListener("click", () => abrirSubmodalCertificado(Number(btn.dataset.i)));
   });
 }
 
@@ -652,6 +670,14 @@ function renderExperienciasLista() {
         ${e.areaPuesto || ""}${e.subarea ? " - " + e.subarea : ""}${e.nivelExperiencia ? " · " + e.nivelExperiencia : ""}<br>
         ${e.fechaInicio || ""} - ${e.alPresente ? "Actualidad" : (e.fechaFin || "")}${e.paisEmpresa ? ", " + e.paisEmpresa : ""}
       </div>
+      <div class="pf-item-card-extras">
+        ${(e.referencias || []).map(r => `
+          <div class="pf-extra-item">👤 Ref. laboral: <strong>${r.nombre} ${r.apellido}</strong> · ${r.relacion || ""}</div>
+        `).join("")}
+        <div class="pf-item-btns-extra">
+          <button type="button" class="pf-btn-sumar-extra" data-accion="ref-laboral" data-i="${i}">+ Sumar referencia laboral</button>
+        </div>
+      </div>
     </div>
   `).join("");
 
@@ -664,6 +690,9 @@ function renderExperienciasLista() {
   });
   cont.querySelectorAll('[data-accion="editar"]').forEach(btn => {
     btn.addEventListener("click", () => abrirSubmodalExperiencia(Number(btn.dataset.i)));
+  });
+  cont.querySelectorAll('[data-accion="ref-laboral"]').forEach(btn => {
+    btn.addEventListener("click", () => abrirSubmodalReferencia("laboral", Number(btn.dataset.i)));
   });
 }
 
@@ -828,7 +857,155 @@ function abrirSubmodalExperiencia(index) {
 document.getElementById("btnSumarExperiencia").addEventListener("click", () => abrirSubmodalExperiencia());
 
 // ======================================================
+// ======================================================
+// REFERENCIAS (laboral / académica)
+// ======================================================
+
+const RELACIONES_REFERENCIA = [
+  "Jefe/a directo/a", "Colega / Par", "Cliente", "Subordinado/a",
+  "Profesor/a", "Tutor/a", "Director/a académico/a", "Otro"
+];
+
+function abrirSubmodalReferencia(tipo, itemIndex) {
+  // tipo: "laboral" | "academica"
+  const lista = tipo === "laboral" ? experienciasTemp : estudiosTemp;
+  const item = lista[itemIndex];
+  const tituloContexto = tipo === "laboral"
+    ? (item.puesto || "") + (item.empresa ? " — " + item.empresa : "")
+    : item.tituloCarrera || "";
+
+  const overlay = document.createElement("div");
+  overlay.className = "pf-submodal-overlay";
+  overlay.innerHTML = `
+    <div class="pf-submodal-box">
+      <span class="pf-submodal-cerrar" id="cerrarSubmodalRef">✕</span>
+      <h3>Sumar referencia ${tipo === "laboral" ? "laboral" : "académica"}</h3>
+      ${tituloContexto ? `<p class="pf-tip">Relacionada a: <strong>${tituloContexto}</strong></p>` : ""}
+      <p class="pf-tip">Tu referencia recibirá un email para confirmar sus datos.</p>
+
+      <div class="pf-row">
+        <div>
+          <label class="pf-label-chico">Nombre *</label>
+          <input type="text" id="sub-ref-nombre" placeholder="Nombre">
+        </div>
+        <div>
+          <label class="pf-label-chico">Apellido *</label>
+          <input type="text" id="sub-ref-apellido" placeholder="Apellido">
+        </div>
+      </div>
+
+      <label class="pf-label-chico">Email *</label>
+      <input type="email" id="sub-ref-email" placeholder="Email de la referencia">
+
+      <label class="pf-label-chico">Teléfono (opcional)</label>
+      <div class="pf-row pf-row-tel">
+        <span class="pf-tel-prefijo">+54</span>
+        <input type="tel" id="sub-ref-telefono" placeholder="Ej: 91123456789">
+      </div>
+
+      <label class="pf-label-chico">Relación *</label>
+      <div class="pf-autocomplete-wrap">
+        <input type="text" id="sub-ref-relacion" placeholder="Elegí una opción">
+        <div class="pf-suggestions oculto" id="sub-ref-relacion-suggestions"></div>
+      </div>
+
+      <div class="pf-submodal-acciones">
+        <button type="button" class="btn-ghost" id="cancelarSubmodalRef">Cancelar</button>
+        <button type="button" class="btn-primary" id="guardarSubmodalRef">Guardar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  initAutocomplete("sub-ref-relacion", "sub-ref-relacion-suggestions", RELACIONES_REFERENCIA, (v) => {
+    document.getElementById("sub-ref-relacion").value = v;
+  });
+
+  document.getElementById("cerrarSubmodalRef").addEventListener("click", () => overlay.remove());
+  document.getElementById("cancelarSubmodalRef").addEventListener("click", () => overlay.remove());
+
+  document.getElementById("guardarSubmodalRef").addEventListener("click", () => {
+    const nombre = document.getElementById("sub-ref-nombre").value.trim();
+    const apellido = document.getElementById("sub-ref-apellido").value.trim();
+    const email = document.getElementById("sub-ref-email").value.trim();
+    const relacion = document.getElementById("sub-ref-relacion").value.trim();
+
+    if (!nombre || !apellido || !email) {
+      mostrarToast("⚠️ Completá nombre, apellido y email.");
+      return;
+    }
+
+    const nuevaRef = {
+      nombre, apellido, email,
+      telefono: document.getElementById("sub-ref-telefono").value.trim(),
+      relacion
+    };
+
+    if (!lista[itemIndex].referencias) lista[itemIndex].referencias = [];
+    lista[itemIndex].referencias.push(nuevaRef);
+
+    if (tipo === "laboral") renderExperienciasLista();
+    else renderEstudiosLista();
+
+    mostrarToast("✅ Referencia agregada.");
+    overlay.remove();
+  });
+}
+
+// ======================================================
+// CERTIFICADOS (vinculados a un estudio)
+// ======================================================
+
+function abrirSubmodalCertificado(estudioIndex) {
+  const estudio = estudiosTemp[estudioIndex];
+
+  const overlay = document.createElement("div");
+  overlay.className = "pf-submodal-overlay";
+  overlay.innerHTML = `
+    <div class="pf-submodal-box">
+      <span class="pf-submodal-cerrar" id="cerrarSubmodalCert">✕</span>
+      <h3>Sumar certificado</h3>
+      ${estudio.tituloCarrera ? `<p class="pf-tip">Relacionado a: <strong>${estudio.tituloCarrera}</strong></p>` : ""}
+
+      <label class="pf-label-chico">Ingresá un link al certificado</label>
+      <input type="url" id="sub-cert-link" placeholder="https://...">
+
+      <p class="pf-tip">O si tenés el archivo, podés nombrar el archivo aquí y adjuntarlo más tarde cuando el equipo implemente la subida de archivos.</p>
+      <input type="text" id="sub-cert-nombre" placeholder="Nombre del certificado (opcional)">
+
+      <div class="pf-submodal-acciones">
+        <button type="button" class="btn-ghost" id="cancelarSubmodalCert">Cancelar</button>
+        <button type="button" class="btn-primary" id="guardarSubmodalCert">Guardar</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  document.getElementById("cerrarSubmodalCert").addEventListener("click", () => overlay.remove());
+  document.getElementById("cancelarSubmodalCert").addEventListener("click", () => overlay.remove());
+
+  document.getElementById("guardarSubmodalCert").addEventListener("click", () => {
+    const link = document.getElementById("sub-cert-link").value.trim();
+    const nombre = document.getElementById("sub-cert-nombre").value.trim();
+
+    if (!link && !nombre) {
+      mostrarToast("⚠️ Ingresá un link o el nombre del certificado.");
+      return;
+    }
+
+    if (!estudiosTemp[estudioIndex].certificados) estudiosTemp[estudioIndex].certificados = [];
+    estudiosTemp[estudioIndex].certificados.push({ link, nombre });
+
+    renderEstudiosLista();
+    mostrarToast("✅ Certificado agregado.");
+    overlay.remove();
+  });
+}
+
+// ======================================================
 // IDIOMAS (submodal "Sumar idioma")
+// ======================================================
+
 // ======================================================
 
 let idiomasTemp = [];
@@ -1080,9 +1257,15 @@ document.getElementById("btnLogout").addEventListener("click", function(){
 // FLUJO DE LOGIN / REGISTRO (PASO 1)
 // ======================================================
 
-// Click en "Creá tu perfil" -> abre modal de login/registro
+// Click en "Creá tu perfil" -> si ya tiene perfil, lo abre para editar; si no, va a crear cuenta
 document.getElementById("step1").addEventListener("click", function(){
-  abrirModalLogin();
+  const perfil = cargarPerfil();
+  if (perfil && perfil.datosPersonales) {
+    precargarFormularioPerfil(perfil);
+    document.getElementById("modalPerfil").classList.remove("oculto");
+  } else {
+    abrirModalLogin();
+  }
 });
 
 // Click en "Analizá tu perfil" -> si tiene perfil, reordena todo por compatibilidad
@@ -2654,8 +2837,9 @@ document.getElementById("btnCrearCuenta").addEventListener("click", function(e){
   if (!validarEmail(input, error)) return;
 
   document.getElementById("modalLogin").classList.add("oculto");
+  precargarFormularioPerfil(null);
   document.getElementById("modalPerfil").classList.remove("oculto");
-  irATabPerfil("datos");
+  irATabPerfil("formacion");
 });
 
 // Validar al iniciar sesión
@@ -2668,8 +2852,9 @@ document.getElementById("btnIngresar").addEventListener("click", function(e){
   if (!validarEmail(input, error)) return;
 
   document.getElementById("modalLogin").classList.add("oculto");
+  precargarFormularioPerfil(null);
   document.getElementById("modalPerfil").classList.remove("oculto");
-  irATabPerfil("datos");
+  irATabPerfil("formacion");
 });
 
 // (La validación del email de perfil ya se hace dentro del submit principal,
@@ -2682,33 +2867,72 @@ document.getElementById("btnIngresar").addEventListener("click", function(e){
 function reordenarPorPerfil(perfil) {
   if (!perfil || !perfil.habilidades) return;
 
+  // Construimos un conjunto de palabras clave del perfil (todo en minúsculas)
   const palabrasClave = [
     ...(perfil.habilidades || []),
     ...(perfil.interesesProfesionales || []),
     (perfil.formacion?.carrera || ''),
-    (perfil.objetivoProfesional || '')
-  ].map(p => p.toLowerCase());
+    (perfil.objetivoProfesional || ''),
+    // También sumamos áreas de los estudios y puestos de experiencias
+    ...((perfil.estudios || []).map(e => e.areaEstudio || '')),
+    ...((perfil.experiencias || []).map(e => e.areaPuesto || ''))
+  ].map(p => p.toLowerCase()).filter(Boolean);
 
-  function calcularScore(tags) {
+  // Compara un array de tags contra las palabras clave del perfil
+  // Devuelve un score de 0 a 100
+  function calcularScoreConTags(tags) {
     if (!tags || !tags.length) return 0;
-    const matches = tags.filter(t => palabrasClave.some(p => p.includes(t) || t.includes(p)));
+    const matches = tags.filter(t =>
+      palabrasClave.some(p => p.includes(t.toLowerCase()) || t.toLowerCase().includes(p))
+    );
     return Math.round((matches.length / tags.length) * 100);
   }
 
-  // Actualizar scores de cursos y reordenar
-  const cursosOrdenados = [...catalogoCursos].map(c => ({
-    ...c,
-    matchScore: Math.max(c.matchScore, calcularScore(c.tags))
-  })).sort((a, b) => b.matchScore - a.matchScore);
+  // Compara el área de una beca/empleo contra los intereses/habilidades del perfil
+  // Devuelve un boost de 0 a 30 puntos
+  function calcularBoostPorArea(area) {
+    if (!area) return 0;
+    const areaLower = area.toLowerCase();
+    const hayMatch = palabrasClave.some(p =>
+      p.includes(areaLower) || areaLower.includes(p)
+    );
+    return hayMatch ? 30 : 0;
+  }
+
+  // ── CURSOS: recalcula matchScore comparando tags del curso con el perfil ──
+  const cursosOrdenados = [...catalogoCursos].map(c => {
+    const scoreCalculado = Math.max(
+      calcularScoreConTags(c.tags),
+      calcularBoostPorArea(c.areaProfesional)
+    );
+    // Si hay match real con el perfil, usamos el score calculado (puede subir O bajar).
+    // Si no hay match alguno (score = 0), conservamos el base para no dejarlo en 0.
+    const matchFinal = scoreCalculado > 0
+      ? Math.min(100, scoreCalculado + 50)   // boost base para que la tarjeta no muestre "0%"
+      : c.matchScore;
+    return { ...c, matchScore: matchFinal };
+  }).sort((a, b) => b.matchScore - a.matchScore);
 
   renderCursos(cursosOrdenados);
 
-  // Reordenar becas
-  const becasOrdenadas = [...becas].sort((a, b) => b.compatibilidad - a.compatibilidad);
+  // ── BECAS: recalcula compatibilidad comparando área y nivel con el perfil ──
+  const becasOrdenadas = [...becas].map(b => {
+    const boost = calcularBoostPorArea(b.area);
+    // Si el perfil menciona el área de la beca, sube la compatibilidad base
+    const nuevaCompat = Math.min(100, b.compatibilidad + boost);
+    return { ...b, compatibilidad: nuevaCompat };
+  }).sort((a, b) => b.compatibilidad - a.compatibilidad);
+
   renderizarBecas(becasOrdenadas);
 
-  // Reordenar empleos
-  const empleosOrdenados = [...empleos].sort((a, b) => b.compatibilidad - a.compatibilidad);
+  // ── EMPLEOS: recalcula compatibilidad comparando tags y modalidad con el perfil ──
+  const empleosOrdenados = [...empleos].map(e => {
+    const boostTags = calcularScoreConTags(e.tags || []);
+    const boostArea = calcularBoostPorArea(e.titulo);
+    const nuevaCompat = Math.min(100, Math.max(e.compatibilidad, e.compatibilidad + Math.round(boostTags * 0.3) + (boostArea > 0 ? 10 : 0)));
+    return { ...e, compatibilidad: nuevaCompat };
+  }).sort((a, b) => b.compatibilidad - a.compatibilidad);
+
   renderizarEmpleos(empleosOrdenados);
 
   mostrarToast("🤖 ¡IA activa! Reordenamos cursos, becas y empleos según tu perfil.");
