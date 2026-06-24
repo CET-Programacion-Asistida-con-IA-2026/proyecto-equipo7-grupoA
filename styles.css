@@ -492,6 +492,7 @@ nav ul li a.active {
     #10B981
   );
 
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -893,6 +894,7 @@ nav ul li a.active {
     #38BDF8,
     #10B981
   );
+  background-clip:text;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -2328,6 +2330,8 @@ nav ul li a.active {
     #c020f0,
     var(--cyan)
   );
+  /* Standard property for compatibility */
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

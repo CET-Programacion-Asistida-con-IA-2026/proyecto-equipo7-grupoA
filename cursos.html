@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<style>
+      .hero, #how, .stats-section, .cta-final, #becas, #empleos, .section-divider { display: none !important; }
+      #hub { display: block !important; padding-top: 110px; }
+</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>OportunIA — Plataforma Inteligente de Empleabilidad y Educación</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+
+  <a class="logo" href="#">
+
+    <div class="logo-mark">OI</div>
+
+    <div>
+      OportunIA
+
+      <span class="logo-sub">
+        Educación • Becas • Empleabilidad
+      </span>
+
+    </div>
+
+  </a>
+
+  <ul>
+      <li><a href="cursos.html" class="active">Cursos</a></li>
+      <li><a href="becas.html">Becas</a></li>
+      <li><a href="empleos.html">Empleos</a></li>
+</ul>
+
+  <div class="nav-actions">
+    <button class="btn-ghost" id="abrirLogin">Iniciar sesión</button>
+    <button class="btn-primary" id="abrirLogin2">Registrate gratis →</button>
+  </div>
+
+  <!-- Hamburguer mobile -->
+  <button class="nav-hamburger" id="navHamburger" aria-label="Abrir menú" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div id="navUsuario" style="display:none; align-items:center; gap:8px; position:relative;">
+    <button id="navAvatarBtn" style="display:flex;align-items:center;gap:8px;background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:999px;transition:background .2s;" onmouseover="this.style.background='rgba(37,99,235,.08)'" onmouseout="this.style.background='none'">
+      <img id="navAvatar" src="" alt="avatar" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:2px solid #2563EB;">
+      <span id="navNombre" style="font-size:.85rem;font-weight:600;color:#0F172A;"></span>
+      <span style="font-size:.7rem;color:#64748b;">▾</span>
+    </button>
+    <div id="navDropdown" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#fff;border:1px solid rgba(37,99,235,.12);border-radius:14px;box-shadow:0 8px 32px rgba(37,99,235,.12);min-width:200px;overflow:hidden;z-index:999;">
+      <button id="btnEditarPerfil" style="display:flex;align-items:center;gap:10px;padding:12px 16px;width:100%;background:none;border:none;cursor:pointer;color:#0F172A;font-size:.88rem;font-weight:500;transition:background .15s;" onmouseover="this.style.background='rgba(37,99,235,.06)'" onmouseout="this.style.background='none'">✏️ Editar mi perfil</button>
+      <hr style="border:none;border-top:1px solid rgba(37,99,235,.08);margin:4px 0;">
+      <button id="btnLogout" style="display:flex;align-items:center;gap:10px;padding:12px 16px;width:100%;background:none;border:none;cursor:pointer;color:#EF4444;font-size:.88rem;font-weight:500;transition:background .15s;" onmouseover="this.style.background='#FFF0F0'" onmouseout="this.style.background='none'">🚪 Cerrar sesión</button>
+    </div>
+  </div>
+
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orbit" style="width:600px;height:600px"></div>
+  <div class="hero-orbit-2"></div>
+
+  <div class="hero-content">
+
+    <div class="hero-chip">
+      <div class="dot"></div>
+      Plataforma impulsada por Inteligencia Artificial
+    </div>
+
+    <h1>
+      Encontrá tu próxima<br>
+      <span class="grad">oportunidad</span><br>
+      educativa y laboral
+    </h1>
+
+    <p>
+      OportunIA centraliza cursos, becas y empleos en un solo lugar.
+      Nuestra inteligencia artificial analiza tu perfil, identifica tus fortalezas y te recomienda oportunidades para potenciar tu futuro profesional.
+    </p>
+
+    <div class="hero-ctas">
+      <button class="btn-hero-main">✨ Crear mi perfil inteligente</button>
+      <button
+  class="btn-hero-alt"
+  onclick="window.open('https://1drv.ms/v/c/279109cdfe3d0ce6/IQBc89O0uF4JTrkZnuT-spuHATmpQlik3vWbHgd3GnY5HB0?e=TaZ0b6','_blank')">
+
+  ▶ Ver cómo funciona
+
+</button>
+    </div>
+
+    <div class="hero-proof">
+      <div class="proof-item"><span class="proof-icon">🎓</span> Cursos gratuitos</div>
+
+      <div class="proof-sep"></div>
+
+      <div class="proof-item"><span class="proof-icon">🏆</span> Becas disponibles</div>
+
+      <div class="proof-sep"></div>
+
+      <div class="proof-item"><span class="proof-icon">💼</span> Oportunidades laborales</div>
+
+      <div class="proof-sep"></div>
+
+      <div class="proof-item"><span class="proof-icon">🤖</span> Recomendaciones con IA</div>
+    </div>
+
+  </div>
+
+  <div class="hero-cards">
+
+    <div class="hero-float-card">
+      <div class="float-label">Perfil Profesional</div>
+
+      <div class="float-score">
+        87
+        <span style="font-size:1rem;color:var(--text-muted)">/100</span>
+      </div>
+
+      <div class="float-score-label">
+        Potencial de empleabilidad
+      </div>
+
+      <div class="float-pill">
+        ↑ Perfil fortalecido con cursos sugeridos
+      </div>
+    </div>
+
+    <div class="hero-float-card">
+      <div class="float-label">Oportunidad Recomendada</div>
+
+      <div class="float-match">
+        <strong>Asistente Administrativa</strong><br>
+
+        <span class="match-pct">75% de compatibilidad</span>
+        con tu perfil<br>
+
+        <span style="color:var(--text-dim);font-size:.68rem">
+          Modalidad híbrida
+        </span>
+      </div>
+    </div>
+
+    <div class="hero-float-card">
+      <div class="float-label">Cursos Recomendados</div>
+
+      <div class="float-course-list">
+
+        <div class="float-course">
+          <div class="float-course-icon" style="background:rgba(37,99,235,.12)">📊</div>
+
+          <div>
+            <div class="float-course-name">Excel Avanzado</div>
+            <div class="float-course-src">Certificación gratuita</div>
+            <div class="float-prog">
+              <div class="float-prog-bar" style="width:65%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="float-course">
+          <div class="float-course-icon" style="background:rgba(56,189,248,.12)">💻</div>
+
+          <div>
+            <div class="float-course-name">Herramientas Digitales</div>
+            <div class="float-course-src">Curso recomendado</div>
+            <div class="float-prog">
+              <div class="float-prog-bar" style="width:30%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS / CÓMO FUNCIONA ═══ -->
+<section class="how-section section" id="how">
+
+  <div class="section-header">
+
+    <div class="chip chip-violet">¿Cómo funciona?</div>
+
+    <h2>
+      Tu camino hacia nuevas
+      <br>
+      <span class="grad">oportunidades</span>
+    </h2>
+
+    <p>
+      Completá tu perfil, descubrí capacitaciones y recibí recomendaciones personalizadas para potenciar tu desarrollo profesional.
+    </p>
+
+  </div>
+
+  <div class="steps-track">
+
+    <div class="step-item" id="step1">
+      <div class="step-bubble">
+        <div class="step-emoji">✏️</div>
+        <div class="step-num-badge">1</div>
+      </div>
+
+      <div class="step-title">Creá tu perfil</div>
+
+      <div class="step-desc">
+        Cargá tu experiencia, estudios, habilidades e intereses.
+      </div>
+
+    </div>
+
+    <div class="step-item" id="step2">
+      
+      <div class="step-bubble">
+        <div class="step-emoji">🔍</div>
+        <div class="step-num-badge">2</div>
+      </div>
+
+      <div class="step-title">Analizá tu perfil</div>
+
+      <div class="step-desc">
+        Nuestra IA identifica fortalezas y oportunidades de mejora.
+      </div>
+    </div>
+
+    <div class="step-item" id="step3">
+
+      <div class="step-bubble">
+        <div class="step-emoji">🎓</div>
+        <div class="step-num-badge">3</div>
+      </div>
+
+      <div class="step-title">Descubrí cursos</div>
+
+      <div class="step-desc">
+        Encontrá capacitaciones recomendadas según tus objetivos.
+      </div>
+    </div>
+
+    <div class="step-item" id="step4">
+
+      <div class="step-bubble">
+        <div class="step-emoji">🏆</div>
+        <div class="step-num-badge">4</div>
+      </div>
+
+      <div class="step-title">Explorá becas</div>
+
+      <div class="step-desc">
+        Accedé a oportunidades educativas compatibles con tu perfil.
+      </div>
+    </div>
+
+    <div class="step-item" id="step5">
+
+      <div class="step-bubble">
+        <div class="step-emoji">💼</div>
+        <div class="step-num-badge">5</div>
+      </div>
+
+      <div class="step-title">Encontrá empleos</div>
+
+      <div class="step-desc">
+        Recibí sugerencias laborales alineadas con tus habilidades.
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<div class="section-divider"></div>
+ 
+<!-- ═══ FORMACIÓN Y CAPACITACIÓN ═══ -->
+<section class="edu-section section" id="hub">
+
+  <div class="section-header">
+
+    <div class="chip chip-pink">Formación & Capacitación</div>
+
+    <h2>
+      Potenciá tu perfil con
+      <br>
+      <span class="grad">cursos recomendados</span>
+    </h2>
+
+    <p>
+      Descubrí cursos, certificaciones y programas de formación que pueden ayudarte a desarrollar nuevas habilidades y acceder a mejores oportunidades laborales.
+    </p>
+
+  </div>
+
+  <div class="edu-tabs">
+    <button class="edu-tab active">Todos</button>
+    <button class="edu-tab">Tecnología</button>
+    <button class="edu-tab">Negocios</button>
+    <button class="edu-tab">Diseño</button>
+    <button class="edu-tab">Datos & IA</button>
+    <button class="edu-tab">Marketing</button>
+    <button class="edu-tab">Idiomas</button>
+    <button class="edu-tab">Salud</button>
+  </div>
+
+<!-- Plataformas -->
+  <div class="platform-grid">
+
+    <div class="platform-card" data-areas="tecnología,negocios,diseño,datos-ia,marketing,idiomas,salud">
+      <div class="platform-tag tag-both">Gratis + Pago</div>
+      <div class="platform-logo">🎓</div>
+      <div class="platform-name">Coursera</div>
+      <div class="platform-courses">Cursos y certificaciones</div>
+    </div>
+
+    <div class="platform-card" data-areas="tecnología,negocios,salud,datos-ia">
+      <div class="platform-tag tag-both">Gratis + Pago</div>
+      <div class="platform-logo">📘</div>
+      <div class="platform-name">edX</div>
+      <div class="platform-courses">Programas universitarios</div>
+    </div>
+
+    <div class="platform-card" data-areas="tecnología,negocios,diseño,datos-ia,marketing,idiomas,salud">
+      <div class="platform-tag tag-paid">Pago</div>
+      <div class="platform-logo">🎯</div>
+      <div class="platform-name">Udemy</div>
+      <div class="platform-courses">Capacitación profesional</div>
+    </div>
+
+    <div class="platform-card" data-areas="tecnología,datos-ia">
+      <div class="platform-tag tag-free">100% Gratis</div>
+      <div class="platform-logo">🔵</div>
+      <div class="platform-name">Google Career Certificates</div>
+      <div class="platform-courses">Certificaciones laborales</div>
+    </div>
+
+    <div class="platform-card" data-areas="tecnología">
+      <div class="platform-tag tag-free">100% Gratis</div>
+      <div class="platform-logo">🌐</div>
+      <div class="platform-name">Cisco Networking Academy</div>
+      <div class="platform-courses">Tecnología y redes</div>
+    </div>
+
+    <div class="platform-card" data-areas="negocios,idiomas,salud">
+      <div class="platform-tag tag-free">100% Gratis</div>
+      <div class="platform-logo">🏛️</div>
+      <div class="platform-name">Fundación Carlos Slim</div>
+      <div class="platform-courses">Formación para el empleo</div>
+    </div>
+
+    <div class="platform-card" data-areas="negocios,marketing,idiomas">
+      <div class="platform-tag tag-free">100% Gratis</div>
+      <div class="platform-logo">🏦</div>
+      <div class="platform-name">Santander Open Academy</div>
+      <div class="platform-courses">Cursos y becas</div>
+    </div>
+
+    <div class="platform-card" data-areas="tecnología,negocios,diseño,marketing,datos-ia">
+      <div class="platform-tag tag-paid">Pago</div>
+      <div class="platform-logo">💼</div>
+      <div class="platform-name">LinkedIn Learning</div>
+      <div class="platform-courses">Habilidades profesionales</div>
+    </div>
+
+    <div class="platform-card" data-areas="negocios,salud,datos-ia">
+      <div class="platform-tag tag-both">Gratis + Pago</div>
+      <div class="platform-logo">🏛</div>
+      <div class="platform-name">Harvard Online</div>
+      <div class="platform-courses">Programas académicos</div>
+    </div>
+
+    <div class="platform-card" data-areas="tecnología,datos-ia,diseño">
+      <div class="platform-tag tag-free">100% Gratis</div>
+      <div class="platform-logo">⚗️</div>
+      <div class="platform-name">MIT OpenCourseWare</div>
+      <div class="platform-courses">Material educativo abierto</div>
+    </div>
+
+  </div>
+ 
+ <!-- Filtros -->
+<div class="course-filters">
+  <select class="filter-select" id="filtroAreaCursos">
+    <option value="">Área profesional</option>
+    <option>Tecnología</option>
+    <option>Diseño</option>
+    <option>Negocios</option>
+    <option>Marketing</option>
+    <option>Administración</option>
+  </select>
+
+  <select class="filter-select" id="filtroNivelCursos">
+    <option value="">Nivel</option>
+    <option>Principiante</option>
+    <option>Intermedio</option>
+    <option>Avanzado</option>
+  </select>
+
+  <select class="filter-select" id="filtroModalidadCursos">
+    <option value="">Modalidad</option>
+    <option>Online</option>
+    <option>Presencial</option>
+    <option>Híbrido</option>
+  </select>
+
+  <select class="filter-select" id="filtroDuracionCursos">
+    <option value="">Duración (h/semana)</option>
+    <option value="2">Hasta 2 h/sem</option>
+    <option value="4">Hasta 4 h/sem</option>
+    <option value="6">Hasta 6 h/sem</option>
+    <option value="99">Sin límite</option>
+  </select>
+
+  <select class="filter-select" id="filtroPrecioCursos">
+    <option value="">Precio</option>
+    <option>Gratuito</option>
+    <option>Pago</option>
+  </select>
+
+  <select class="filter-select" id="filtroCertificadoCursos">
+    <option value="">Certificado</option>
+    <option>Con certificado</option>
+    <option>Sin certificado</option>
+  </select>
+
+  <button class="btn-primary" id="btnAplicarFiltrosCursos" type="button">
+    Aplicar filtros
+  </button>
+</div>
+
+<!-- Cursos (carrusel de a 3) -->
+<div class="course-grid" id="courseGrid">
+  <p class="becas-empty">Cargando cursos...</p>
+</div>
+<!-- Navegación carrusel -->
+<div class="becas-nav">
+  <button class="becas-flecha" id="cursosPrev" aria-label="Anterior">&#8592;</button>
+  <div id="cursosPuntos" class="becas-puntos"></div>
+  <span id="cursosContador" class="becas-contador"></span>
+  <button class="becas-flecha" id="cursosNext" aria-label="Siguiente">&#8594;</button>
+</div>
+
+</section>
+
+<div class="section-divider"></div>
+ 
+<!-- ═══ BECAS ═══ -->
+<section class="becas-section section" id="becas">
+
+  <div class="section-header">
+
+    <div class="chip chip-gold">Centro de Becas</div>
+
+    <h2>
+      Becas y oportunidades que
+      <span class="grad">impulsan tu futuro</span>
+    </h2>
+
+    <p>
+      Explorá oportunidades educativas y de formación. OportunIA analiza tu perfil y te ayuda a identificar las becas más relevantes para tus objetivos profesionales y académicos.
+    </p>
+
+  </div>
+
+<div class="becas-layout">
+
+    <div class="becas-sidebar">
+
+      <div class="sidebar-title">🔍 Filtrar becas</div>
+
+      <div class="filter-group">
+        <span class="filter-label">Tipo de beca</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Completa"> <span>Completa</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Parcial"> <span>Parcial</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Mensual"> <span>Mensual</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Único pago"> <span>Único pago</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Pasantía"> <span>Pasantía</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="tipo" value="Premio"> <span>Premio</span></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Alcance</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="checkbox" data-filtro="alcance" value="Internacional"> <span>Internacional</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="alcance" value="Nacional"> <span>Nacional</span></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Área de estudio</span>
+        <div class="filter-checks">
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Tecnología"> <span>Tecnología</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Negocios"> <span>Negocios</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Educación"> <span>Educación</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Ciencia"> <span>Ciencia</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Investigación"> <span>Investigación</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Idioma"> <span>Idioma</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Liderazgo"> <span>Liderazgo</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Políticas Públicas"> <span>Políticas Públicas</span></label>
+          <label class="filter-check"><input type="checkbox" data-filtro="area" value="Multidisciplinaria"> <span>Multidisciplinaria</span></label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">Compatibilidad mínima</span>
+        <input type="range" class="range-slider" id="filtroCompatMin" min="0" max="100" value="0">
+        <div class="range-labels">
+          <span>0%</span>
+          <span id="filtroCompatMinLabel">0%+</span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btnAplicarFiltrosBecas" type="button" style="width:100%;margin-top:8px;justify-content:center;display:flex">
+        Aplicar filtros
+      </button>
+
+      <button class="becas-flecha" id="btnLimpiarFiltrosBecas" type="button" style="width:100%;margin-top:8px;height:36px;border-radius:12px;font-size:.8rem">
+        Limpiar filtros
+      </button>
+
+    </div>
+
+    <div class="becas-grid" id="becasGrid">
+      <p class="becas-empty">Cargando becas...</p>
+    </div>
+    <!-- Navegación carrusel -->
+    <div class="becas-nav">
+      <button class="becas-flecha" id="becasPrev" aria-label="Anterior">&#8592;</button>
+      <div id="becasPuntos" class="becas-puntos"></div>
+      <span id="becasContador" class="becas-contador"></span>
+      <button class="becas-flecha" id="becasNext" aria-label="Siguiente">&#8594;</button>
+    </div>
+
+  </div>
+
+</section>
+
+<div class="section-divider"></div>
+ 
+<!-- ═══ EMPLEABILIDAD ═══ -->
+
+<section class="jobs-section section" id="empleos">
+
+  <div class="section-header">
+
+    <div class="chip chip-green">Empleabilidad</div>
+
+    <h2>
+      Oportunidades laborales
+      <span class="grad">para vos</span>
+    </h2>
+
+    <p>
+      Explorá oportunidades laborales organizadas según tus habilidades,
+      experiencia y objetivos profesionales.
+    </p>
+
+  </div>
+
+  <div class="jobs-layout">
+
+    <div class="jobs-main">
+
+      <div class="jobs-filters">
+
+        <select class="filter-select" id="filtroModalidad">
+          <option value="">Modalidad</option>
+          <option value="Presencial">Presencial</option>
+          <option value="Híbrido">Híbrido</option>
+          <option value="Remoto">Remoto</option>
+        </select>
+
+        <select class="filter-select" id="filtroTipo">
+          <option value="">Tipo</option>
+          <option value="Full Time">Full Time</option>
+          <option value="Part Time">Part Time</option>
+          <option value="Freelance">Freelance</option>
+        </select>
+
+        <select class="filter-select" id="filtroNivel">
+          <option value="">Nivel</option>
+          <option value="Junior">Junior</option>
+          <option value="Semi Senior">Semi Senior</option>
+          <option value="Senior">Senior</option>
+        </select>
+
+        <select class="filter-select" id="filtroFuente">
+          <option value="">Fuente</option>
+          <option value="LinkedIn">LinkedIn</option>
+          <option value="Computrabajo">Computrabajo</option>
+          <option value="Bumeran">Bumeran</option>
+          <option value="Indeed">Indeed</option>
+          <option value="Zona Jobs">Zona Jobs</option>
+          <option value="Get on Board">Get on Board</option>
+          <option value="Workana">Workana</option>
+          <option value="Torre.ai">Torre.ai</option>
+          <option value="Remote OK">Remote OK</option>
+          <option value="We Work Remotely">We Work Remotely</option>
+          <option value="Himalayas">Himalayas</option>
+        </select>
+
+        <button class="btn-primary" id="btnAplicarFiltrosEmpleos" type="button">
+          Aplicar filtros
+        </button>
+
+      </div>
+
+      <!-- Las tarjetas se generan automáticamente desde main.js -->
+      <div id="jobsGrid"></div>
+
+      <!-- Navegación carrusel -->
+      <div class="becas-nav">
+        <button class="becas-flecha" id="empleosPrev" aria-label="Anterior">&#8592;</button>
+        <div id="empleosPuntos" class="becas-puntos"></div>
+        <span id="empleosContador" class="becas-contador"></span>
+        <button class="becas-flecha" id="empleosNext" aria-label="Siguiente">&#8594;</button>
+      </div>
+
+      <!-- FUENTES DE EMPLEO -->
+
+      <div class="job-sources-panel">
+
+        <div class="sources-title">Fuentes de empleo</div>
+
+        <div class="source-item">
+          <div class="source-logo">💼</div>
+          <div>
+            <div class="source-name">LinkedIn</div>
+            <div class="source-count">Red profesional líder</div>
+          </div>
+        </div>
+
+        <div class="source-item">
+          <div class="source-logo">🔍</div>
+          <div>
+            <div class="source-name">Indeed</div>
+            <div class="source-count">Mayor buscador de empleos</div>
+          </div>
+        </div>
+
+        <div class="source-item">
+          <div class="source-logo">📄</div>
+          <div>
+            <div class="source-name">Computrabajo</div>
+            <div class="source-count">Líder en Argentina</div>
+          </div>
+        </div>
+
+        <div class="source-item">
+          <div class="source-logo">🚀</div>
+          <div>
+            <div class="source-name">Get on Board</div>
+            <div class="source-count">Empleos remotos tech</div>
+          </div>
+        </div>
+
+        <div class="source-item">
+          <div class="source-logo">💻</div>
+          <div>
+            <div class="source-name">Workana</div>
+            <div class="source-count">Freelance y remoto</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+ 
+<!-- ═══ STATS ═══ -->
+
+<section class="stats-section">
+  <div class="stats-grid">
+
+    <div class="stat-box">
+      <div class="stat-number cyan">+200K</div>
+      <div class="stat-label">Cursos disponibles</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number gold">+8.000</div>
+      <div class="stat-label">Becas registradas</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number green">+15.000</div>
+      <div class="stat-label">Oportunidades laborales</div>
+    </div>
+
+    <div class="stat-box">
+      <div class="stat-number pink">1 objetivo</div>
+      <div class="stat-label">Reducir la desigualdad de oportunidades</div>
+    </div>
+
+  </div>
+</section>
+ 
+<!-- ═══ CTA FINAL ═══ -->
+
+<section class="cta-final">
+
+  <div style="position:relative;z-index:2">
+
+    <div class="chip chip-cyan" style="margin-bottom:20px">
+      Tu futuro empieza hoy
+    </div>
+
+    <h2>
+      Descubrí oportunidades,
+      <br>
+      aprendé nuevas habilidades
+      <br>
+      y encontrá tu próximo empleo
+    </h2>
+
+    <p>
+      OportunIA reúne cursos, becas y oportunidades laborales en un solo lugar para ayudarte a desarrollar tu potencial.
+    </p>
+
+    <div class="cta-actions">
+      <button class="btn-hero-main">
+        🚀 Crear mi perfil
+      </button>
+
+      <button class="btn-hero-alt">
+        📋 Ver demostración
+      </button>
+    </div>
+
+    <div class="hero-proof" style="margin-top:36px">
+
+      <div class="proof-item">
+        🎓 Cursos gratuitos
+      </div>
+
+      <div class="proof-sep"></div>
+
+      <div class="proof-item">
+        🏆 Becas actualizadas
+      </div>
+
+      <div class="proof-sep"></div>
+
+      <div class="proof-item">
+        💼 Oportunidades laborales
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+ 
+<!-- ═══ FOOTER ═══ -->
+
+<footer>
+
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+
+      <a class="logo" href="#" style="display:inline-flex;margin-bottom:14px;">
+        <div class="logo-mark">OI</div>
+        <div>
+          OportunIA
+          <span class="logo-sub">Educación y Empleabilidad</span>
+        </div>
+      </a>
+
+      <p>
+        OportunIA centraliza cursos, becas y oportunidades laborales, y cuenta con un asistente virtual que te recomienda formaciones y becas según tu perfil y tus objetivos.
+      </p>
+
+    </div>
+
+    <div class="footer-newsletter">
+
+      <h4>Recibí oportunidades</h4>
+
+      <p>
+        Enterate de nuevas becas, cursos y oportunidades laborales recomendadas para tu perfil.
+      </p>
+
+      <div class="email-wrap">
+        <input type="email" id="footerEmail" placeholder="tu@email.com" required>
+        <button id="footerEmailBtn">→</button>
+      </div>
+
+      <span class="error-msg oculto" id="errorFooterEmail">Ingresá un email válido (ej: nombre@dominio.com)</span>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <p>
+      © 2026 OportunIA. Todos los derechos reservados.
+    </p>
+
+  </div>
+
+</footer>
+
+<!-- Modal Login -->
+<div class="modal-login oculto" id="modalLogin">
+
+    <div class="login-box">
+
+        <span class="cerrar-modal" id="cerrarModal">✕</span>
+
+        <h2>Bienvenido a OportunIA</h2>
+
+        <p>Iniciá sesión o creá una cuenta para empezar a armar tu perfil.</p>
+
+        <!-- VISTA SOCIAL -->
+        <div id="vistaSocial">
+
+            <div class="social-login" id="socialLogin">
+
+                <button class="btn-social btn-email" id="btnEmailContinue">
+                    <span class="social-icon">✉️</span> Continuar con email
+                </button>
+
+            </div>
+
+            <div class="login-divider" id="loginDivider">
+                <span>o registrate manualmente</span>
+            </div>
+
+        </div>
+
+        <div class="social-loading oculto" id="socialLoading">
+            <div class="social-spinner"></div>
+            <span id="socialLoadingText">Conectando...</span>
+        </div>
+
+        <!-- VISTA MANUAL -->
+        <div id="manualLoginSection" class="oculto">
+
+            <button class="back-arrow" id="backToSocial">←</button>
+
+            <div class="tabs-login" id="tabsLogin">
+                <button class="tab-login active" id="btnRegistro">Registrarse</button>
+                <button class="tab-login" id="btnSesion">Iniciar sesión</button>
+            </div>
+
+            <!-- REGISTRO -->
+            <div id="registroForm">
+                <input type="text" placeholder="Nombre y apellido">
+                <input type="email" id="emailRegistro" placeholder="Email">
+                <span class="error-msg oculto" id="errorEmailRegistro">Ingresá un email válido (ej: nombre@dominio.com)</span>
+                <input type="password" placeholder="Contraseña">
+                <button class="btn-hero-main" id="btnCrearCuenta">Crear cuenta</button>
+            </div>
+
+            <!-- LOGIN -->
+            <div id="sesionForm" style="display:none;">
+                <input type="email" id="emailSesion" placeholder="Email">
+                <span class="error-msg oculto" id="errorEmailSesion">Ingresá un email válido (ej: nombre@dominio.com)</span>
+                <input type="password" placeholder="Contraseña">
+                <button class="btn-hero-main" id="btnIngresar">Ingresar</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal Formulario de Perfil -->
+<div class="modal-login oculto" id="modalPerfil">
+
+    <div class="login-box perfil-box perfil-box-amplio">
+
+        <button class="back-arrow" id="backToLogin">←</button>
+
+        <span class="cerrar-modal" id="cerrarModalPerfil">✕</span>
+
+        <h2>Mi perfil</h2>
+
+        <p>Contanos un poco sobre vos para que la IA pueda analizar tu perfil y recomendarte cursos, becas y empleos.</p>
+
+        <form id="profileForm">
+
+          <div class="perfil-layout">
+
+            <!-- ═══════════ COLUMNA IZQUIERDA: foto + datos personales + contacto ═══════════ -->
+            <div class="perfil-col perfil-col-izq">
+
+              <div class="perfil-foto-wrap">
+                <div class="perfil-foto-preview" id="perfilFotoPreview">
+                  <span id="perfilFotoIniciales">👤</span>
+                  <img id="perfilFotoImg" class="oculto" alt="Foto de perfil">
+                </div>
+                <div class="perfil-foto-acciones">
+                  <button type="button" class="perfil-foto-btn" id="btnSubirFoto" title="Cambiar foto">✏️</button>
+                  <button type="button" class="perfil-foto-btn" id="btnEliminarFoto" title="Eliminar foto">🗑️</button>
+                </div>
+                <input type="file" id="inputFotoPerfil" accept="image/*" class="oculto">
+              </div>
+
+              <h4 class="perfil-nombre-preview" id="perfilNombrePreview">Tu nombre</h4>
+
+              <h5 class="perfil-section-title">Datos personales</h5>
+              <div class="pf-row">
+                <input type="text" id="pf-nombre" placeholder="Nombre" required>
+                <input type="text" id="pf-apellido" placeholder="Apellido" required>
+              </div>
+              <select id="pf-nacionalidad">
+                <option value="">Nacionalidad</option>
+                <option>Argentina</option>
+                <option>Bolivia</option>
+                <option>Brasil</option>
+                <option>Chile</option>
+                <option>Colombia</option>
+                <option>Paraguay</option>
+                <option>Perú</option>
+                <option>Uruguay</option>
+                <option>Venezuela</option>
+                <option>Otra</option>
+              </select>
+              <div class="pf-row">
+                <input type="date" id="pf-fecha-nacimiento" placeholder="Fecha de nacimiento">
+                <select id="pf-genero">
+                  <option value="">Género</option>
+                  <option>Femenino</option>
+                  <option>Masculino</option>
+                  <option>No binario</option>
+                  <option>Prefiero no decir</option>
+                </select>
+              </div>
+              <div class="pf-row">
+                <select id="pf-estado-civil">
+                  <option value="">Estado civil</option>
+                  <option>Soltero/a</option>
+                  <option>Casado/a</option>
+                  <option>Divorciado/a</option>
+                  <option>Viudo/a</option>
+                  <option>Unión convivencial</option>
+                </select>
+                <input type="text" id="pf-dni" placeholder="D.N.I.">
+              </div>
+
+              <h5 class="perfil-section-title">Datos de contacto</h5>
+              <div class="pf-row">
+                <input type="tel" id="pf-celular" placeholder="Celular">
+                <input type="tel" id="pf-telefono" placeholder="Teléfono (opcional)">
+              </div>
+              <input type="email" id="pf-email" placeholder="Email" required>
+              <span class="error-msg oculto" id="errorPfEmail">Ingresá un email válido (ej: nombre@dominio.com)</span>
+
+              <h5 class="perfil-section-title">Canales de contacto</h5>
+              <label class="pf-label-chico">Canal principal</label>
+              <select id="pf-canal-principal">
+                <option value="">Elegí una opción</option>
+                <option>Mensaje de OportunIA</option>
+                <option>Correo electrónico</option>
+                <option>Mensaje de WhatsApp</option>
+                <option>Llamada telefónica</option>
+              </select>
+              <label class="pf-label-chico">Canal secundario</label>
+              <select id="pf-canal-secundario">
+                <option value="">Elegí una opción</option>
+                <option>Mensaje de OportunIA</option>
+                <option>Mensaje de WhatsApp</option>
+                <option>Llamada telefónica</option>
+              </select>
+
+              <p class="pf-tip">💡 No olvides mantener tus datos de contacto actualizados.</p>
+
+              <button type="button" class="btn-ghost pf-btn-descargar" id="btnDescargarCV" disabled>
+                📄 Descargar mi CV
+              </button>
+              <p class="pf-tip-disabled">Disponible próximamente</p>
+
+            </div>
+
+            <!-- ═══════════ COLUMNA CENTRAL: tabs Formación / Experiencia / Perfil ═══════════ -->
+            <div class="perfil-col perfil-col-centro">
+
+              <div class="perfil-tabs">
+                <button type="button" class="perfil-tab active" data-tab="formacion">Formación</button>
+                <button type="button" class="perfil-tab" data-tab="experiencia">Experiencia</button>
+                <button type="button" class="perfil-tab" data-tab="perfil">Perfil</button>
+              </div>
+
+              <!-- TAB FORMACIÓN -->
+              <div class="perfil-tab-panel active" data-tab="formacion">
+
+                <div class="pf-subseccion-header">
+                  <h4 class="perfil-section-title">Formación académica y cursos</h4>
+                  <button type="button" class="pf-btn-sumar" id="btnSumarEstudio">+ Sumar estudio</button>
+                </div>
+                <div id="listaEstudios" class="pf-lista-items">
+                  <p class="pf-lista-vacia">Todavía no agregaste estudios.</p>
+                </div>
+
+                <div class="pf-subseccion-header">
+                  <h4 class="perfil-section-title">Idiomas</h4>
+                  <button type="button" class="pf-btn-sumar" id="btnSumarIdioma">+ Sumar idioma</button>
+                </div>
+                <div id="listaIdiomas" class="pf-lista-items">
+                  <p class="pf-lista-vacia">Todavía no agregaste idiomas.</p>
+                </div>
+
+                <h4 class="perfil-section-title">Conocimientos y habilidades</h4>
+                <div class="pf-autocomplete-wrap">
+                  <input type="text" id="pf-habilidades-input" placeholder="Escribí una habilidad y elegí una opción (ej: Excel, Python...)">
+                  <div class="pf-suggestions oculto" id="pf-habilidades-suggestions"></div>
+                </div>
+                <div class="pf-tags" id="pf-habilidades-tags"></div>
+                <input type="hidden" id="pf-habilidades">
+
+              </div>
+
+              <!-- TAB EXPERIENCIA -->
+              <div class="perfil-tab-panel" data-tab="experiencia">
+
+                <div class="pf-subseccion-header">
+                  <h4 class="perfil-section-title">Experiencia laboral</h4>
+                  <button type="button" class="pf-btn-sumar" id="btnSumarExperiencia">+ Sumar experiencia</button>
+                </div>
+                <div id="listaExperiencias" class="pf-lista-items">
+                  <p class="pf-lista-vacia">Todavía no agregaste experiencia laboral.</p>
+                </div>
+
+              </div>
+
+              <!-- TAB PERFIL -->
+              <div class="perfil-tab-panel" data-tab="perfil">
+
+                <h4 class="perfil-section-title">Resumen profesional</h4>
+                <textarea id="pf-objetivo" rows="5" placeholder="Contanos en pocas líneas tu perfil profesional, tus fortalezas y lo que buscás lograr (ej: tu experiencia, herramientas que manejás y qué tipo de rol te gustaría conseguir)." required></textarea>
+
+                <h4 class="perfil-section-title">Intereses profesionales</h4>
+                <div class="pf-autocomplete-wrap">
+                  <input type="text" id="pf-intereses-input" placeholder="Escribí un área de interés (ej: Tecnología, Marketing...)">
+                  <div class="pf-suggestions oculto" id="pf-intereses-suggestions"></div>
+                </div>
+                <div class="pf-tags" id="pf-intereses-tags"></div>
+                <input type="hidden" id="pf-intereses">
+
+                <h4 class="perfil-section-title">Preferencia salarial</h4>
+                <label class="pf-label-chico">Sueldo bruto pretendido</label>
+                <div class="pf-row pf-row-salario">
+                  <select id="pf-moneda-salario">
+                    <option value="ARS">$ ARS</option>
+                    <option value="USD">U$S</option>
+                  </select>
+                  <input type="number" id="pf-pretension-salarial" placeholder="Ej: 1200000" min="0">
+                </div>
+
+                <h4 class="perfil-section-title">Discapacidad</h4>
+                <p class="pf-tip">Si tenés algún tipo de discapacidad, no es obligatorio que la declares. Pero si lo hacés, te ayudará a encontrar puestos que mejor se adapten a tus necesidades.</p>
+                <input type="text" id="pf-discapacidad" placeholder="Agregar discapacidad (opcional)">
+
+              </div>
+
+            </div>
+
+            <!-- ═══════════ COLUMNA DERECHA: estado del CV ═══════════ -->
+            <div class="perfil-col perfil-col-der">
+
+              <div class="pf-card-resumen">
+                <p class="pf-resumen-label">Última modificación del perfil</p>
+                <p class="pf-resumen-valor" id="pfUltimaModificacion">Sin guardar todavía</p>
+              </div>
+
+              <div class="pf-card-resumen pf-card-completitud">
+                <p class="pf-resumen-label">Completitud de tu perfil</p>
+                <div class="pf-barra-completitud">
+                  <div class="pf-barra-completitud-fill" id="pfBarraCompletitud" style="width:0%"></div>
+                </div>
+                <p class="pf-resumen-valor" id="pfPorcentajeCompletitud">0% completo</p>
+              </div>
+
+            </div>
+
+          </div>
+
+            <div class="perfil-tabs-nav">
+                <button type="submit" class="btn-hero-main perfil-submit" id="perfilSubmitBtn">Guardar perfil →</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div id="modalBecas" class="profile-modal oculto">
+
+    <h2>🏆 Becas compatibles con tu perfil</h2>
+
+    <div class="beca-card">
+        Santander Skills
+    </div>
+
+    <div class="beca-card">
+        Google Career Certificates
+    </div>
+
+    <div class="beca-card">
+        Potenciar Talento
+    </div>
+
+    <button id="finalizarBecas">
+
+        Continuar →
+
+    </button>
+
+</div>
+
+<div id="modalEmpleos" class="profile-modal oculto">
+
+    <h2>
+        💼 Oportunidades recomendadas para vos
+    </h2>
+
+    <div class="job-card">
+
+        Asistente Administrativo
+
+        <br>
+
+        Compatibilidad 94%
+
+    </div>
+
+    <div class="job-card">
+
+        Analista de Datos Jr.
+
+        <br>
+
+        Compatibilidad 88%
+
+    </div>
+
+    <button id="generarCV">
+
+        🤖 Generar CV con IA
+
+    </button>
+
+</div>
+
+<div id="modalCV" class="profile-modal oculto">
+
+    <h2>
+        🤖 CV Inteligente
+    </h2>
+
+    <p>
+
+        Elegí el tipo de empleo para el que querés generar tu CV.
+
+    </p>
+
+    <button class="btn-cv">
+
+        Administrativa
+
+    </button>
+
+    <button class="btn-cv">
+
+        Atención al Cliente
+
+    </button>
+
+    <button class="btn-cv">
+
+        Marketing Digital
+
+    </button>
+
+    <button class="btn-cv">
+
+        Analista de Datos
+
+    </button>
+
+</div>
+
+<!-- BOTÓN IA -->
+
+  <button id="abrirChatIA" class="chat-float">
+    🤖
+  </button>
+
+  <div id="chatIA" class="chat-container oculto">
+
+    <div class="chat-header">
+
+      <span>🤖 Lina AI</span>
+
+    </div>
+
+    <iframe
+      src="https://lina-agente-604508803765.us-east1.run.app"
+      width="100%"
+      height="100%">
+    </iframe>
+
+  </div>
+
+  <script src="main.js"></script>
+
+</body>
+</html>
